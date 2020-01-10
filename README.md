@@ -1,12 +1,12 @@
 # DSC-backend
 This is the repo solely for the backend of our DSC-arezue project
 
-# Requirements
+## Requirements
 - npm^=6.13
 - nodejs^=12.14/1
 - PostgreSQL^=12.1
 
-# How to start
+## How to start
 If first time cloning the repo, we will need to download all dependencies, simply perform the following commands
 ```
 npm install
@@ -19,7 +19,7 @@ npm install
 nodemon start
 ```
 
-# NOTE
+## NOTE
 - Do not commit your node_modules folder, therefore do not delete what is in .gitignore
 - For every feature, please use branching option
 - Once feature is developed, please use pull requests, another team member will need to verify
