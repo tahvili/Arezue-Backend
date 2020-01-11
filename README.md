@@ -3,7 +3,7 @@ This is the repo solely for the backend of our DSC-arezue project
 
 ## Requirements
 - npm^=6.13
-- nodejs^=12.14/1
+- nodejs^=12.14.1
 - PostgreSQL^=12.1
 
 ## How to start
@@ -18,6 +18,8 @@ Once nodemon is installed, simply perform the following commands
 npm install
 nodemon start
 ```
+## Testing
+We will be using [mocha](https://mochajs.org/) as the testing environment and [chai](https://www.chaijs.com/) for assertion library. It will be similar to python unit testing, writing good test cases are a must
 
 ## NOTE
 - Do not commit your node_modules folder, therefore do not delete what is in .gitignore
