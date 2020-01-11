@@ -27,3 +27,4 @@ We will be using [mocha](https://mochajs.org/) as the testing environment and [c
 - For every feature, please use branching option
 - Once feature is developed, please use pull requests, another team member will need to verify
 - As you write, please document everything and write test cases if possible
+- While it is good to write codes when you know it, please strive to perform code development in a TDD (Test Driven Development) format so that we can think of edge cases while we develop
