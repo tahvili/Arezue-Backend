@@ -19,6 +19,10 @@ npm install
 nodemon start
 ```
 After running the above command, your webserver will now be started. By default we will be using port **3000** so connect using http://localhost:3000
+
+## ExpressJS
+Will be mainly using expressjs for its middleware and page routing
+
 ## Testing
 We will be using [mocha](https://mochajs.org/) as the testing environment and [chai](https://www.chaijs.com/) for assertion library. It will be similar to python unit testing, writing good test cases are a must
 
