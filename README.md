@@ -6,6 +6,9 @@ This is the repo solely for the backend of our DSC-arezue project
 - nodejs^=12.14.1
 - PostgreSQL^=11
 
+## Environments
+All enviornmental variables (i.e. ports, database credentials) will go into the dotenv file
+
 ## How to start
 If first time cloning the repo, we will need to download all dependencies, simply perform the following commands
 ```
