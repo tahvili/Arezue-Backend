@@ -2,9 +2,9 @@
 This is the repo solely for the backend of our DSC-arezue project
 
 ## Requirements
-- npm^=6.13
-- nodejs^=12.14.1
-- PostgreSQL^=11
+- npm^6.13
+- nodejs^12.14.1
+- PostgreSQL^11
 
 ## Environments
 All enviornmental variables (i.e. ports, database credentials) will go into the dotenv file
