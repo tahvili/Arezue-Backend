@@ -4,7 +4,7 @@ This is the repo solely for the backend of our DSC-arezue project
 ## Requirements
 - npm^=6.13
 - nodejs^=12.14.1
-- PostgreSQL^=12.1
+- PostgreSQL^=11
 
 ## How to start
 If first time cloning the repo, we will need to download all dependencies, simply perform the following commands
