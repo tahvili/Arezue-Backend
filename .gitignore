@@ -1,1 +1,18 @@
+# Miscellaneous
+*.swp
+*.log
+.DS_Store
+.atom/
+
+# Nodejs related
 node_modules/
+
+# IntelliJ related
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# vscode folder, depending on what we have, we may choose to include it
+.vscode/
+
