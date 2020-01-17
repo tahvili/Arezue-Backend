@@ -1,0 +1,2 @@
+mkdir Jobseeker Company Pending_Requests Dream_Companies Available_locations Skills Dream_Careers Starred_Resumes Resumes Interested Pending_Requests Employer Jobs Job Keywords Benefits
+
