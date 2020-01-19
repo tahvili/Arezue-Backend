@@ -1,5 +1,6 @@
 CREATE table Job (
     Job_ID double precision primary key,
+    EUID double precision REFERENCES employer(UID) ON DELETE RESTRICT not NULL,
     Company_ID double precision REFERENCES company(Company_ID) ON DELETE RESTRICT not NULL,
     Title VARCHAR(70) not NULL,
     Wage text not NULL,

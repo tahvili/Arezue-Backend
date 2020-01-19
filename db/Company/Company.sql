@@ -1,3 +1,5 @@
+-- Should we keep track of employers per company
+
 CREATE table Company (
     Company_ID double precision primary key,
     Company_Name varchar(70) not NULL,
