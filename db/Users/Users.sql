@@ -4,8 +4,8 @@ CREATE table Users (
     Phone_Number VARCHAR(50) NULL,
     Location VARCHAR(50) NULL,
     Profile_Picture VARCHAR(2083) NULL,
-    Active_States BOOLEAN not NULL,
-    Data_Created DATE not NULL,
-    Date_Last_Login DATE not NULL,
+    Active_States BOOLEAN not NULL DEFAULT True,
+    Date_Created DATE not NULL DEFAULT current_date,
+    Date_Last_Login DATE not NULL DEFAULT current_date,
     CHECK (false) NO INHERIT
 );
