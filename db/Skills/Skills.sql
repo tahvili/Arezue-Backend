@@ -1,5 +1,6 @@
 CREATE table Skills (
-    UID double precision REFERENCES jobseeker(uid) primary key,
-    Skill varchar(70) primary key,
-    Ranking int NULL
+    UID double precision REFERENCES jobseeker(uid),
+    Skill varchar(70),
+    Ranking int NULL,
+    PRIMARY KEY (UID, Skill)
 )
