@@ -32,7 +32,7 @@ Will be mainly using expressjs for its middleware and page routing
 - There is a init.sh that will allow people to generate the database tables by just executing the script
 ## Data model
 Our database follows the following image of data model that our backend has designed to give scalability 
-![Image of Data Model](https://i.imgur.com/NbNqjvO)
+![Image of Data Model](https://i.imgur.com/NbNqjvO.png)
 
 ## Testing
 We will be using [mocha](https://mochajs.org/) as the testing environment and [chai](https://www.chaijs.com/) for assertion library. It will be similar to python unit testing, writing good test cases are a must
