@@ -1,0 +1,7 @@
+company.sql
+    -- What's the difference between num_employed vs. num_employers?
+
+job.sql
+    hours should be varchar to allow 'Flexible'
+    max_candidate and wage should be null if employer does not want to disclose.
+    Difference between title and position?
