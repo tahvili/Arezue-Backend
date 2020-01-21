@@ -62,7 +62,7 @@ if [ $# -eq 0 ] || [ "$1" == "new" ] || [ "$1" == "all" ]
 fi
 
 
-if [ "$1" == "dummy" ] || [ "$1" == "new" ]
+if [ "$1" == "dummy" ] || [ "$1" == "new" ] || [ "$1" == "all" ]
     then
         if [ -f "$logfile" ]
         then
