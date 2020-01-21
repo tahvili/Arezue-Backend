@@ -1,4 +1,5 @@
 #!/bin/bash
+# Commands available, ./init.sh, ./init.sh all, ./init.sh dummy
 
 # Make sure you use LF instead of CRLF.
 # This can be changed in VSCode bottom right corner.
@@ -22,13 +23,14 @@
 
 ## Set and load configuration file
 config="./database.conf"
-if [ $# -eq 0 ]
+logfile="./logs/errorlog.`uname -n`.log"
+if [ $# -eq 0 ] || [ "$1" == "new" ] || [ "$1" == "all" ]
     then
     if [ -f "$config" ]
     then
         echo "Loading $config file"
         . $config
-        logfile="./logs/errorlog.`uname -n`.$(date).log"
+
         {
         PGPASSWORD=${password} psql -U ${username} -p ${port} -h ${hostname} ${database} < ./Users/Users.sql;
         PGPASSWORD=${password} psql -U ${username} -p ${port} -h ${hostname} ${database} < ./Jobseeker/Jobseeker.sql;
@@ -51,27 +53,43 @@ if [ $# -eq 0 ]
         if [ -f "$logfile" ]
         then
             echo "An error exists, please check $logfile for detailed errors"
+        else
+            echo "Database created successfully"
         fi
     else
         echo "$config not found."
     fi
 fi
 
-for arg in "$@"
-    do
-        if [ "dummy" = $arg ]
+
+if [ "$1" == "dummy" ] || [ "$1" == "new" ]
+    then
+        if [ -f "$logfile" ]
         then
+            echo "An error, please check $logfile for detailed errors before proceeding"
+            echo "If you believe this is an error on our side, delete the log file then proceed once again"
+        else
+            echo "Inserting dummy data"
+            . $config
+            { PGPASSWORD=${password} psql -U ${username} -p ${port} -h ${hostname} ${database} < ./dummy_data/js_data.sql
+            # Make sure company is created first and employer info has existing company_id
+            PGPASSWORD=${password} psql -U ${username} -p ${port} -h ${hostname} ${database} < ./dummy_data/com_data.sql
+            PGPASSWORD=${password} psql -U ${username} -p ${port} -h ${hostname} ${database} < ./dummy_data/em_data.sql
+            PGPASSWORD=${password} psql -U ${username} -p ${port} -h ${hostname} ${database} < ./dummy_data/job_data.sql
+            } > /dev/null 2> "$logfile"; [ -s "$logfile" ] || rm -f "$logfile"
             if [ -f "$logfile" ]
             then
-                echo "An error, please check $logfile for detailed errors before proceeding"
+                echo "An error exists, please check $logfile for detailed errors"
             else
-                echo "Inserting dummy data"
-                . $config
-                PGPASSWORD=${password} psql -U ${username} -p ${port} -h ${hostname} ${database} < ./dummy_data/js_data.sql
-                # Make sure company is created first and employer info has existing company_id
-                PGPASSWORD=${password} psql -U ${username} -p ${port} -h ${hostname} ${database} < ./dummy_data/com_data.sql
-                PGPASSWORD=${password} psql -U ${username} -p ${port} -h ${hostname} ${database} < ./dummy_data/em_data.sql
-                PGPASSWORD=${password} psql -U ${username} -p ${port} -h ${hostname} ${database} < ./dummy_data/job_data.sql
+                echo "Dummy data inserted correctly"
             fi
         fi
-    done
+fi
+
+if [ "$1" == "clear" ]
+    then
+        echo "Clearing database"
+        . $config
+        PGPASSWORD=${password} psql -U ${username} -p ${port} -h ${hostname} ${database} < ./clear/clear.sql > /dev/null
+        echo "Successfully cleared all data from the database"
+fi
