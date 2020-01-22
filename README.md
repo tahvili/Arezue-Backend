@@ -4,7 +4,7 @@ This is the repo solely for the backend of our DSC-arezue project
 ## Requirements
 - npm^6.13
 - nodejs^12.14.1
-- PostgreSQL^11
+- PostgreSQL^11 // We recommend 12 or higher
 
 ## Environments
 All enviornmental variables (i.e. ports, database credentials) will go into the dotenv file
@@ -23,6 +23,8 @@ nodemon start
 ```
 After running the above command, your webserver will now be started. By default we will be using port **3000** so connect using http://localhost:3000
 
+Now we need a working database, which we've kindly provided a *init.sh* that will initilize all tables automatically, but in order to use the script, you will need to first manually create the database. After the database has been created, you must modify *database.conf* accordingly to the database you've just created.
+
 ## ExpressJS
 Will be mainly using expressjs for its middleware and page routing
 
@@ -30,8 +32,17 @@ Will be mainly using expressjs for its middleware and page routing
 - We are using PostgreSQL for our backend and frontend's database
 - All schemas for databases are stored in the db folder
 - There is a init.sh that will allow people to generate the database tables by just executing the script
+- Before running the script, you are required to modify database.conf accordingly to your own database configuration
+    ```
+    ## Several options for the script: ##
+    ./init # Create only the database
+    ./init dummy # Insert only the dummy data into the database
+    ./init all or ./init new # Creates and insert dummy data into the database
+    ./init clear # Remove all data from the databse including the table itself
+    ```
 ## Data model
-Our database follows the following image of data model that our backend has designed to give scalability 
+Our database follows the following image of data model that our backend has designed to give scalability.
+[Enlarge Here](https://app.sqldbm.com/PostgreSQL/Share/kV3GUyt-8Z5r7qtVxQ4xGkGFrngIE8md_DYjF4jNYw0)
 ![Image of Data Model](https://i.imgur.com/NbNqjvO.png)
 
 ## Testing
