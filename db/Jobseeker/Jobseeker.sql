@@ -1,5 +1,5 @@
 CREATE table Jobseeker (
-    UID double precision primary key,
+    UID uuid primary key,
     Num_Employer_Scanned int not NULL DEFAULT 0,
     Num_Employer_Viewed_Resume int not NULL DEFAULT 0,
     Pending_Interest int not NULL DEFAULT 0,
