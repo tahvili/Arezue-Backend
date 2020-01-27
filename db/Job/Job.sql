@@ -1,4 +1,4 @@
-CREATE table Job (
+CREATE table IF NOT EXISTS Job (
     Job_ID uuid primary key,
     EUID uuid REFERENCES employer(UID) ON DELETE RESTRICT not NULL,
     Company_ID uuid REFERENCES company(Company_ID) ON DELETE RESTRICT not NULL,

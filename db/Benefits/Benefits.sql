@@ -1,4 +1,4 @@
-CREATE table Benefits (
+CREATE table IF NOT EXISTS Benefits (
     Job_ID uuid REFERENCES job(Job_ID) ON DELETE RESTRICT primary key,
     Benefit text NULL
 )

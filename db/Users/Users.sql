@@ -1,4 +1,4 @@
-CREATE table Users (
+CREATE table IF NOT EXISTS Users (
     Name VARCHAR(70) not NULL,
     Email_Address VARCHAR(255) not NULL,
     Phone_Number VARCHAR(50) NULL,

@@ -1,4 +1,4 @@
-CREATE table Job_list (
+CREATE table IF NOT EXISTS Job_list (
     Company_ID uuid REFERENCES company(Company_ID) ON DELETE RESTRICT,
     EUID uuid REFERENCES employer(UID) ON DELETE RESTRICT,
     Job_ID uuid REFERENCES job(Job_ID) ON DELETE RESTRICT,

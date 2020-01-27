@@ -1,6 +1,6 @@
 -- Should we keep track of employers per company
 
-CREATE table Company (
+CREATE table IF NOT EXISTS Company (
     Company_ID uuid primary key,
     Company_Name varchar(70) not NULL,
     Date_Created date not NULL DEFAULT current_date,

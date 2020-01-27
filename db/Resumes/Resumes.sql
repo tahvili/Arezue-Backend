@@ -1,4 +1,4 @@
-CREATE table Resumes (
+CREATE table IF NOT EXISTS Resumes (
     UID uuid REFERENCES jobseeker(uid) ON DELETE RESTRICT,
     Resume_ID uuid UNIQUE,
     Resume json not NULL,

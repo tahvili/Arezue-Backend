@@ -1,4 +1,4 @@
-CREATE table Jobseeker (
+CREATE table IF NOT EXISTS Jobseeker (
     UID uuid primary key,
     Num_Employer_Scanned int not NULL DEFAULT 0,
     Num_Employer_Viewed_Resume int not NULL DEFAULT 0,
