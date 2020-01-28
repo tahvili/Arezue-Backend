@@ -7,4 +7,4 @@ CREATE table IF NOT EXISTS Pending_Requests_Sent (
     Job_ID uuid REFERENCES job(Job_ID) ON DELETE CASCADE,
     Date_sent date not NULL DEFAULT current_date,
     PRIMARY KEY (EUID, JUID, Job_ID)
-)
+);

@@ -1,7 +1,9 @@
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
 CREATE table IF NOT EXISTS Employer (
-    UID uuid primary key,
+    UID uuid DEFAULT uuid_generate_v4 () primary key,
     Company_ID uuid REFERENCES company(Company_ID) ON DELETE CASCADE,
     Successful_Searches int not NULL DEFAULT 0,
     Interview_Req_Sent int not NULL DEFAULT 0,
     Accepted_Interview_Req int not NULL DEFAULT 0
-) INHERITS (users)
+) INHERITS (users);

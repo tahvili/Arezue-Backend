@@ -3,4 +3,4 @@ CREATE table IF NOT EXISTS Dream_Companies (
     Dream_Company VARCHAR(70),
     Preference int NULL,
     PRIMARY KEY (UID, Dream_Company)
-)
+);

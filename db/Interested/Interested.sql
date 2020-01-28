@@ -4,4 +4,4 @@ CREATE table IF NOT EXISTS Interested (
     Job_ID uuid REFERENCES job(Job_ID) ON DELETE CASCADE,
     Date_sent date not NULL DEFAULT current_date,
     PRIMARY KEY (EUID, Job_ID, JUID)
-)
+);

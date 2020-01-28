@@ -3,4 +3,4 @@ CREATE table IF NOT EXISTS Skills (
     Skill varchar(70),
     Ranking int NULL,
     PRIMARY KEY (UID, Skill)
-)
+);
