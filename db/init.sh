@@ -51,9 +51,9 @@ if [ $# -eq 0 ] || [ "$1" == "new" ] || [ "$1" == "all" ]
         PGPASSWORD=${password} psql -U ${username} -p ${port} -h ${hostname} ${database} < ./Job_list/Job_list.sql; 
         } > /dev/null 2> "$logfile"; [ -s "$logfile" ] || rm -f "$logfile"
         if [ -f "$logfile" ]
-        then
+            then
             echo "An error exists, please check $logfile for detailed errors"
-        else
+            else
             echo "Database created successfully"
         fi
     else
@@ -64,26 +64,27 @@ fi
 
 if [ "$1" == "dummy" ] || [ "$1" == "new" ] || [ "$1" == "all" ]
     then
-        if [ -f "$logfile" ]
-        then
-            echo "An error, please check $logfile for detailed errors before proceeding"
-            echo "If you believe this is an error on our side, delete the log file then proceed once again"
-        else
+    #     if [ -f "$logfile" ]
+        # then
+            # echo "An error, please check $logfile for detailed errors before proceeding"
+            # echo "If you believe this is an error on our side, delete the log file then proceed once again"
+        # else
             echo "Inserting dummy data"
             . $config
-            { PGPASSWORD=${password} psql -U ${username} -p ${port} -h ${hostname} ${database} < ./dummy_data/js_data.sql
+            { PGPASSWORD=${password} psql -U ${username} -p ${port} -h ${hostname} ${database} < ./dummy_data/jobseeker_data.sql
             # Make sure company is created first and employer info has existing company_id
-            PGPASSWORD=${password} psql -U ${username} -p ${port} -h ${hostname} ${database} < ./dummy_data/com_data.sql
-            PGPASSWORD=${password} psql -U ${username} -p ${port} -h ${hostname} ${database} < ./dummy_data/em_data.sql
+            PGPASSWORD=${password} psql -U ${username} -p ${port} -h ${hostname} ${database} < ./dummy_data/company_data.sql
+            PGPASSWORD=${password} psql -U ${username} -p ${port} -h ${hostname} ${database} < ./dummy_data/employer_data.sql
             PGPASSWORD=${password} psql -U ${username} -p ${port} -h ${hostname} ${database} < ./dummy_data/job_data.sql
+            PGPASSWORD=${password} psql -U ${username} -p ${port} -h ${hostname} ${database} < ./dummy_data/resume_data.sql
             } > /dev/null 2> "$logfile"; [ -s "$logfile" ] || rm -f "$logfile"
             if [ -f "$logfile" ]
-            then
+                then
                 echo "An error exists, please check $logfile for detailed errors"
-            else
+                else
                 echo "Dummy data inserted correctly"
             fi
-        fi
+        # fi
 fi
 
 if [ "$1" == "clear" ]
