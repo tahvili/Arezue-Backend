@@ -11,6 +11,6 @@ router.get('/', function(req, res, next) {
 router.get('/api/Users', db.getAllUsers);
 
 // C of CRUD, create account for new members
-router.post('/api/CreateAccount/jobseeker/:firebaseID&:Name&:Email', db.createJobseeker);
+router.post('/api/CreateAccount/jobseeker/', db.createJobseeker);
 
 module.exports = router;
