@@ -10,7 +10,7 @@ router.get('/', function(req, res, next) {
 // Temporarily get request for testing
 router.get('/api/Users', db.getAllUsers);
 
-// C of CRUD, create account for new members
+// C of CRUD, create account for new jobseeker
 router.post('/api/CreateAccount/jobseeker/', db.createJobseeker);
 
 module.exports = router;

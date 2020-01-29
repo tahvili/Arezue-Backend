@@ -32,7 +32,7 @@ const createJobseeker = function(request, response, next) {
         if (error) {
             throw error;
         }
-        response.status(201).send(`User added with ID: ${results.rows[0].uid}`)
+        response.status(200).send(`User added with ID: ${results.rows[0].uid}`)
     })
 
 }
