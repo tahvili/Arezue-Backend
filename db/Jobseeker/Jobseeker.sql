@@ -3,6 +3,7 @@ CREATE table Jobseeker (
     Num_Employer_Scanned int not NULL DEFAULT 0,
     Num_Employer_Viewed_Resume int not NULL DEFAULT 0,
     Pending_Interest int not NULL DEFAULT 0,
-    Potential_Client boolean not NULL DEFAULT False
+    Potential_Client boolean not NULL DEFAULT False,
+    UNIQUE (email_address)
 ) INHERITS (Users);
 
