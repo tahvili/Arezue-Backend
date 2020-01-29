@@ -16,7 +16,7 @@ var jsonParser = bodyParser.json()
 var urlencodedParser = bodyParser.urlencoded({ extended: true })
 
 // we can also do exports.func
-const getAllUsers = function (request, response, next) {
+exports.getAllUsers = function (request, response, next) {
     pool.query('SELECT * from jobseeker', (error, results) => {
         if (error) {
             throw error;
@@ -27,35 +27,71 @@ const getAllUsers = function (request, response, next) {
 
 // Route to create the jobseeker account
 // Since they have different views, we will have differnet POST api request
-const createJobseeker = [
+/*
+** Requirements: UUID, Email and Name
+*/
+exports.createJobseeker = [
     body('email').notEmpty().isEmail().withMessage("Must be a valid email address"),
     body('name').notEmpty().isAlpha().withMessage("Must be a valid name"),
-    sanitizeBody('name').escape(),
+    sanitizeBody('name', 'email').escape(),
 
-    function(request, response, next) {
-        const errors = validationResult(request);
+    async function(req, res, next) {
+        const errors = validationResult(req);
         if (!errors.isEmpty()) {
             // There are errors. Render form again with sanitized values/errors messages.
-            response.status(400).send(errors)
+            res.status(400).send(errors)
             return;
         }
         else {
-            let firebaseID = request.body.firebaseID;
-            let name = request.body.name;
-            let email = request.body.email;
-            pool.query('INSERT INTO jobseeker (uid, name, email_address) VALUES (uuid_generate_v4(), $1, $2) RETURNING *', [name, email], (error, results) => {
+            let firebaseID = req.body.firebaseID;
+            let name = req.body.name;
+            let email = req.body.email;
+            pool.query('INSERT INTO jobseeker (uid, name, email_address) VALUES (uuid_generate_v4(), $1, $2) RETURNING uid', [name, email], (error, results) => {
                 if (error) {
-                    response.status(400).send(error)
+                    res.status(400).send(error)
                     return console.error(error);
                 }
-                response.status(200).send(`User created with ID: ${results.rows[0].uid}`)
+                res.status(200).send(`User created with ID: ${results.rows[0].uid}`)
             })
         }
 }];
 
+exports.createEmployer = [
+    body('email').notEmpty().isEmail().withMessage("Must be a valid email address"),
+    body('name').notEmpty().isAlpha().withMessage("Must be a valid name"),
+    body('company').notEmpty().withMessage("Must be a valid company name"),
+    sanitizeBody('name', 'company', 'email').escape(),
+
+    async function(req, res, next) {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            res.status(400).send(errors)
+            return;
+        } else {
+            let firebaseID = req.body.firebaseID;
+            let name = req.body.name;
+            let email = req.body.email;
+            let company = req.body.company;
+            pool.query('INSERT INTO employer (uid, name, email_address, company VALUES (uuid_generate_v4(), $1, $2, $3) RETURNING uid', [name, email, company], (error, results) => {
+                if (error) {
+                    res.status(400).send(error)
+                    return console.error(error);
+                }
+                res.status(200).send(`User created with ID: ${results.rows[0].uid}`)
+            })
+        }
+
+    }
+];
+
+// exports.addJobseeker = [
+
+// ]
+
+// Now using exports.func so the list of below doesnt get too long
 // Route to create the employer's account
-module.exports = {
-    getAllUsers,
-    createJobseeker,
-    // createEmployer,
-}
+// module.exports = {
+//     getAllUsers,
+//     createJobseeker,
+//     // createEmployer,
+// }
