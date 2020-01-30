@@ -23,10 +23,22 @@ router.post('/api/CreateAccount/jobseeker/', db.createJobseeker);
 router.post('/api/CreateAccount/employer/', db.createEmployer);
 
 // Add a phone number to jobseeker's row
-router.post('/api/Jobseeker/addPhoneNum', db.updateJobseekerPhoneNum);
+router.post('/api/Jobseeker/addPhoneNum', db.updatePhoneNum);
 
 // Add a phone number to employer's row
-router.post('/api/Employer/addPhoneNum', db.updateEmployerPhoneNum);
+router.post('/api/Employer/addPhoneNum', db.updatePhoneNum);
+
+// Update potentialness of a jobseeker if they are seeking for a job
+router.post('/api/Jobseeker/updatePotential', db.updateJobseekerPotential);
+
+// Update location
+router.post('/api/Jobseeker/updateLocation', db.updateLocation);
+router.post('/api/Employer/updateLocaiton', db.updateLocation);
+
+// Update active states
+router.post('/api/Jobseeker/updateActiveStates', db.updateActiveStates);
+router.post('/api/Employer/updateActiveStates', db.updateActiveStates);
+
 
 // Not being used method, DO NOT USE
 router.post('/api/addPhoneNum', db.addPhoneNum);

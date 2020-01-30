@@ -1,3 +1,8 @@
+/*
+ * We need to create an authorized API call after we get firebase integration
+ * https://www.toptal.com/firebase/role-based-firebase-authentication
+ */
+
 // Need to call pool from config.js which is our database setup and others
 const pool = require('../config');
 
@@ -96,8 +101,8 @@ exports.createEmployer = [
     }
 ];
 
-// This function will not be used as we decided to use different route for employer and jobseeker on updating their information
-exports.addPhoneNum = [
+// Method to insert phone number whether its employer or jobseeker
+exports.updatePhoneNum = [
     body('phone').notEmpty().isMobilePhone().withMessage("Must be a valid phone number"),
     body('uuid').notEmpty().withMessage("Must provide a valid UUID"),
     sanitizeBody('phone', 'uuid').escape(),
@@ -111,32 +116,50 @@ exports.addPhoneNum = [
             let firebaseID = req.body.firebaseID; // Unsure if needed at this stage right now
             let phone = req.body.phone;
             let uuid = req.body.uuid;
-            await pool.query(`select email_address from jobseeker
-                WHERE uid = $1`, [uuid], (error, results) => {
-                if (error) {
-                    res.status(400).send(error)
-                    return console.error(error);
-                }
-                if (results.rowCount) {
-                    pool.query(`UPDATE jobseeker
+            let url = req.originalUrl;
+            let path = url.split("/")[2];
+            if (path == 'jobseeker') {
+                await pool.query(`Update jobseeker 
                     SET phone_number = $1
-                    WHERE
-                        uid = $2`, [phone, uuid], (error, results) => {
-                        if (error) {
-                            res.status(400).send(error)
-                            return console.error(error);
-                        }
-                        res.status(200).send('INSERTED!');
-                    });
-                } else {
-                    res.status(404).send("MISSING DATA!");
-                }
-            });
+                    WHERE 
+                        uid = $2
+                    RETURNING uid`, [phone, uuid], (error, results) => {
+                    if (error) {
+                        res.status(400).send(error);
+                        return console.error(error);
+                    }
+                    if (results.rowCount) {
+                        res.status(200).send('Phone number inserted')
+                    } else {
+                        res.status(400).send("Users not found");
+                    }
+                });
+            } else if (path == 'employer') {
+                await pool.query(`Update employer 
+                    SET phone_number = $1
+                    WHERE 
+                        uid = $2 
+                    RETURNING uid`, [phone, uuid], (error, results) => {
+                    if (error) {
+                        res.status(400).send(error);
+                        return console.error(error);
+                    }
+                    if (results.rowCount) {
+                        res.status(200).send('Phone number inserted')
+                    } else {
+                        res.status(400).send("Users not found");
+                    }
+                });
+            } else {
+                res.status(404)
+            }
+
+
         }
     }
 ];
 
-// Method to insert phoneNumber to a specific jobseeker
+// !  Not in use
 exports.updateJobseekerPhoneNum = [
     body('phone').notEmpty().isMobilePhone().withMessage("Must be a valid phone number"),
     body('uuid').notEmpty().withMessage("Must provide a valid UUID"),
@@ -150,6 +173,8 @@ exports.updateJobseekerPhoneNum = [
         }
         let phone = req.body.phone;
         let uuid = req.body.uuid;
+        let url = req.originalUrl;
+        let path = url.split("/");
         await pool.query(`Update jobseeker
         SET phone_number = $1
         WHERE
@@ -160,7 +185,7 @@ exports.updateJobseekerPhoneNum = [
                 return console.error(error);
             }
             if (results.rowCount) {
-                res.status(200).send("Phone number inserted");
+                res.status(200).send(`Phone number inserted ${path[2]}`);
             } else {
                 res.status(400).send("User not found");
             }
@@ -170,7 +195,7 @@ exports.updateJobseekerPhoneNum = [
     }
 ];
 
-// Method to insert phoneNumber to a specific employer
+// !  Not in use
 exports.updateEmployerPhoneNum = [
     body('phone').notEmpty().isMobilePhone().withMessage("Must be a valid phone number"),
     body('uuid').notEmpty().withMessage("Must provide a valid UUID"),
@@ -204,12 +229,14 @@ exports.updateEmployerPhoneNum = [
     }
 ];
 
+// Update the potential boolean of jobseeker or employer
 exports.updateJobseekerPotential = [
     body('potential').notEmpty().isBoolean().withMessage("Must be a boolean value"),
     body('uuid').notEmpty().withMessage("Must provide a valid UUID"),
+
     sanitizeBody('potential', 'uuid').escape(),
 
-    async function(req, res, next) {
+    async function (req, res, next) {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             res.status(400).send(errors)
@@ -232,7 +259,120 @@ exports.updateJobseekerPotential = [
             }
         })
     }
-]
+];
+
+// Method to insert location whether its employer or jobseeker
+exports.updateLocation = [
+    body('location').notEmpty().withMessage("Must be a valid location"),
+    body('uuid').notEmpty().withMessage("Must provide a valid UUID"),
+    sanitizeBody('location', 'uuid').escape(),
+
+    async function (req, res, next) {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            res.status(400).send(errors)
+            return;
+        } else {
+            let firebaseID = req.body.firebaseID; // Unsure if needed at this stage right now
+            let locaiton = req.body.location;
+            let uuid = req.body.uuid;
+            let url = req.originalUrl;
+            let path = url.split("/")[2];
+            if (path == 'jobseeker') {
+                await pool.query(`Update jobseeker 
+                    SET location = $1
+                    WHERE 
+                        uid = $2
+                    RETURNING uid`, [location, uuid], (error, results) => {
+                    if (error) {
+                        res.status(400).send(error);
+                        return console.error(error);
+                    }
+                    if (results.rowCount) {
+                        res.status(200).send('Location updated')
+                    } else {
+                        res.status(400).send("Users not found");
+                    }
+                });
+            } else if (path == 'employer') {
+                await pool.query(`Update employer 
+                    SET location = $1
+                    WHERE 
+                        uid = $2 
+                    RETURNING uid`, [location, uuid], (error, results) => {
+                    if (error) {
+                        res.status(400).send(error);
+                        return console.error(error);
+                    }
+                    if (results.rowCount) {
+                        res.status(200).send('Location updated')
+                    } else {
+                        res.status(400).send("Users not found");
+                    }
+                });
+            } else {
+                res.status(404)
+            }
+        }
+    }
+];
+
+// Method to update states of employer or jobseeker
+exports.updateActiveStates = [
+    body('states').notEmpty().isBoolean().withMessage("Must be a boolean"),
+    body('uuid').notEmpty().withMessage("Must provide a valid UUID"),
+    sanitizeBody('location', 'uuid').escape(),
+
+    async function (req, res, next) {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            res.status(400).send(errors)
+            return;
+        } else {
+            let firebaseID = req.body.firebaseID; // Unsure if needed at this stage right now
+            let states = req.body.states;
+            let uuid = req.body.uuid;
+            let url = req.originalUrl;
+            let path = url.split("/")[2];
+            if (path == 'jobseeker') {
+                await pool.query(`Update jobseeker 
+                    SET states = $1
+                    WHERE 
+                        uid = $2
+                    RETURNING uid`, [states, uuid], (error, results) => {
+                    if (error) {
+                        res.status(400).send(error);
+                        return console.error(error);
+                    }
+                    if (results.rowCount) {
+                        res.status(200).send('Active states boolean required')
+                    } else {
+                        res.status(400).send("Users not found");
+                    }
+                });
+            } else if (path == 'employer') {
+                await pool.query(`Update employer 
+                    SET states = $1
+                    WHERE 
+                        uid = $2 
+                    RETURNING uid`, [states, uuid], (error, results) => {
+                    if (error) {
+                        res.status(400).send(error);
+                        return console.error(error);
+                    }
+                    if (results.rowCount) {
+                        res.status(200).send('Active states boolean required')
+                    } else {
+                        res.status(400).send("Users not found");
+                    }
+                });
+            } else {
+                res.status(404)
+            }
+        }
+    }
+];
+
 // Now using exports.func so the list of below doesnt get too long
 // Route to create the employer's account
 // module.exports = {
