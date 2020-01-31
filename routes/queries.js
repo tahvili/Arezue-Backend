@@ -57,7 +57,7 @@ exports.createJobseeker = [
         let firebaseID = req.body.firebaseID;
         let name = req.body.name;
         let email = req.body.email;
-        pool.query('INSERT INTO jobseeker (uid, name, email_address) VALUES ($1, $2, $3) RETURNING uid', [firebaseID,name, email], (error, results) => {
+        pool.query('INSERT INTO jobseeker (uid, name, email_address) VALUES ($1, $2, $3) RETURNING uid', [firebaseID, name, email], (error, results) => {
             if (error) {
                 res.status(400).send(error)
                 return console.error(error);
