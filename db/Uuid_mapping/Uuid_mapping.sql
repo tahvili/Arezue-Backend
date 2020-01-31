@@ -1,5 +1,5 @@
-CREATE table IF NOT EXISTS Uuid_mapping (
-    fb_uid VARCHAR(30),
+CREATE table IF NOT EXISTS uuid_mapping (
+    fb_uid VARCHAR(50),
     db_uid uuid REFERENCES users(uid),
     PRIMARY KEY(fb_uid, db_uid)
 );
