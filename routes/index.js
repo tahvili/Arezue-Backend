@@ -28,8 +28,16 @@ router.post('/api/Jobseeker/addPhoneNum', db.updatePhoneNum);
 // Add a phone number to employer's row
 router.post('/api/Employer/addPhoneNum', db.updatePhoneNum);
 
+// Update name to employer or jobseeker
+router.post('/api/Jobseeker/updateName', db.updateName);
+router.post('/api/Employer/updateName', db.updateName);
+
 // Update potentialness of a jobseeker if they are seeking for a job
 router.post('/api/Jobseeker/updatePotential', db.updateJobseekerPotential);
+
+// Update name to employer or jobseeker
+router.post('/api/Jobseeker/updateLastLogin', db.updateLastLogin);
+router.post('/api/Employer/updateLastLogin', db.updateLastLogin);
 
 // Update location
 router.post('/api/Jobseeker/updateLocation', db.updateLocation);
@@ -40,8 +48,15 @@ router.post('/api/Jobseeker/updateActiveStates', db.updateActiveStates);
 router.post('/api/Employer/updateActiveStates', db.updateActiveStates);
 
 
+/* What is missing?
+  Jobseeker
+    - profile_picture
+    - num_employer_*
+    - pending_interest
+*/
+
 // Not being used method, DO NOT USE
-router.post('/api/addPhoneNum', db.addPhoneNum);
+// router.post('/api/addPhoneNum', db.addPhoneNum);
 
 module.exports = router;
  

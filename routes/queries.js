@@ -57,7 +57,7 @@ exports.createJobseeker = [
         let firebaseID = req.body.firebaseID;
         let name = req.body.name;
         let email = req.body.email;
-        pool.query('INSERT INTO jobseeker (uid, name, email_address) VALUES (uuid_generate_v4(), $1, $2) RETURNING uid', [name, email], (error, results) => {
+        pool.query('INSERT INTO jobseeker (uid, name, email_address) VALUES ($1, $2, $3) RETURNING uid', [firebaseID,name, email], (error, results) => {
             if (error) {
                 res.status(400).send(error)
                 return console.error(error);
@@ -373,6 +373,115 @@ exports.updateActiveStates = [
     }
 ];
 
+// Method to update states of employer or jobseeker
+exports.updateName = [
+    body('name').notEmpty().isAlpha().withMessage("Must be a valid name"),
+    body('uuid').notEmpty().withMessage("Must provide a valid UUID"),
+    sanitizeBody('name', 'uuid').escape(),
+
+    async function (req, res, next) {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            res.status(400).send(errors)
+            return;
+        } else {
+            let firebaseID = req.body.firebaseID; // Unsure if needed at this stage right now
+            let states = req.body.states;
+            let uuid = req.body.uuid;
+            let url = req.originalUrl;
+            let path = url.split("/")[2];
+            if (path == 'jobseeker') {
+                await pool.query(`Update jobseeker 
+                    SET name = $1
+                    WHERE 
+                        uid = $2
+                    RETURNING uid`, [name, uuid], (error, results) => {
+                    if (error) {
+                        res.status(400).send(error);
+                        return console.error(error);
+                    }
+                    if (results.rowCount) {
+                        res.status(200).send('Name has been changed')
+                    } else {
+                        res.status(400).send("Users not found");
+                    }
+                });
+            } else if (path == 'employer') {
+                await pool.query(`Update employer 
+                    SET name = $1
+                    WHERE 
+                        uid = $2 
+                    RETURNING uid`, [name, uuid], (error, results) => {
+                    if (error) {
+                        res.status(400).send(error);
+                        return console.error(error);
+                    }
+                    if (results.rowCount) {
+                        res.status(200).send('Name has been changed')
+                    } else {
+                        res.status(400).send("Users not found");
+                    }
+                });
+            } else {
+                res.status(404)
+            }
+        }
+    }
+];
+
+// Method to update last login of employer or jobseeker
+exports.updateLastLogin = [
+    body('uuid').notEmpty().withMessage("Must provide a valid UUID"),
+    sanitizeBody('uuid').escape(),
+
+    async function (req, res, next) {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            res.status(400).send(errors)
+            return;
+        } else {
+            let firebaseID = req.body.firebaseID; // Unsure if needed at this stage right now
+            let uuid = req.body.uuid;
+            let url = req.originalUrl;
+            let path = url.split("/")[2];
+            if (path == 'jobseeker') {
+                await pool.query(`Update jobseeker 
+                    SET date_last_login = current_date
+                    WHERE 
+                        uid = $1
+                    RETURNING uid`, [uuid], (error, results) => {
+                    if (error) {
+                        res.status(400).send(error);
+                        return console.error(error);
+                    }
+                    if (results.rowCount) {
+                        res.status(200).send('Date updated')
+                    } else {
+                        res.status(400).send("Users not found");
+                    }
+                });
+            } else if (path == 'employer') {
+                await pool.query(`Update employer 
+                    SET date_last_login = current_date
+                    WHERE 
+                        uid = $1
+                    RETURNING uid`, [uid], (error, results) => {
+                    if (error) {
+                        res.status(400).send(error);
+                        return console.error(error);
+                    }
+                    if (results.rowCount) {
+                        res.status(200).send('Date updated')
+                    } else {
+                        res.status(400).send("Users not found");
+                    }
+                });
+            } else {
+                res.status(404)
+            }
+        }
+    }
+];
 // Now using exports.func so the list of below doesnt get too long
 // Route to create the employer's account
 // module.exports = {
