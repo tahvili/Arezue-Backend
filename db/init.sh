@@ -49,7 +49,9 @@ if [ $# -eq 0 ] || [ "$1" == "new" ] || [ "$1" == "all" ]
         PGPASSWORD=${password} psql -U ${username} -p ${port} -h ${hostname} ${database} < ./Starred_Resumes/Starred_Resumes.sql;
         PGPASSWORD=${password} psql -U ${username} -p ${port} -h ${hostname} ${database} < ./Pending_Requests_Sent/Pending_Requests_Sent.sql;
         PGPASSWORD=${password} psql -U ${username} -p ${port} -h ${hostname} ${database} < ./Job_list/Job_list.sql; 
-        PGPASSWORD=${password} psql -U ${username} -p ${port} -h ${hostname} ${database} < ./Experiences/Experiences.sql; 
+        PGPASSWORD=${password} psql -U ${username} -p ${port} -h ${hostname} ${database} < ./Experiences/Experiences.sql;
+        PGPASSWORD=${password} psql -U ${username} -p ${port} -h ${hostname} ${database} < ./Experiences/Experiences.sql;
+        PGPASSWORD=${password} psql -U ${username} -p ${port} -h ${hostname} ${database} < ./Uuid_mapping/Uuid_mapping.sql;
         } > /dev/null 2> "$logfile"; [ -s "$logfile" ] || rm -f "$logfile"
         if [ -f "$logfile" ]
             then
