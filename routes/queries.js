@@ -482,6 +482,8 @@ exports.updateLastLogin = [
         }
     }
 ];
+
+
 // Now using exports.func so the list of below doesnt get too long
 // Route to create the employer's account
 // module.exports = {

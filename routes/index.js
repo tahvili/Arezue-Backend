@@ -13,6 +13,7 @@ router.get('/api', function(req, res, next) {
   res.render('index', { title: 'Arezue API' });
 });
 
+
 // Temporarily get request for testing
 router.get('/api/Users', db.getAllUsers);
 
