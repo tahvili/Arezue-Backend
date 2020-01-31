@@ -7,7 +7,6 @@
 const pool = require('../config');
 
 var express = require('express')
-var bodyParser = require('body-parser')
 
 const {
     body,
@@ -17,19 +16,44 @@ const {
     sanitizeBody
 } = require('express-validator');
 
-var app = express()
 
-// create application/json parser
-var jsonParser = bodyParser.json()
+exports.init = [
+    body('firebaseID').notEmpty().isAlphanumeric().withMessage("You must pass in a firebase ID."),
+    function(request, response, next) {
+        const firebaseID = request.body.firebaseID;
+        var query = "SELECT * FROM Employer WHERE fb_id = $1";
+        pool.query(query, [firebaseID], (error, results))
+        .then(res => {
+            //TODO: Need to complete this init route.
+        });
+    }
 
-// create application/x-www-form-urlencoded parser
-var urlencodedParser = bodyParser.urlencoded({
-    extended: true
-})
+]
 
 // we can also do exports.func
+//Get all users
 exports.getAllUsers = function (request, response, next) {
-    pool.query('SELECT * from jobseeker', (error, results) => {
+    pool.query('SELECT * from Users', (error, results) => {
+        if (error) {
+            throw error;
+        }
+        response.status(200).json(results.rows);
+    });
+};
+
+//Gets all jobseekers
+exports.getAllJobSeekers = function (request, response, next) {
+    pool.query('SELECT * from Jobseeker', (error, results) => {
+        if (error) {
+            throw error;
+        }
+        response.status(200).json(results.rows);
+    });
+};
+
+//Gets all Employers
+exports.getAllEmployers = function (request, response, next) {
+    pool.query('SELECT * from Employer', (error, results) => {
         if (error) {
             throw error;
         }
@@ -43,6 +67,7 @@ exports.getAllUsers = function (request, response, next) {
  ** Requirements: UUID, Email and Name
  */
 exports.createJobseeker = [
+    body('firebaseID').notEmpty().isAlphanumeric().withMessage("You must pass in a firebase ID."),
     body('email').notEmpty().isEmail().withMessage("Must be a valid email address"),
     body('name').notEmpty().isAlpha().withMessage("Must be a valid name"),
     sanitizeBody('name', 'email').escape(),
@@ -57,7 +82,7 @@ exports.createJobseeker = [
         let firebaseID = req.body.firebaseID;
         let name = req.body.name;
         let email = req.body.email;
-        pool.query('INSERT INTO jobseeker (uid, name, email_address) VALUES ($1, $2, $3) RETURNING uid', [firebaseID, name, email], (error, results) => {
+        pool.query('INSERT INTO jobseeker (fb_id, name, email_address) VALUES ($1, $2, $3) RETURNING uid', [firebaseID, name, email], (error, results) => {
             if (error) {
                 res.status(400).send(error)
                 return console.error(error);
@@ -74,6 +99,7 @@ exports.createJobseeker = [
  ** Requirements: UUID, Email and Name
  */
 exports.createEmployer = [
+    body('firebaseID').notEmpty().isAlphanumeric().withMessage("You must pass in a firebase ID."),
     body('email').notEmpty().isEmail().withMessage("Must be a valid email address"),
     body('name').notEmpty().isAlpha().withMessage("Must be a valid name"),
     body('company').notEmpty().withMessage("Must be a valid company name"),
@@ -89,7 +115,7 @@ exports.createEmployer = [
         let name = req.body.name;
         let email = req.body.email;
         let company = req.body.company;
-        pool.query('INSERT INTO employer (uid, name, email_address, company VALUES (uuid_generate_v4(), $1, $2, $3) RETURNING uid', [name, email, company], (error, results) => {
+        pool.query('INSERT INTO Employer (fb_id, name, email_address, Company_id) VALUES ($1, $2, $3, $4) RETURNING uid', [firebaseID, name, email, company], (error, results) => {
             if (error) {
                 res.status(400).send(error)
                 return console.error(error);
@@ -100,6 +126,8 @@ exports.createEmployer = [
 
     }
 ];
+
+//####Routes that need to fixed########//
 
 // Method to insert phone number whether its employer or jobseeker
 exports.updatePhoneNum = [
