@@ -17,15 +17,44 @@ const {
 } = require('express-validator');
 
 
+function sendJSON(statusCode, payload) {
+    return JSON.stringify({status_code: statusCode, payload: payload})
+}
+
+function sendError(statusCode, message, additionalInfo={}) {
+    return JSON.stringify({status_code:statusCode, error: {message: message, additional_information: additionalInfo}})
+}
+
 exports.init = [
     body('firebaseID').notEmpty().isAlphanumeric().withMessage("You must pass in a firebase ID."),
     function(request, response, next) {
-        const firebaseID = request.body.firebaseID;
-        var query = "SELECT * FROM Employer WHERE fb_id = $1";
-        pool.query(query, [firebaseID], (error, results))
-        .then(res => {
-            //TODO: Need to complete this init route.
-        });
+        const errors = validationResult(request);
+        if (!errors.isEmpty()) {
+            // There are errors. Render form again with sanitized values/errors messages.
+            response.status(400).send(sendError(400, "Validation Error", errors))
+            return;
+        }
+        firebaseID = request.body.firebaseID;
+        var queryEmployer = "SELECT * FROM Employer WHERE fb_id = $1";
+        var queryJobseeker = "SELECT * FROM Jobseeker WHERE fb_id = $1";
+
+        //Performs both queries and then returns its results in an array which is used to handle the rest of the logic.
+        Promise.all([pool.query(queryEmployer, [firebaseID]),pool.query(queryJobseeker, [firebaseID])])
+        .then(values => {
+            //[0, 1] or [1,1], or [0, 0] where first index is employer, second is jobseeker
+            var rowCountsArray = values.map(r=>r.rowCount)
+            var rows = values.filter(r=>r.rowCount>0).map(r => r.rows[0])
+            //could not find any relevant user
+            if (rows.length == 0) {
+                response.status(404)
+                response.send(sendError(404, `User with firebase_id = ${firebaseID} not found.`))
+                return //console.error?
+            }
+            var userType = rowCountsArray[0] == 1 ? "employer" :"jobseeker" // this shouldn't be a string but using it temporarily
+            rows[0]['user_type'] = userType; //attach the user type to the row object
+            response.send(sendJSON(200, rows[0]))
+        })
+        .catch(e => {response.status(500); response.send(sendError(500, '/api/init error ' + e))});
     }
 
 ]
