@@ -25,6 +25,7 @@ router.get('/api', function(req, res, next) {
 
 
 // Temporarily get request for testing
+router.get('/api/temp-testing', db.getAllUsers);
 router.get('/api/users', db.getAllUsers);
 
 router.post('/api/init', db.init);
