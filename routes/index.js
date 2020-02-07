@@ -35,6 +35,7 @@ router.post('/api/init', db.init);
 // router.post('/api/jobseekers', db.getAllJobSeekers);
 router.get('/api/jobseekers', db.getAllJobSeekers);
 router.post('/api/jobseekers/create', db.createJobseeker);
+// router.post('/api/jobseekers/update', db.updateJobseeker);
 
 
 //##########Jobseeker Routes############//
