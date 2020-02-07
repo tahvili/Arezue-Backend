@@ -1,6 +1,3 @@
--- We need this table because what if Interested was removed from user because they arent interested anymore,
--- Are we not keeping track of everything sent?
-
 CREATE table IF NOT EXISTS Pending_Requests_Sent (
     EUID uuid REFERENCES employer(uid) ON DELETE CASCADE,
     JUID uuid REFERENCES jobseeker(uid) ON DELETE CASCADE,

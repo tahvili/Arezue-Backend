@@ -1,5 +1,3 @@
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-
 CREATE table IF NOT EXISTS Company (
     Company_ID serial primary key,
     Company_Name varchar(70) not NULL,

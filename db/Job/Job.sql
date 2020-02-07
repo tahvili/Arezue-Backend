@@ -6,8 +6,6 @@ BEGIN
 END
 $$;
 
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-
 CREATE table IF NOT EXISTS Job (
     Job_ID serial primary key,
     EUID uuid REFERENCES employer(UID) ON DELETE CASCADE not NULL,

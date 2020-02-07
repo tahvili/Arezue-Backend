@@ -1,5 +1,3 @@
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-
 CREATE table IF NOT EXISTS Resumes (
     UID uuid REFERENCES jobseeker(uid) ON DELETE CASCADE,
     Resume_ID serial UNIQUE,
