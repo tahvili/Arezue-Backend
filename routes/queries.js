@@ -111,13 +111,15 @@ exports.createJobseeker = [
         let firebaseID = req.body.firebaseID;
         let name = req.body.name;
         let email = req.body.email;
-        pool.query('INSERT INTO jobseeker (fb_id, name, email_address) VALUES ($1, $2, $3) RETURNING uid', [firebaseID, name, email], (error, results) => {
-            if (error) {
-                res.status(400).send(error)
-                return console.error(error);
-            }
+        Promise.all([pool.query('INSERT INTO jobseeker (fb_id, name, email_address) VALUES ($1, $2, $3) RETURNING uid', [firebaseID, name, email])])
+        .then(results => {
+            
             res.status(200).send(`User created with ID: ${results.rows[0].uid}`)
         })
+        .catch(error => {
+                res.status(400).send(error)
+                return console.error(error);
+            })
     }
 ];
 
