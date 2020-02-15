@@ -6,8 +6,6 @@
 // Need to call pool from config.js which is our database setup and others
 const pool = require('../config');
 
-var express = require('express')
-
 const {
     body,
     validationResult
@@ -50,7 +48,7 @@ exports.init = [
                 response.send(sendError(404, `User with firebaseID = ${firebaseID} not found.`))
                 return //console.error?
             }
-            var userType = rowCountsArray[0] == 1 ? "employer" :"jobseeker" // this shouldn't be a string but using it temporarily
+            var userType = rowCountsArray[0] == 1 ? "employer" : "jobseeker" // this shouldn't be a string but using it temporarily
             rows[0]['user_type'] = userType; //attach the user type to the row object
             response.send(sendJSON(200, rows[0]))
         })
@@ -123,7 +121,7 @@ exports.createJobseeker = [
             }
             
         })
-        .catch(e => {res.status(500); res.send(sendError(500, '/jobseeker/create error ' + e ))});
+        .catch(e => {res.status(500); res.send(sendError(500, '/jobseeker error ' + e ))});
     }];
 
 
@@ -164,5 +162,34 @@ exports.createEmployer = [
             }
             
         })
-        .catch(e => {res.status(500); res.send(sendError(500, '/employers/create error ' + e ))});
+        .catch(e => {res.status(500); res.send(sendError(500, '/employers error ' + e ))});
+    }];
+
+exports.getEmployer = [
+    body('firebaseID').notEmpty().isAlphanumeric().withMessage("You must pass in a firebase ID."),
+    sanitizeBody('firebaseID').escape(),
+
+    async function (req, res, next) {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            res.status(400).send(errors)
+            return;
+        }
+        let firebaseID = req.body.firebaseID;
+        
+
+        let create_employer = `SELECT * FROM employer where fb_id = $1`;
+        Promise.all([pool.query(create_employer, [firebaseID])])
+        .then (result => {
+            // var rowCountsArray = values.map(r=>r.rowCount)
+            var rows = result.filter(r=>r.rowCount>0).map(r => r.rows[0])
+
+            if (rows[0]) {
+                res.status(200).send(sendJSON(200, rows[0]))
+            } else {
+                res.status(400).send(`Employer could not be created`);
+            }
+            
+        })
+        .catch(e => {res.status(500); res.send(sendError(500, '/employers error ' + e ))});
     }];
