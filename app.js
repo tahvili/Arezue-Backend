@@ -7,8 +7,32 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var apiRouter = require('./routes/api');
 
 var app = express();
+
+
+const swaggerJSDoc = require('swagger-jsdoc');
+const swaggerUi = require('swagger-ui-express');
+var options = {
+  swaggerDefinition: {
+    host: 'localhost:3000',
+    basePath: '/api/v1',
+    info: {
+      title: 'Arezue API',
+      version: '0.0.1',
+      description: 'API for all api calls to Arezue server'
+    }
+  },
+  apis: ['./routes/*'],
+};
+const swaggerSpec = swaggerJSDoc(options);
+
+// API-docs
+app.use('/api/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+app.use(express.static(path.join(__dirname, 'public')));
+
 
 // dotenv for all our environment variables
 require('dotenv').config();
@@ -25,6 +49,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/api', apiRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

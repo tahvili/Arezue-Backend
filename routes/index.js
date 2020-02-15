@@ -1,7 +1,7 @@
 var express = require('express');
-var router = express.Router();
+var router = express.Router({ mergeParams: true, strict: true});
 
-var db = require('./queries');
+// var db = require('./queries');
 var bodyParser = require('body-parser')
 
 
@@ -25,23 +25,23 @@ router.get('/api', function(req, res, next) {
 
 
 // Temporarily get request for testing
-router.get('/api/temp-testing', db.getAllUsers);
-router.get('/api/users', db.getAllUsers);
+// router.get('/api/temp-testing', db.getAllUsers);
+// router.get('/api/users', db.getAllUsers);
 
-router.post('/api/init', db.init);
+// router.post('/api/init', db.init);
 
 //##########Jobseeker Routes############//
 // Create account for new jobseeker
 // router.post('/api/jobseekers', db.getAllJobSeekers);
-router.get('/api/jobseekers', db.getAllJobSeekers);
-router.post('/api/jobseekers/create', db.createJobseeker);
+// router.get('/api/jobseekers', db.getAllJobSeekers);
+// router.post('/api/jobseekers/create', db.createJobseeker);
 // router.post('/api/jobseekers/update', db.updateJobseeker);
 
 
 //##########Jobseeker Routes############//
 // Create account for new employer
-router.get('/api/employers', db.getAllEmployers);
-router.post('/api/employers/create', db.createEmployer);
+// router.get('/api/employers', db.getAllEmployers);
+// router.post('/api/employers/create', db.createEmployer);
 // router.put('/api/employers/edit', db.editeEmployer);
 
 

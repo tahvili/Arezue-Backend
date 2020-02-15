@@ -98,7 +98,7 @@ exports.getAllEmployers = function (request, response, next) {
 exports.createJobseeker = [
     body('firebaseID').notEmpty().isAlphanumeric().withMessage("You must pass in a firebase ID."),
     body('email').notEmpty().isEmail().withMessage("Must be a valid email address"),
-    body('name').notEmpty().isAlpha().withMessage("Must be a valid name"),
+    body('name').notEmpty().withMessage("Must be a valid name"),
     sanitizeBody('name', 'email').escape(),
 
     async function (req, res, next) {
@@ -112,16 +112,19 @@ exports.createJobseeker = [
         let name = req.body.name;
         let email = req.body.email;
         Promise.all([pool.query('INSERT INTO jobseeker (fb_id, name, email_address) VALUES ($1, $2, $3) RETURNING uid', [firebaseID, name, email])])
-        .then(results => {
+        .then(result => {
+    
+            var rows = result.filter(r=>r.rowCount>0).map(r => r.rows[0])
+          
+            if (rows[0].uid) {
+                res.status(200).send(`Jobseeker created with ID: ${rows[0].uid}`)
+            } else {
+                res.status(400).send(`Jobseeker could not be created`);
+            }
             
-            res.status(200).send(`User created with ID: ${results.rows[0].uid}`)
         })
-        .catch(error => {
-                res.status(400).send(error)
-                return console.error(error);
-            })
-    }
-];
+        .catch(e => {res.status(500); res.send(sendError(500, '/jobseeker/create error ' + e ))});
+    }];
 
 
 // Route to create the Employer account
@@ -132,7 +135,7 @@ exports.createJobseeker = [
 exports.createEmployer = [
     body('firebaseID').notEmpty().isAlphanumeric().withMessage("You must pass in a firebase ID."),
     body('email').notEmpty().isEmail().withMessage("Must be a valid email address"),
-    body('name').notEmpty().isAlpha().withMessage("Must be a valid name"),
+    body('name').notEmpty().withMessage("Must be a valid name"),
     body('company').notEmpty().withMessage("Must be a valid company name"),
     sanitizeBody('name', 'company', 'email').escape(),
 
@@ -155,11 +158,11 @@ exports.createEmployer = [
             var rows = result.filter(r=>r.rowCount>0).map(r => r.rows[0])
 
             if (rows[0].uid) {
-                res.status(200).send(`User created with ID: ${rows[0].uid}`)
+                res.status(200).send(`Employer created with ID: ${rows[0].uid}`)
             } else {
-                res.status(400).send(`User could not be created`);
+                res.status(400).send(`Employer could not be created`);
             }
             
         })
-        .catch(e => {res.status(500); res.send(sendError(500, '/api/employers/create error ' + e ))});
+        .catch(e => {res.status(500); res.send(sendError(500, '/employers/create error ' + e ))});
     }];
