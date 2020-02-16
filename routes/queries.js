@@ -123,7 +123,34 @@ exports.createJobseeker = [
         })
         .catch(e => {res.status(500); res.send(sendError(500, '/jobseeker error ' + e ))});
     }];
-
+    exports.getJobseeker = [
+        // body('firebaseID').notEmpty() .withMessage("You must pass in a firebase ID."),
+        // sanitizeBody('firebaseID').escape(),
+    
+        async function (req, res, next) {
+            const errors = validationResult(req);
+            if (!errors.isEmpty()) {
+                res.status(400).send(errors)
+                return;
+            }
+            let firebaseID = req.query.firebaseID;
+            
+    
+            let create_employer = `SELECT * FROM jobseeker where fb_id = $1`;
+            Promise.all([pool.query(create_employer, [firebaseID])])
+            .then (result => {
+                // var rowCountsArray = values.map(r=>r.rowCount)
+                var rows = result.filter(r=>r.rowCount>0).map(r => r.rows[0])
+    
+                if (rows[0]) {
+                    res.status(200).send(rows[0])
+                } else {
+                    res.status(400).send(`jobseeker could not be created`);
+                }
+                
+            })
+            .catch(e => {res.status(500); res.send(sendError(500, '/jobseeker error ' + e ))});
+        }];
 
 // Route to create the Employer account
 // Since they have different views, we will have differnet POST api request
@@ -166,8 +193,8 @@ exports.createEmployer = [
     }];
 
 exports.getEmployer = [
-    body('firebaseID').notEmpty().isAlphanumeric().withMessage("You must pass in a firebase ID."),
-    sanitizeBody('firebaseID').escape(),
+    // param('firebaseID').notEmpty().isAlphanumeric().withMessage("You must pass in a firebase ID."),
+    // sanitizeBody('firebaseID').escape(),
 
     async function (req, res, next) {
         const errors = validationResult(req);
@@ -175,7 +202,7 @@ exports.getEmployer = [
             res.status(400).send(errors)
             return;
         }
-        let firebaseID = req.body.firebaseID;
+        let firebaseID = req.param.firebaseID;
         
 
         let create_employer = `SELECT * FROM employer where fb_id = $1`;
@@ -185,7 +212,7 @@ exports.getEmployer = [
             var rows = result.filter(r=>r.rowCount>0).map(r => r.rows[0])
 
             if (rows[0]) {
-                res.status(200).send(sendJSON(200, rows[0]))
+                res.status(200).json(rows[0])
             } else {
                 res.status(400).send(`Employer could not be created`);
             }
