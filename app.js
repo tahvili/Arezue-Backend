@@ -16,7 +16,8 @@ const swaggerJSDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
 var options = {
   swaggerDefinition: {
-    host: 'localhost:3000',
+    // host: 'api.daffychuy.com',
+    
     basePath: '/api/v1',
     info: {
       title: 'Arezue API',
