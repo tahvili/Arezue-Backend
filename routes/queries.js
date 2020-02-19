@@ -1,3 +1,4 @@
+/*jshint esversion: 6*/
 /*
  * We need to create an authorized API call after we get firebase integration
  * https://www.toptal.com/firebase/role-based-firebase-authentication
@@ -40,13 +41,13 @@ exports.init = [
         Promise.all([pool.query(queryEmployer, [firebaseID]),pool.query(queryJobseeker, [firebaseID])])
         .then(values => {
             //[0, 1] or [1,1], or [0, 0] where first index is employer, second is jobseeker
-            var rowCountsArray = values.map(r=>r.rowCount)
-            var rows = values.filter(r=>r.rowCount>0).map(r => r.rows[0])
+            var rowCountsArray = values.map(r=>r.rowCount);
+            var rows = values.filter(r=>r.rowCount>0).map(r => r.rows[0]);
             //could not find any relevant user
             if (rows.length == 0) {
-                response.status(404)
-                response.send(sendError(404, `User with firebaseID = ${firebaseID} not found.`))
-                return //console.error?
+                response.status(404);
+                response.send(sendError(404, `User with firebaseID = ${firebaseID} not found.`));
+                return; //console.error?
             }
             var userType = rowCountsArray[0] == 1 ? "employer" : "jobseeker" // this shouldn't be a string but using it temporarily
             rows[0]['user_type'] = userType; //attach the user type to the row object

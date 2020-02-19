@@ -104,33 +104,33 @@ router.route('/v1/employer')
      * 
      */
     .get(db.getEmployer)
-    /**
-     *  @swagger
-     * 
-     *  /employer:
-     *      put:
-     *          description: Modify information of specified employyer
-     *          tags:
-     *              - Employer
-     *          produces: 
-     *              - application/json
-     *          parameters:
-     *              - name: UUID
-     *                description: UUID of the corresponding employer
-     *                in: formData
-     *                requried: true
-     *                type: string
-     * 
-     *          responses:
-     *              200:
-     *                  description: Successfully modified the employer
-     *              400:
-     *                  description: User could not be found
-     *              500:
-     *                  description: Internal server error
-     * 
-     * 
-     */
+    // /**
+    //  *  @swagger
+    //  * 
+    //  *  /employer:
+    //  *      put:
+    //  *          description: Modify information of specified employyer
+    //  *          tags:
+    //  *              - Employer
+    //  *          produces: 
+    //  *              - application/json
+    //  *          parameters:
+    //  *              - name: UUID
+    //  *                description: UUID of the corresponding employer
+    //  *                in: formData
+    //  *                requried: true
+    //  *                type: string
+    //  * 
+    //  *          responses:
+    //  *              200:
+    //  *                  description: Successfully modified the employer
+    //  *              400:
+    //  *                  description: User could not be found
+    //  *              500:
+    //  *                  description: Internal server error
+    //  * 
+    //  * 
+    //  */
     .put(db.updateEmployer)
 
 router.route('/v1/jobseeker?:firebaseID?')
