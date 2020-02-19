@@ -9,7 +9,7 @@ router.route('/v1/init')
      * 
      *  /init:
      *      post:
-     *          description: Initializes the jobseeker or employer fields
+     *          description: Get either the jobseeker or employer's pre-information if exists
      *          tags:
      *              - Initialization
      *          produces: 
@@ -22,9 +22,9 @@ router.route('/v1/init')
      *                type: string 
      *          responses:
      *              200:
-     *                  description: Successfully created an employer
+     *                  description: Successfully get an employer/jobseeker
      *              400:
-     *                  description: User could not be created
+     *                  description: User could not be found
      *              500:
      *                  description: Internal server error
      * 
