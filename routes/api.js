@@ -116,34 +116,33 @@ router.route('/employer/:uid?')
      * 
      */
     .get(db.getEmployer)
-    // /**
-    //  *  @swagger
-    //  * 
-    //  *  /employer:
-    //  *      put:
-    //  *          description: Modify information of specified employyer
-    //  *          tags:
-    //  *              - Employer
-    //  *          produces: 
-    //  *              - application/json
-    //  *          parameters:
-    //  *              - name: UUID
-    //  *                description: UUID of the corresponding employer
-    //  *                in: formData
-    //  *                requried: true
-    //  *                type: string
-    //  * 
-    //  *          responses:
-    //  *              200:
-    //  *                  description: Successfully modified the employer
-    //  *              400:
-    //  *                  description: User could not be found
-    //  *              500:
-    //  *                  description: Internal server error
-    //  * 
-    //  * 
-    //  */
-    // .put(db.updateEmployer)
+    /**
+     *  @swagger
+     * 
+     *  /employer/{uid}:
+     *      put:
+     *          description: Modify information of specified employer; NOTE! YOU MUST PASS EVERYTHING ELSE AS BODY
+     *          tags:
+     *              - Employer
+     *          produces: 
+     *              - application/json
+     *          parameters:
+     *              - name: uid
+     *                description: UUID of the corresponding employer
+     *                in: formData
+     *                requried: true
+     *                type: string
+     *          responses:
+     *              200:
+     *                  description: Successfully modified the employer
+     *              400:
+     *                  description: User could not be found
+     *              500:
+     *                  description: Internal server error
+     * 
+     * 
+     */
+    .put(db.updateEmployer)
 
 
 router.route('/jobseeker/?:uid?/')
@@ -213,6 +212,32 @@ router.route('/jobseeker/?:uid?/')
      * 
      */
     .get(db.getJobseeker)
+    /**
+     *  @swagger
+     * 
+     *  /jobseeker/{uid}:
+     *      put:
+     *          description: Modify information of specified jobseeker; NOTE! YOU MUST PASS EVERYTHING ELSE AS BODY
+     *          tags:
+     *              - Jobseeker
+     *          produces: 
+     *              - application/json
+     *          parameters:
+     *              - name: uid
+     *                description: UUID of the corresponding jobseeker
+     *                in: formData
+     *                requried: true
+     *                type: string
+     *          responses:
+     *              200:
+     *                  description: Successfully modified the jobseeker
+     *              400:
+     *                  description: User could not be found
+     *              500:
+     *                  description: Internal server error
+     * 
+     * 
+     */
     .put(db.updateJobseeker);
 
 module.exports = router;

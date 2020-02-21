@@ -227,12 +227,40 @@ exports.updateJobseeker = [
             return;
         }
 
-        pairs = Object.keys(data).map((key) => `${key} = "${data[key]}"`).join(", ");
-        console.log(pairs);
-        let update_employer = `UPDATE jobseeker set $1 where uid = $2 RETURNING uid`;
-        Promise.all([pool.query(update_employer, [pairs, uid])])
+        pairs = Object.keys(data).map((key, index) => `${key}=$${index+1}`).join(", ");
+        values = Object.values(data)
+        var update_jobseeker = `UPDATE jobseeker set ${pairs} where uid = $${values.length+1} RETURNING uid`;
+        Promise.all([pool.query(update_jobseeker, values.concat(uid))])
         .then (result => {
-            // var rowCountsArray = values.map(r=>r.rowCount)
+            var rows = result.filter(r=>r.rowCount>0).map(r => r.rows[0])
+
+            if (rows[0]) {
+                res.status(200).send(rows[0]);
+            } else {
+                res.status(400).send(`Jobseeker could not be updated`);
+            }
+            
+        })
+       .catch(e => {res.status(500); res.send(sendError(500, '/jobseeker error ' + e ))});
+   }];
+
+exports.updateEmployer = [
+    async function (req, res, next) {
+        let uid = validator.escape(req.params.uid);
+        let data = req.body;
+        console.log(typeof data);
+        console.log(data);
+
+        if (!validator.isUUID(uid, [4])) {
+            res.status(400).send("Invalid UUID");
+            return;
+        }
+
+        pairs = Object.keys(data).map((key, index) => `${key}=$${index+1}`).join(", ");
+        values = Object.values(data)
+        var update_employer = `UPDATE jobseeker set ${pairs} where uid = $${values.length+1} RETURNING uid`;
+        Promise.all([pool.query(update_employer, values.concat(uid))])
+        .then (result => {
             var rows = result.filter(r=>r.rowCount>0).map(r => r.rows[0])
 
             if (rows[0]) {
