@@ -143,10 +143,10 @@ router.route('/employer/:uid?')
     //  * 
     //  * 
     //  */
-    .put(db.updateEmployer)
+    // .put(db.updateEmployer)
 
 
-router.route('/jobseeker/?:uid?')
+router.route('/jobseeker/?:uid?/')
     /**
      *  @swagger
      * 
@@ -212,7 +212,7 @@ router.route('/jobseeker/?:uid?')
      * 
      * 
      */
-    .get(db.getJobseeker);
-
+    .get(db.getJobseeker)
+    .put(db.updateJobseeker);
 
 module.exports = router;

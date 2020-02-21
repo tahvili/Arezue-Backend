@@ -6,6 +6,7 @@
 
 // Need to call pool from config.js which is our database setup and others
 const pool = require('../config');
+const bodyParser = require('body-parser');
 
 const validator = require('validator');
 
@@ -198,8 +199,6 @@ exports.getEmployer = [
             return;
         }
 
-        
-
         let create_employer = `SELECT * FROM employer where uid = $1`;
         Promise.all([pool.query(create_employer, [uid])])
         .then (result => {
@@ -216,8 +215,32 @@ exports.getEmployer = [
         .catch(e => {res.status(500); res.send(sendError(500, '/employer error ' + e ))});
     }];
 
-exports.updateEmployer = [
+exports.updateJobseeker = [
     async function (req, res, next) {
-       let update_employer = `` 
-    }
-]
+        let uid = validator.escape(req.params.uid);
+        let data = req.body;
+        console.log(typeof data);
+        console.log(data);
+
+        if (!validator.isUUID(uid, [4])) {
+            res.status(400).send("Invalid UUID");
+            return;
+        }
+
+        pairs = Object.keys(data).map((key) => `${key} = "${data[key]}"`).join(", ");
+        console.log(pairs);
+        let update_employer = `UPDATE jobseeker set $1 where uid = $2 RETURNING uid`;
+        Promise.all([pool.query(update_employer, [pairs, uid])])
+        .then (result => {
+            // var rowCountsArray = values.map(r=>r.rowCount)
+            var rows = result.filter(r=>r.rowCount>0).map(r => r.rows[0])
+
+            if (rows[0]) {
+                res.status(200).send(rows[0]);
+            } else {
+                res.status(400).send(`Jobseeker could not be updated`);
+            }
+            
+        })
+       .catch(e => {res.status(500); res.send(sendError(500, '/jobseeker error ' + e ))});
+   }];
