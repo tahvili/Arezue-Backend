@@ -2,8 +2,16 @@ var express = require('express');
 var router = express.Router({ mergeParams: true, strickt: true});
 
 const db = require('./queries');
-router.get('/v1/getAll', db.getAllJobSeekers);
-router.route('/v1/init')
+
+router.use(function(req, res, next) {
+    console.log("Logging request... (Message does nothing atm)");
+    next();
+})
+
+
+router.get('/getAll', db.getAllJobSeekers);
+
+router.route('/init')
     /**
      *  @swagger
      * 
@@ -32,7 +40,11 @@ router.route('/v1/init')
      */
     .post(db.init);
 
-router.route('/v1/employer')
+// router.route('/employer/:uid')
+//     .get(db.getEmployer);
+// router.get('/employer/:uid/test', db.getEmployer);
+
+router.route('/employer/:uid?')
     /**
      *  @swagger
      * 
@@ -63,7 +75,7 @@ router.route('/v1/employer')
      *                description: Id of the company
      *                in: formData
      *                requried: true
-     *                type: string
+     *                type: integer
      * 
      *          responses:
      *              200:
@@ -79,7 +91,7 @@ router.route('/v1/employer')
     /**
      *  @swagger
      * 
-     *  /employer?uid={uid}:
+     *  /employer/{uid}:
      *      get:
      *          description: Returns information about specified jobseeker
      *          tags:
@@ -133,7 +145,8 @@ router.route('/v1/employer')
     //  */
     .put(db.updateEmployer)
 
-router.route('/v1/jobseeker?:firebaseID?')
+
+router.route('/jobseeker/?:uid?')
     /**
      *  @swagger
      * 
@@ -175,7 +188,7 @@ router.route('/v1/jobseeker?:firebaseID?')
     /**
      *  @swagger
      * 
-     *  /jobseeker?uid={uid}:
+     *  /jobseeker/{uid}:
      *      get:
      *          description: Returns information about specified jobseeker
      *          tags:
