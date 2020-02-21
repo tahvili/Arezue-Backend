@@ -226,9 +226,12 @@ exports.updateJobseeker = [
             res.status(400).send("Invalid UUID");
             return;
         }
-
+        delete data['uid'];
+        delete data['firebaseID']
         pairs = Object.keys(data).map((key, index) => `${key}=$${index+1}`).join(", ");
+
         values = Object.values(data)
+        console.log(pairs);
         var update_jobseeker = `UPDATE jobseeker set ${pairs} where uid = $${values.length+1} RETURNING uid`;
         Promise.all([pool.query(update_jobseeker, values.concat(uid))])
         .then (result => {
@@ -255,8 +258,10 @@ exports.updateEmployer = [
             res.status(400).send("Invalid UUID");
             return;
         }
-
+        delete data['uid'];
+        delete data['firebaseID']
         pairs = Object.keys(data).map((key, index) => `${key}=$${index+1}`).join(", ");
+        console.log(data);
         values = Object.values(data)
         var update_employer = `UPDATE jobseeker set ${pairs} where uid = $${values.length+1} RETURNING uid`;
         Promise.all([pool.query(update_employer, values.concat(uid))])
