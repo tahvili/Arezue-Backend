@@ -24,7 +24,7 @@ exports.init = [
         var firebaseID = request.body.firebaseID;
         var queryEmployer = "SELECT * FROM Employer WHERE fb_id = $1";
         var queryJobseeker = "SELECT * FROM Jobseeker WHERE fb_id = $1";
-        validator.escape(req.firebaseID),
+        validator.escape(request.firebaseID),
 
         //Performs both queries and then returns its results in an array which is used to handle the rest of the logic.
         Promise.all([pool.query(queryEmployer, [firebaseID]),pool.query(queryJobseeker, [firebaseID])])
