@@ -21,7 +21,7 @@ function sendError(statusCode, message, additionalInfo={}) {
 exports.init = [
     function(request, response, next) {
         
-        var firebaseID = validator.escape(request.firebaseID);
+        var firebaseID = validator.escape(request.body.firebaseID);
         var queryEmployer = "SELECT * FROM Employer WHERE fb_id = $1";
         var queryJobseeker = "SELECT * FROM Jobseeker WHERE fb_id = $1";
 
