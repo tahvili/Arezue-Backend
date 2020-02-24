@@ -21,10 +21,9 @@ function sendError(statusCode, message, additionalInfo={}) {
 exports.init = [
     function(request, response, next) {
         
-        var firebaseID = request.body.firebaseID;
+        var firebaseID = validator.escape(request.body.firebaseID);
         var queryEmployer = "SELECT * FROM Employer WHERE fb_id = $1";
         var queryJobseeker = "SELECT * FROM Jobseeker WHERE fb_id = $1";
-        validator.escape(req.firebaseID),
 
         //Performs both queries and then returns its results in an array which is used to handle the rest of the logic.
         Promise.all([pool.query(queryEmployer, [firebaseID]),pool.query(queryJobseeker, [firebaseID])])
