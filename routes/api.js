@@ -240,4 +240,124 @@ router.route('/jobseeker/?:uid?/')
      */
     .put(db.updateJobseeker);
 
+    router.route('/jobseeker/:uid/skills')
+    /**
+     *  @swagger
+     * 
+     *  /jobseeker/{uid}/skills:
+     *      get:
+     *          description: Returns the skills of specified jobseeker
+     *          tags:
+     *              - Jobseeker, skills
+     *          produces: 
+     *              - application/json
+     *          parameters:
+     *              - name: uid
+     *                description: UID for the specific user
+     *                in: path
+     *                requried: true
+     *                type: string
+     * 
+     *          responses:
+     *              200:
+     *                  description: Successfully get the Jobseeker
+     *              400:
+     *                  description: User could not be found
+     *              500:
+     *                  description: Internal server error
+     * 
+     * 
+     */
+    .get(db.getSkills)
+
+    router.route('/jobseeker/:uid/dream_careers')
+    /**
+     *  @swagger
+     * 
+     *  /jobseeker/{uid}/dream_careers:
+     *      get:
+     *          description: Returns the dream careers of specified jobseeker
+     *          tags:
+     *              - Jobseeker, Drean Careers
+     *          produces: 
+     *              - application/json
+     *          parameters:
+     *              - name: uid
+     *                description: UID for the specific user
+     *                in: path
+     *                requried: true
+     *                type: string
+     * 
+     *          responses:
+     *              200:
+     *                  description: Successfully get the Jobseeker
+     *              400:
+     *                  description: User could not be found
+     *              500:
+     *                  description: Internal server error
+     * 
+     * 
+     */
+    .get(db.getDreamCareers)
+
+    router.route('/jobseeker/:uid/dream_companies')
+    /**
+     *  @swagger
+     * 
+     *  /jobseeker/{uid}/dream_companies:
+     *      get:
+     *          description: Returns the dream careers of specified jobseeker
+     *          tags:
+     *              - Jobseeker, Drean Companies
+     *          produces: 
+     *              - application/json
+     *          parameters:
+     *              - name: uid
+     *                description: UID for the specific user
+     *                in: path
+     *                requried: true
+     *                type: string
+     * 
+     *          responses:
+     *              200:
+     *                  description: Successfully get the Jobseeker
+     *              400:
+     *                  description: User could not be found
+     *              500:
+     *                  description: Internal server error
+     * 
+     * 
+     */
+    .get(db.getDreamCompanies)
+
+    router.route('/jobseeker/:uid/exp')
+    /**
+     *  @swagger
+     * 
+     *  /jobseeker/{uid}/exp:
+     *      get:
+     *          description: Returns the experiences of specified jobseeker
+     *          tags:
+     *              - Jobseeker, Experiences
+     *          produces: 
+     *              - application/json
+     *          parameters:
+     *              - name: uid
+     *                description: UID for the specific user
+     *                in: path
+     *                requried: true
+     *                type: string
+     * 
+     *          responses:
+     *              200:
+     *                  description: Successfully get the Jobseeker
+     *              400:
+     *                  description: User could not be found
+     *              500:
+     *                  description: Internal server error
+     * 
+     * 
+     */
+    .get(db.getExp)
+
 module.exports = router;

@@ -277,3 +277,103 @@ exports.updateEmployer = [
         })
        .catch(e => {res.status(500); res.send(sendError(500, '/jobseeker error ' + e ))});
    }];
+
+exports.getSkills = [
+    async function (req, res, next) {
+        let uid = validator.escape(req.params.uid);
+        if (validator.isEmpty(uid)) {
+            res.status(400).send("One of the field is empty");
+            return;
+        }
+        if (!validator.isUUID(uid, [4])) {
+            res.status(400).send("Invalid UUID");
+            return;
+        }
+        let Query = `SELECT * FROM skills where uid = $1`;
+        Promise.all([pool.query(Query, [uid])])
+        .then (result => {
+            var rows = result.filter(r=>r.rowCount>0).map(r => r.rows[0])
+
+            if (rows[0]) {
+                res.status(200).send(rows)
+            } else {
+                res.status(400).send(`Jobseeker could not be found`);
+            }
+        })
+        .catch(e => {res.status(500); res.send(sendError(500, '/jobseeker error ' + e ))});
+    }];
+
+exports.getDreamCareers = [
+    async function (req, res, next) {
+        let uid = validator.escape(req.params.uid);
+        if (validator.isEmpty(uid)) {
+            res.status(400).send("One of the field is empty");
+            return;
+        }
+        if (!validator.isUUID(uid, [4])) {
+            res.status(400).send("Invalid UUID");
+            return;
+        }
+        let Query = `SELECT * FROM Dream_Careers where uid = $1`;
+        Promise.all([pool.query(Query, [uid])])
+        .then (result => {
+            var rows = {};
+            rows = result.filter(r=>r.rowCount>0).map(r => r.rows)
+            if (rows) {
+                res.status(200).send(rows)
+            } else {
+                res.status(400).send(`Jobseeker could not be found`);
+            }
+        })
+        .catch(e => {res.status(500); res.send(sendError(500, '/jobseeker error ' + e ))});
+    }];
+
+exports.getDreamCompanies = [
+    async function (req, res, next) {
+        let uid = validator.escape(req.params.uid);
+        if (validator.isEmpty(uid)) {
+            res.status(400).send("One of the field is empty");
+            return;
+        }
+        if (!validator.isUUID(uid, [4])) {
+            res.status(400).send("Invalid UUID");
+            return;
+        }
+        let Query = `SELECT * FROM Dream_Companies where uid = $1`;
+        Promise.all([pool.query(Query, [uid])])
+        .then (result => {
+            var rows = result.filter(r=>r.rowCount>0).map(r => r.rows[0])
+
+            if (rows[0]) {
+                res.status(200).send(rows)
+            } else {
+                res.status(400).send(`Jobseeker could not be found`);
+            }
+        })
+        .catch(e => {res.status(500); res.send(sendError(500, '/jobseeker error ' + e ))});
+    }];
+
+exports.getExp = [
+    async function (req, res, next) {
+        let uid = validator.escape(req.params.uid);
+        if (validator.isEmpty(uid)) {
+            res.status(400).send("One of the field is empty");
+            return;
+        }
+        if (!validator.isUUID(uid, [4])) {
+            res.status(400).send("Invalid UUID");
+            return;
+        }
+        let Query = `SELECT * FROM Experiences where uid = $1`;
+        Promise.all([pool.query(Query, [uid])])
+        .then (result => {
+            var rows = result.filter(r=>r.rowCount>0).map(r => r.rows[0])
+
+            if (rows[0]) {
+                res.status(200).send(rows)
+            } else {
+                res.status(400).send(`Jobseeker could not be found`);
+            }
+        })
+        .catch(e => {res.status(500); res.send(sendError(500, '/jobseeker error ' + e ))});
+    }];
