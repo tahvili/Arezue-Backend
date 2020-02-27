@@ -2,8 +2,16 @@ var express = require('express');
 var router = express.Router({ mergeParams: true, strickt: true});
 
 const db = require('./queries');
-router.get('/v1/getAll', db.getAllJobSeekers);
-router.route('/v1/init')
+
+router.use(function(req, res, next) {
+    console.log("Logging request... (Message does nothing atm)");
+    next();
+})
+
+
+router.get('/getAll', db.getAllJobSeekers);
+
+router.route('/init')
     /**
      *  @swagger
      * 
@@ -32,7 +40,11 @@ router.route('/v1/init')
      */
     .post(db.init);
 
-router.route('/v1/employer')
+// router.route('/employer/:uid')
+//     .get(db.getEmployer);
+// router.get('/employer/:uid/test', db.getEmployer);
+
+router.route('/employer/:uid?')
     /**
      *  @swagger
      * 
@@ -63,7 +75,7 @@ router.route('/v1/employer')
      *                description: Id of the company
      *                in: formData
      *                requried: true
-     *                type: string
+     *                type: integer
      * 
      *          responses:
      *              200:
@@ -79,7 +91,7 @@ router.route('/v1/employer')
     /**
      *  @swagger
      * 
-     *  /employer?uid={uid}:
+     *  /employer/{uid}:
      *      get:
      *          description: Returns information about specified jobseeker
      *          tags:
@@ -104,36 +116,36 @@ router.route('/v1/employer')
      * 
      */
     .get(db.getEmployer)
-    // /**
-    //  *  @swagger
-    //  * 
-    //  *  /employer:
-    //  *      put:
-    //  *          description: Modify information of specified employyer
-    //  *          tags:
-    //  *              - Employer
-    //  *          produces: 
-    //  *              - application/json
-    //  *          parameters:
-    //  *              - name: UUID
-    //  *                description: UUID of the corresponding employer
-    //  *                in: formData
-    //  *                requried: true
-    //  *                type: string
-    //  * 
-    //  *          responses:
-    //  *              200:
-    //  *                  description: Successfully modified the employer
-    //  *              400:
-    //  *                  description: User could not be found
-    //  *              500:
-    //  *                  description: Internal server error
-    //  * 
-    //  * 
-    //  */
+    /**
+     *  @swagger
+     * 
+     *  /employer/{uid}:
+     *      put:
+     *          description: Modify information of specified employer; NOTE! YOU MUST PASS EVERYTHING ELSE AS BODY
+     *          tags:
+     *              - Employer
+     *          produces: 
+     *              - application/json
+     *          parameters:
+     *              - name: uid
+     *                description: UUID of the corresponding employer
+     *                in: formData
+     *                requried: true
+     *                type: string
+     *          responses:
+     *              200:
+     *                  description: Successfully modified the employer
+     *              400:
+     *                  description: User could not be found
+     *              500:
+     *                  description: Internal server error
+     * 
+     * 
+     */
     .put(db.updateEmployer)
 
-router.route('/v1/jobseeker?:firebaseID?')
+
+router.route('/jobseeker/?:uid?/')
     /**
      *  @swagger
      * 
@@ -175,7 +187,7 @@ router.route('/v1/jobseeker?:firebaseID?')
     /**
      *  @swagger
      * 
-     *  /jobseeker?uid={uid}:
+     *  /jobseeker/{uid}:
      *      get:
      *          description: Returns information about specified jobseeker
      *          tags:
@@ -199,7 +211,153 @@ router.route('/v1/jobseeker?:firebaseID?')
      * 
      * 
      */
-    .get(db.getJobseeker);
+    .get(db.getJobseeker)
+    /**
+     *  @swagger
+     * 
+     *  /jobseeker/{uid}:
+     *      put:
+     *          description: Modify information of specified jobseeker; NOTE! YOU MUST PASS EVERYTHING ELSE AS BODY
+     *          tags:
+     *              - Jobseeker
+     *          produces: 
+     *              - application/json
+     *          parameters:
+     *              - name: uid
+     *                description: UUID of the corresponding jobseeker
+     *                in: formData
+     *                requried: true
+     *                type: string
+     *          responses:
+     *              200:
+     *                  description: Successfully modified the jobseeker
+     *              400:
+     *                  description: User could not be found
+     *              500:
+     *                  description: Internal server error
+     * 
+     * 
+     */
+    .put(db.updateJobseeker);
 
+    router.route('/jobseeker/:uid/skills')
+    /**
+     *  @swagger
+     * 
+     *  /jobseeker/{uid}/skills:
+     *      get:
+     *          description: Returns the skills of specified jobseeker
+     *          tags:
+     *              - Jobseeker, skills
+     *          produces: 
+     *              - application/json
+     *          parameters:
+     *              - name: uid
+     *                description: UID for the specific user
+     *                in: path
+     *                requried: true
+     *                type: string
+     * 
+     *          responses:
+     *              200:
+     *                  description: Successfully get the Jobseeker
+     *              400:
+     *                  description: User could not be found
+     *              500:
+     *                  description: Internal server error
+     * 
+     * 
+     */
+    .get(db.getSkills)
+
+    router.route('/jobseeker/:uid/dream_careers')
+    /**
+     *  @swagger
+     * 
+     *  /jobseeker/{uid}/dream_careers:
+     *      get:
+     *          description: Returns the dream careers of specified jobseeker
+     *          tags:
+     *              - Jobseeker, Drean Careers
+     *          produces: 
+     *              - application/json
+     *          parameters:
+     *              - name: uid
+     *                description: UID for the specific user
+     *                in: path
+     *                requried: true
+     *                type: string
+     * 
+     *          responses:
+     *              200:
+     *                  description: Successfully get the Jobseeker
+     *              400:
+     *                  description: User could not be found
+     *              500:
+     *                  description: Internal server error
+     * 
+     * 
+     */
+    .get(db.getDreamCareers)
+
+    router.route('/jobseeker/:uid/dream_companies')
+    /**
+     *  @swagger
+     * 
+     *  /jobseeker/{uid}/dream_companies:
+     *      get:
+     *          description: Returns the dream careers of specified jobseeker
+     *          tags:
+     *              - Jobseeker, Drean Companies
+     *          produces: 
+     *              - application/json
+     *          parameters:
+     *              - name: uid
+     *                description: UID for the specific user
+     *                in: path
+     *                requried: true
+     *                type: string
+     * 
+     *          responses:
+     *              200:
+     *                  description: Successfully get the Jobseeker
+     *              400:
+     *                  description: User could not be found
+     *              500:
+     *                  description: Internal server error
+     * 
+     * 
+     */
+    .get(db.getDreamCompanies)
+
+    router.route('/jobseeker/:uid/exp')
+    /**
+     *  @swagger
+     * 
+     *  /jobseeker/{uid}/exp:
+     *      get:
+     *          description: Returns the experiences of specified jobseeker
+     *          tags:
+     *              - Jobseeker, Experiences
+     *          produces: 
+     *              - application/json
+     *          parameters:
+     *              - name: uid
+     *                description: UID for the specific user
+     *                in: path
+     *                requried: true
+     *                type: string
+     * 
+     *          responses:
+     *              200:
+     *                  description: Successfully get the Jobseeker
+     *              400:
+     *                  description: User could not be found
+     *              500:
+     *                  description: Internal server error
+     * 
+     * 
+     */
+    .get(db.getExp)
 
 module.exports = router;

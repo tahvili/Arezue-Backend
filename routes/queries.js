@@ -6,15 +6,9 @@
 
 // Need to call pool from config.js which is our database setup and others
 const pool = require('../config');
+const bodyParser = require('body-parser');
 
-const {
-    body,
-    validationResult
-} = require('express-validator');
-const {
-    sanitizeBody
-} = require('express-validator');
-
+const validator = require('validator');
 
 function sendJSON(statusCode, payload) {
     return JSON.stringify({status_code: statusCode, payload: payload})
@@ -25,15 +19,9 @@ function sendError(statusCode, message, additionalInfo={}) {
 }
 
 exports.init = [
-    body('firebaseID').notEmpty().isAlphanumeric().withMessage("You must pass in a firebase ID."),
     function(request, response, next) {
-        const errors = validationResult(request);
-        if (!errors.isEmpty()) {
-            // There are errors. Render form again with sanitized values/errors messages.
-            response.status(400).send(sendError(400, "Validation Error", errors))
-            return;
-        }
-        firebaseID = request.body.firebaseID;
+        
+        var firebaseID = validator.escape(request.body.firebaseID);
         var queryEmployer = "SELECT * FROM Employer WHERE fb_id = $1";
         var queryJobseeker = "SELECT * FROM Jobseeker WHERE fb_id = $1";
 
@@ -95,21 +83,20 @@ exports.getAllEmployers = function (request, response, next) {
  ** Requirements: UUID, Email and Name
  */
 exports.createJobseeker = [
-    body('firebaseID').notEmpty().isAlphanumeric().withMessage("You must pass in a firebase ID."),
-    body('email').notEmpty().isEmail().withMessage("Must be a valid email address"),
-    body('name').notEmpty().withMessage("Must be a valid name"),
-    sanitizeBody('name', 'email').escape(),
-
     async function (req, res, next) {
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            // There are errors. Render form again with sanitized values/errors messages.
-            res.status(400).send(errors)
+        let firebaseID = validator.escape(req.body.firebaseID);
+        let name = validator.escape(req.body.name);
+        let email = validator.escape(req.body.email);
+        
+        if (validator.isEmpty(firebaseID) || validator.isEmpty(name) || validator.isEmpty(email)) {
+            res.status(400).send("One of the field is empty");
             return;
         }
-        let firebaseID = req.body.firebaseID;
-        let name = req.body.name;
-        let email = req.body.email;
+        if (!validator.isEmail(email)) {
+            res.status(400).send("Invalid email address");
+            return;
+        }
+
         Promise.all([pool.query('INSERT INTO jobseeker (fb_id, name, email_address) VALUES ($1, $2, $3) RETURNING uid', [firebaseID, name, email])])
         .then(result => {
     
@@ -124,34 +111,34 @@ exports.createJobseeker = [
         })
         .catch(e => {res.status(500); res.send(sendError(500, '/jobseeker error ' + e ))});
     }];
-    exports.getJobseeker = [
-        // body('firebaseID').notEmpty() .withMessage("You must pass in a firebase ID."),
-        // sanitizeBody('firebaseID').escape(),
-    
-        async function (req, res, next) {
-            const errors = validationResult(req);
-            if (!errors.isEmpty()) {
-                res.status(400).send(errors)
-                return;
+
+exports.getJobseeker = [
+    async function (req, res, next) {
+        let uid = validator.escape(req.params.uid);
+        if (validator.isEmpty(uid)) {
+            res.status(400).send("One of the field is empty");
+            return;
+        }
+        if (!validator.isUUID(uid, [4])) {
+            res.status(400).send("Invalid UUID");
+            return;
+        }
+
+        let create_employer = `SELECT * FROM jobseeker where uid = $1`;
+        Promise.all([pool.query(create_employer, [uid])])
+        .then (result => {
+            // var rowCountsArray = values.map(r=>r.rowCount)
+            var rows = result.filter(r=>r.rowCount>0).map(r => r.rows[0])
+
+            if (rows[0]) {
+                res.status(200).send(rows[0])
+            } else {
+                res.status(400).send(`jobseeker could not be found`);
             }
-            let uid = req.query.uid;
             
-    
-            let create_employer = `SELECT * FROM jobseeker where uid = $1`;
-            Promise.all([pool.query(create_employer, [uid])])
-            .then (result => {
-                // var rowCountsArray = values.map(r=>r.rowCount)
-                var rows = result.filter(r=>r.rowCount>0).map(r => r.rows[0])
-    
-                if (rows[0]) {
-                    res.status(200).send(rows[0])
-                } else {
-                    res.status(400).send(`jobseeker could not be created`);
-                }
-                
-            })
-            .catch(e => {res.status(500); res.send(sendError(500, '/jobseeker error ' + e ))});
-        }];
+        })
+        .catch(e => {res.status(500); res.send(sendError(500, '/jobseeker error ' + e ))});
+    }];
 
 // Route to create the Employer account
 // Since they have different views, we will have differnet POST api request
@@ -159,23 +146,28 @@ exports.createJobseeker = [
  ** Requirements: UUID, Email and Name
  */
 exports.createEmployer = [
-    body('firebaseID').notEmpty().isAlphanumeric().withMessage("You must pass in a firebase ID."),
-    body('email').notEmpty().isEmail().withMessage("Must be a valid email address"),
-    body('name').notEmpty().withMessage("Must be a valid name"),
-    body('company').notEmpty().withMessage("Must be a valid company name"),
-    sanitizeBody('name', 'company', 'email').escape(),
 
     async function (req, res, next) {
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            res.status(400).send(errors)
+        let firebaseID = validator.escape(req.body.firebaseID);
+        let name = validator.escape(req.body.name);
+        let email = validator.escape(req.body.email);
+        let company = validator.escape(req.body.company);
+        if (validator.isEmpty(firebaseID) || validator.isEmpty(name) || validator.isEmpty(email) || validator.isEmpty(company)) {
+            res.status(400).send("One of the field is empty");
             return;
         }
-        let firebaseID = req.body.firebaseID;
-        let name = req.body.name;
-        let email = req.body.email;
-        let company = req.body.company;
-        
+        if (!validator.isEmail(email)) {
+            res.status(400).send("Invalid email address");
+            return;
+        }
+        if (!validator.isAlpha(name)) {
+            res.status(400).send("Invalid name");
+            return;
+        }
+        if (!validator.isNumeric(company)) {
+            res.status(400).send("Invalid company ID");
+            return;
+        }
 
         let create_employer = `INSERT INTO Employer (fb_id, name, email_address, Company_id) VALUES ($1, $2, $3, $4) RETURNING uid`;
         Promise.all([pool.query(create_employer, [firebaseID, name, email, company])])
@@ -194,17 +186,17 @@ exports.createEmployer = [
     }];
 
 exports.getEmployer = [
-    // param('firebaseID').notEmpty().isAlphanumeric().withMessage("You must pass in a firebase ID."),
-    // sanitizeBody('firebaseID').escape(),
 
     async function (req, res, next) {
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            res.status(400).send(errors)
+        let uid = validator.escape(req.params.uid);
+        if (validator.isEmpty(uid)) {
+            res.status(400).send("One of the field is empty");
             return;
         }
-        let uid = req.query.uid;
-        
+        if (!validator.isUUID(uid, [4])) {
+            res.status(400).send("Invalid UUID");
+            return;
+        }
 
         let create_employer = `SELECT * FROM employer where uid = $1`;
         Promise.all([pool.query(create_employer, [uid])])
@@ -215,15 +207,172 @@ exports.getEmployer = [
             if (rows[0]) {
                 res.status(200).send(rows[0])
             } else {
-                res.status(400).send(`employer could not be created`);
+                res.status(400).send(`employer could not be found`);
             }
             
         })
         .catch(e => {res.status(500); res.send(sendError(500, '/employer error ' + e ))});
     }];
 
+exports.updateJobseeker = [
+    async function (req, res, next) {
+        let uid = validator.escape(req.params.uid);
+        let data = req.body;
+        console.log(typeof data);
+        console.log(data);
+
+        if (!validator.isUUID(uid, [4])) {
+            res.status(400).send("Invalid UUID");
+            return;
+        }
+        delete data['uid'];
+        delete data['firebaseID']
+        pairs = Object.keys(data).map((key, index) => `${key}=$${index+1}`).join(", ");
+
+        values = Object.values(data)
+        console.log(pairs);
+        var update_jobseeker = `UPDATE jobseeker set ${pairs} where uid = $${values.length+1} RETURNING uid`;
+        Promise.all([pool.query(update_jobseeker, values.concat(uid))])
+        .then (result => {
+            var rows = result.filter(r=>r.rowCount>0).map(r => r.rows[0])
+
+            if (rows[0]) {
+                res.status(200).send(rows[0]);
+            } else {
+                res.status(400).send(`Jobseeker could not be updated`);
+            }
+            
+        })
+       .catch(e => {res.status(500); res.send(sendError(500, '/jobseeker error ' + e ))});
+   }];
+
 exports.updateEmployer = [
     async function (req, res, next) {
-       let update_employer = `` 
-    }
-]
+        let uid = validator.escape(req.params.uid);
+        let data = req.body;
+        console.log(typeof data);
+        console.log(data);
+
+        if (!validator.isUUID(uid, [4])) {
+            res.status(400).send("Invalid UUID");
+            return;
+        }
+        delete data['uid'];
+        delete data['firebaseID']
+        pairs = Object.keys(data).map((key, index) => `${key}=$${index+1}`).join(", ");
+        console.log(data);
+        values = Object.values(data)
+        var update_employer = `UPDATE jobseeker set ${pairs} where uid = $${values.length+1} RETURNING uid`;
+        Promise.all([pool.query(update_employer, values.concat(uid))])
+        .then (result => {
+            var rows = result.filter(r=>r.rowCount>0).map(r => r.rows[0])
+
+            if (rows[0]) {
+                res.status(200).send(rows[0]);
+            } else {
+                res.status(400).send(`Jobseeker could not be updated`);
+            }
+            
+        })
+       .catch(e => {res.status(500); res.send(sendError(500, '/jobseeker error ' + e ))});
+   }];
+
+exports.getSkills = [
+    async function (req, res, next) {
+        let uid = validator.escape(req.params.uid);
+        if (validator.isEmpty(uid)) {
+            res.status(400).send("One of the field is empty");
+            return;
+        }
+        if (!validator.isUUID(uid, [4])) {
+            res.status(400).send("Invalid UUID");
+            return;
+        }
+        let Query = `SELECT * FROM skills where uid = $1`;
+        Promise.all([pool.query(Query, [uid])])
+        .then (result => {
+            var rows = result.filter(r=>r.rowCount>0).map(r => r.rows[0])
+
+            if (rows[0]) {
+                res.status(200).send(rows)
+            } else {
+                res.status(400).send(`Jobseeker could not be found`);
+            }
+        })
+        .catch(e => {res.status(500); res.send(sendError(500, '/jobseeker error ' + e ))});
+    }];
+
+exports.getDreamCareers = [
+    async function (req, res, next) {
+        let uid = validator.escape(req.params.uid);
+        if (validator.isEmpty(uid)) {
+            res.status(400).send("One of the field is empty");
+            return;
+        }
+        if (!validator.isUUID(uid, [4])) {
+            res.status(400).send("Invalid UUID");
+            return;
+        }
+        let Query = `SELECT * FROM Dream_Careers where uid = $1`;
+        Promise.all([pool.query(Query, [uid])])
+        .then (result => {
+            var rows = {};
+            rows = result.filter(r=>r.rowCount>0).map(r => r.rows)
+            if (rows) {
+                res.status(200).send(rows)
+            } else {
+                res.status(400).send(`Jobseeker could not be found`);
+            }
+        })
+        .catch(e => {res.status(500); res.send(sendError(500, '/jobseeker error ' + e ))});
+    }];
+
+exports.getDreamCompanies = [
+    async function (req, res, next) {
+        let uid = validator.escape(req.params.uid);
+        if (validator.isEmpty(uid)) {
+            res.status(400).send("One of the field is empty");
+            return;
+        }
+        if (!validator.isUUID(uid, [4])) {
+            res.status(400).send("Invalid UUID");
+            return;
+        }
+        let Query = `SELECT * FROM Dream_Companies where uid = $1`;
+        Promise.all([pool.query(Query, [uid])])
+        .then (result => {
+            var rows = result.filter(r=>r.rowCount>0).map(r => r.rows[0])
+
+            if (rows[0]) {
+                res.status(200).send(rows)
+            } else {
+                res.status(400).send(`Jobseeker could not be found`);
+            }
+        })
+        .catch(e => {res.status(500); res.send(sendError(500, '/jobseeker error ' + e ))});
+    }];
+
+exports.getExp = [
+    async function (req, res, next) {
+        let uid = validator.escape(req.params.uid);
+        if (validator.isEmpty(uid)) {
+            res.status(400).send("One of the field is empty");
+            return;
+        }
+        if (!validator.isUUID(uid, [4])) {
+            res.status(400).send("Invalid UUID");
+            return;
+        }
+        let Query = `SELECT * FROM Experiences where uid = $1`;
+        Promise.all([pool.query(Query, [uid])])
+        .then (result => {
+            var rows = result.filter(r=>r.rowCount>0).map(r => r.rows[0])
+
+            if (rows[0]) {
+                res.status(200).send(rows)
+            } else {
+                res.status(400).send(`Jobseeker could not be found`);
+            }
+        })
+        .catch(e => {res.status(500); res.send(sendError(500, '/jobseeker error ' + e ))});
+    }];
