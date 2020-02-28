@@ -8,7 +8,26 @@ router.use(function(req, res, next) {
     next();
 })
 
-
+/**
+ *  @swagger
+ * 
+ *  /getAll:
+ *      get:
+ *          description: Get all users in database (Mainly to get firebaseID so we can easily test)
+ *          tags:
+ *              - Get all
+ *          produces: 
+ *              - application/json
+ *          responses:
+ *              200:
+ *                  description: Successfully get an employer/jobseeker
+ *              400:
+ *                  description: User could not be found
+ *              500:
+ *                  description: Internal server error
+ * 
+ * 
+ */
 router.get('/getAll', db.getAllJobSeekers);
 
 router.route('/init')
@@ -269,8 +288,79 @@ router.route('/jobseeker/?:uid?/')
      * 
      */
     .get(db.getSkills)
+    /**
+     *  @swagger
+     * 
+     *  /jobseeker/{uid}/skills:
+     *      post:
+     *          description: Add a new skill to a jobseeker table
+     *          tags:
+     *              - Jobseeker, skills
+     *          produces: 
+     *              - application/json
+     *          parameters:
+     *              - name: uid
+     *                description: UID for the specific user
+     *                in: path
+     *                requried: true
+     *                type: string
+     *              - name: skill
+     *                description: Skill to add for a user
+     *                in: formData
+     *                required: true
+     *                type: string
+     *              - name: ranking
+     *                description: Ranking of the skill
+     *                in: formData
+     *                required: false
+     *                type: integer
+     * 
+     *          responses:
+     *              200:
+     *                  description: Successfully get the Jobseeker
+     *              400:
+     *                  description: User could not be found
+     *              500:
+     *                  description: Internal server error
+     * 
+     * 
+     */
+    .post(db.addSkill)
+    /**
+     *  @swagger
+     * 
+     *  /jobseeker/{uid}/skills:
+     *      delete:
+     *          description: Delete a skill added to the database for a jobseeker
+     *          tags:
+     *              - Jobseeker, skills
+     *          produces: 
+     *              - application/json
+     *          parameters:
+     *              - name: uid
+     *                description: UID for the specific user
+     *                in: path
+     *                requried: true
+     *                type: string
+     *              - name: skill
+     *                description: Skill to add for a user
+     *                in: formData
+     *                required: true
+     *                type: string
+     * 
+     *          responses:
+     *              200:
+     *                  description: Successfully get the Jobseeker
+     *              400:
+     *                  description: User could not be found
+     *              500:
+     *                  description: Internal server error
+     * 
+     * 
+     */
+    .delete(db.deleteSkill)
 
-    router.route('/jobseeker/:uid/dream_careers')
+router.route('/jobseeker/:uid/dream_careers')
     /**
      *  @swagger
      * 
@@ -278,7 +368,7 @@ router.route('/jobseeker/?:uid?/')
      *      get:
      *          description: Returns the dream careers of specified jobseeker
      *          tags:
-     *              - Jobseeker, Drean Careers
+     *              - Jobseeker, Dream Careers
      *          produces: 
      *              - application/json
      *          parameters:
@@ -299,8 +389,79 @@ router.route('/jobseeker/?:uid?/')
      * 
      */
     .get(db.getDreamCareers)
+    /**
+     *  @swagger
+     * 
+     *  /jobseeker/{uid}/dream_careers:
+     *      post:
+     *          description: Add a new dream career to a jobseeker table
+     *          tags:
+     *              - Jobseeker, Dream Careers
+     *          produces: 
+     *              - application/json
+     *          parameters:
+     *              - name: uid
+     *                description: UID for the specific user
+     *                in: path
+     *                requried: true
+     *                type: string
+     *              - name: dream_career
+     *                description: Skill to add for a user
+     *                in: formData
+     *                required: true
+     *                type: string
+     *              - name: ranking
+     *                description: Ranking of the skill
+     *                in: formData
+     *                required: false
+     *                type: integer
+     * 
+     *          responses:
+     *              200:
+     *                  description: Successfully get the Jobseeker
+     *              400:
+     *                  description: User could not be found
+     *              500:
+     *                  description: Internal server error
+     * 
+     * 
+     */
+    .post(db.addDreamCareers)
+    /**
+     *  @swagger
+     * 
+     *  /jobseeker/{uid}/dream_careers:
+     *      delete:
+     *          description: Delete a drema career added to the database for a jobseeker
+     *          tags:
+     *              - Jobseeker, Dream Careers
+     *          produces: 
+     *              - application/json
+     *          parameters:
+     *              - name: uid
+     *                description: UID for the specific user
+     *                in: path
+     *                requried: true
+     *                type: string
+     *              - name: dream_career
+     *                description: Dream career to add for a user
+     *                in: formData
+     *                required: true
+     *                type: string
+     * 
+     *          responses:
+     *              200:
+     *                  description: Successfully get the Jobseeker
+     *              400:
+     *                  description: User could not be found
+     *              500:
+     *                  description: Internal server error
+     * 
+     * 
+     */
+    .delete(db.deleteDreamCareers)
 
-    router.route('/jobseeker/:uid/dream_companies')
+router.route('/jobseeker/:uid/dream_companies')
     /**
      *  @swagger
      * 
@@ -308,7 +469,7 @@ router.route('/jobseeker/?:uid?/')
      *      get:
      *          description: Returns the dream careers of specified jobseeker
      *          tags:
-     *              - Jobseeker, Drean Companies
+     *              - Jobseeker, Dream Companies
      *          produces: 
      *              - application/json
      *          parameters:
@@ -329,8 +490,79 @@ router.route('/jobseeker/?:uid?/')
      * 
      */
     .get(db.getDreamCompanies)
+    /**
+     *  @swagger
+     * 
+     *  /jobseeker/{uid}/dream_companies:
+     *      post:
+     *          description: Add a new dream company to a jobseeker table
+     *          tags:
+     *              - Jobseeker, Dream Companies
+     *          produces: 
+     *              - application/json
+     *          parameters:
+     *              - name: uid
+     *                description: UID for the specific user
+     *                in: path
+     *                requried: true
+     *                type: string
+     *              - name: dream_company
+     *                description: Dream company to add to the user
+     *                in: formData
+     *                required: true
+     *                type: string
+     *              - name: preference
+     *                description: Preference of the company
+     *                in: formData
+     *                required: false
+     *                type: integer
+     * 
+     *          responses:
+     *              200:
+     *                  description: Successfully get the Jobseeker
+     *              400:
+     *                  description: User could not be found
+     *              500:
+     *                  description: Internal server error
+     * 
+     * 
+     */
+    .post(db.addDreamCompanies)
+    /**
+     *  @swagger
+     * 
+     *  /jobseeker/{uid}/dream_companies:
+     *      delete:
+     *          description: Delete a dream company added to the database for a jobseeker
+     *          tags:
+     *              - Jobseeker, Dream Companies
+     *          produces: 
+     *              - application/json
+     *          parameters:
+     *              - name: uid
+     *                description: UID for the specific user
+     *                in: path
+     *                requried: true
+     *                type: string
+     *              - name: dream_company
+     *                description: Dream company to delete from the user
+     *                in: formData
+     *                required: true
+     *                type: string
+     * 
+     *          responses:
+     *              200:
+     *                  description: Successfully get the Jobseeker
+     *              400:
+     *                  description: User could not be found
+     *              500:
+     *                  description: Internal server error
+     * 
+     * 
+     */
+    .delete(db.deleteDreamCompanies)
 
-    router.route('/jobseeker/:uid/exp')
+router.route('/jobseeker/:uid/exp')
     /**
      *  @swagger
      * 
@@ -359,5 +591,81 @@ router.route('/jobseeker/?:uid?/')
      * 
      */
     .get(db.getExp)
+    /**
+     *  @swagger
+     * 
+     *  /jobseeker/{uid}/exp:
+     *      post:
+     *          description: Add a new experience to jobseeker (ONLY SUPPORST 1 RIGHT NOW)
+     *          tags:
+     *              - Jobseeker, Experiences
+     *          produces: 
+     *              - application/json
+     *          parameters:
+     *              - name: uid
+     *                description: UID for the specific user
+     *                in: path
+     *                requried: true
+     *                type: string
+     *              - name: title
+     *                description: Title of the past job experience
+     *                in: formData
+     *                required: true
+     *                type: string
+     *              - name: start_date
+     *                description: Starting date of job
+     *                in: formData
+     *                required: true
+     *                type: string
+     *              - name: end_date
+     *                description: Ending date of job
+     *                in: formData
+     *                required: true
+     *                type: string
+     *              - name: description
+     *                description: The description of the job
+     *                in: formData
+     *                required: true
+     *                type: string
+     * 
+     *          responses:
+     *              200:
+     *                  description: Successfully get the Jobseeker
+     *              400:
+     *                  description: User could not be found
+     *              500:
+     *                  description: Internal server error
+     * 
+     * 
+     */
+    .post(db.addExp)
+    /**
+     *  @swagger
+     * 
+     *  /jobseeker/{uid}/exp:
+     *      delete:
+     *          description: Delete an experience from jobseeker (ONLY SUPPORST 1 RIGHT NOW)
+     *          tags:
+     *              - Jobseeker, Experiences
+     *          produces: 
+     *              - application/json
+     *          parameters:
+     *              - name: uid
+     *                description: UID for the specific user
+     *                in: path
+     *                requried: true
+     *                type: string
+     * 
+     *          responses:
+     *              200:
+     *                  description: Successfully get the Jobseeker
+     *              400:
+     *                  description: User could not be found
+     *              500:
+     *                  description: Internal server error
+     * 
+     * 
+     */
+    .delete(db.deleteExp)
 
 module.exports = router;

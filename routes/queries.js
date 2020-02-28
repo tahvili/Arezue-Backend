@@ -277,6 +277,7 @@ exports.updateEmployer = [
        .catch(e => {res.status(500); res.send(sendError(500, '/jobseeker error ' + e ))});
    }];
 
+// Skills
 exports.getSkills = [
     async function (req, res, next) {
         let uid = validator.escape(req.params.uid);
@@ -300,8 +301,60 @@ exports.getSkills = [
             }
         })
         .catch(e => {res.status(500); res.send(sendError(500, '/jobseeker error ' + e ))});
+}];
+
+exports.addSkill = [
+    async function (req, res, next) {
+        let uid = validator.escape(req.params.uid);
+        let skill = validator.escape(req.body.skill);
+        if (validator.isEmpty(uid) || validator.isEmpty(skill)) {
+            res.status(400).send("One of the field is empty");
+            return;
+        }
+        if (!validator.isUUID(uid, [4])) {
+            res.status(400).send("Invalid UUID");
+            return;
+        }
+        let Query = `INSERT INTO skills (uid, skill, ranking) VALUES ($1, $2, 0) returning uid`
+        Promise.all([pool.query(Query, [uid, skill])])
+        .then (result => {
+            var rows = result.filter(r=>r.rowCount>0).map(r => r.rows[0]);
+
+            if (rows[0]) {
+                res.status(200).send(rows);
+            } else {
+                res.status(400).send(`Jobseeker could not be found`);
+            }
+        }).catch(e => {res.status(500); res.send(sendError(500, '/jobseeker error ' + e ))});
     }];
 
+exports.deleteSkill = [
+    async function (req, res, next) {
+        let uid = validator.escape(req.params.uid);
+        let skill = validator.escape(req.body.skill);
+        if (validator.isEmpty(uid) || validator.isEmpty(skill)) {
+            res.status(400).send("One of the field is empty");
+            return;
+        }
+        if (!validator.isUUID(uid, [4])) {
+            res.status(400).send("Invalid UUID");
+            return;
+        }
+        let Query = `DELETE FROM skills WHERE uid = $1 and skill = $2 returning uid`;
+        Promise.all([pool.query(Query, [uid, skill])])
+        .then (result => {
+            var rows = result.filter(r=>r.rowCount>0).map(r => r.rows[0]);
+
+            if (rows[0]) {
+                res.status(200).send(rows);
+            } else {
+                res.status(400).send(`Jobseeker could not be found`);
+            }
+        })
+        .catch(e => {res.status(500); res.send(sendError(500, '/jobseeker error ' + e ))});
+    }];
+
+// Dream careers
 exports.getDreamCareers = [
     async function (req, res, next) {
         let uid = validator.escape(req.params.uid);
@@ -327,6 +380,58 @@ exports.getDreamCareers = [
         .catch(e => {res.status(500); res.send(sendError(500, '/jobseeker error ' + e ))});
     }];
 
+exports.addDreamCareers = [
+    async function (req, res, next) {
+        let uid = validator.escape(req.params.uid);
+        let dream_career = validator.escape(req.body.dream_career);
+        if (validator.isEmpty(uid) || validator.isEmpty(dream_career)) {
+            res.status(400).send("One of the field is empty");
+            return;
+        }
+        if (!validator.isUUID(uid, [4])) {
+            res.status(400).send("Invalid UUID");
+            return;
+        }
+        let Query = `INSERT INTO dream_careers (uid, dream_career, ranking) VALUES ($1, $2, 0) returning uid`;
+        Promise.all([pool.query(Query, [uid, dream_career])])
+        .then (result => {
+            var rows = result.filter(r=>r.rowCount>0).map(r => r.rows[0]);
+
+            if (rows[0]) {
+                res.status(200).send('Added dream career');
+            } else {
+                res.status(400).send(`Jobseeker could not be found`);
+            }
+        }).catch(e => {res.status(500); res.send(sendError(500, '/jobseeker error ' + e ))});
+    }];
+
+exports.deleteDreamCareers = [
+    async function (req, res, next) {
+        let uid = validator.escape(req.params.uid);
+        let dream_career = validator.escape(req.body.dream_career);
+        if (validator.isEmpty(uid) || validator.isEmpty(dream_career)) {
+            res.status(400).send("One of the field is empty");
+            return;
+        }
+        if (!validator.isUUID(uid, [4])) {
+            res.status(400).send("Invalid UUID");
+            return;
+        }
+        let Query = `DELETE FROM dream_careers WHERE uid = $1 and dream_career = $2 returning uid`;
+        Promise.all([pool.query(Query, [uid, dream_career])])
+        .then (result => {
+            var rows = result.filter(r=>r.rowCount>0).map(r => r.rows[0]);
+
+            if (rows[0]) {
+                res.status(200).send(rows);
+            } else {
+                res.status(400).send(`Jobseeker could not be found`);
+            }
+        })
+        .catch(e => {res.status(500); res.send(sendError(500, '/jobseeker error ' + e ))});
+    }];
+
+// Dream companies
 exports.getDreamCompanies = [
     async function (req, res, next) {
         let uid = validator.escape(req.params.uid);
@@ -352,6 +457,58 @@ exports.getDreamCompanies = [
         .catch(e => {res.status(500); res.send(sendError(500, '/jobseeker error ' + e ))});
     }];
 
+    exports.addDreamCompanies = [
+        async function (req, res, next) {
+            let uid = validator.escape(req.params.uid);
+            let dream_company = validator.escape(req.body.dream_company);
+            if (validator.isEmpty(uid) || validator.isEmpty(dream_company)) {
+                res.status(400).send("One of the field is empty");
+                return;
+            }
+            if (!validator.isUUID(uid, [4])) {
+                res.status(400).send("Invalid UUID");
+                return;
+            }
+            let Query = `INSERT INTO dream_companies (uid, dream_company, preference) VALUES ($1, $2, 0) returning uid`;
+            Promise.all([pool.query(Query, [uid, dream_company])])
+            .then (result => {
+                var rows = result.filter(r=>r.rowCount>0).map(r => r.rows[0]);
+    
+                if (rows[0]) {
+                    res.status(200).send('Added dream career');
+                } else {
+                    res.status(400).send(`Jobseeker could not be found`);
+                }
+            })
+            .catch(e => {res.status(500); res.send(sendError(500, '/jobseeker error ' + e ))});
+        }];
+    
+    exports.deleteDreamCompanies = [
+        async function (req, res, next) {
+            let uid = validator.escape(req.params.uid);
+            let dream_company = validator.escape(req.body.dream_company);
+            if (validator.isEmpty(uid) || validator.isEmpty(dream_company)) {
+                res.status(400).send("One of the field is empty");
+                return;
+            }
+            if (!validator.isUUID(uid, [4])) {
+                res.status(400).send("Invalid UUID");
+                return;
+            }
+            let Query = `DELETE FROM dream_companies WHERE uid = $1 and dream_company = $2 returning uid`;
+            Promise.all([pool.query(Query, [uid, dream_company])])
+            .then (result => {
+                var rows = result.filter(r=>r.rowCount>0).map(r => r.rows[0]);
+    
+                if (rows[0]) {
+                    res.status(200).send(rows);
+                } else {
+                    res.status(400).send(`Jobseeker could not be found`);
+                }
+            }).catch(e => {res.status(500); res.send(sendError(500, '/jobseeker error ' + e ))});
+        }];
+
+// Experiences
 exports.getExp = [
     async function (req, res, next) {
         let uid = validator.escape(req.params.uid);
@@ -376,3 +533,59 @@ exports.getExp = [
         })
         .catch(e => {res.status(500); res.send(sendError(500, '/jobseeker error ' + e ))});
     }];
+    exports.addExp = [
+        async function (req, res, next) {
+            let uid = validator.escape(req.params.uid);
+            let title = validator.escape(req.body.title);
+            let start_date = validator.escape(req.body.start_date);
+            let end_date = validator.escape(req.body.end_date);
+            let description = validator.escape(req.body.description);
+            if (validator.isEmpty(uid) || validator.isEmpty(title) || validator.isEmpty(start_date) || validator.isEmpty(end_date) || validator.isEmpty(description)) {
+                res.status(400).send("One of the field is empty");
+                return;
+            }
+            if (!validator.isUUID(uid, [4])) {
+                res.status(400).send("Invalid UUID");
+                return;
+            }
+            let Query = `INSERT INTO experiences (uid, title, start_date, end_date, description) VALUES ($1, $2, $3, $4, $5) returning uid`;
+            Promise.all([pool.query(Query, [uid, title, start_date, end_date, description])])
+            .then (result => {
+                var rows = result.filter(r=>r.rowCount>0).map(r => r.rows[0]);
+    
+                if (rows[0]) {
+                    res.status(200).send('Added job experience');
+                } else {
+                    res.status(400).send(`Jobseeker could not be found`);
+                }
+            })
+            .catch(e => {res.status(500); res.send(sendError(500, '/jobseeker error ' + e ))});
+        }];
+    
+    exports.deleteExp = [
+        async function (req, res, next) {
+            let uid = validator.escape(req.params.uid);
+            // let title = validator.escape(req.body.title);
+            // let start_date = validator.escape(req.body.start_date);
+            // let end_date = validator.escape(req.body.end_date);
+            // let description = validator.escape(req.body.description);
+            if (validator.isEmpty(uid)) {
+                res.status(400).send("One of the field is empty");
+                return;
+            }
+            if (!validator.isUUID(uid, [4])) {
+                res.status(400).send("Invalid UUID");
+                return;
+            }
+            let Query = `DELETE FROM experiences WHERE uid = $1returning uid`;
+            Promise.all([pool.query(Query, [uid])])
+            .then (result => {
+                var rows = result.filter(r=>r.rowCount>0).map(r => r.rows[0]);
+    
+                if (rows[0]) {
+                    res.status(200).send(rows);
+                } else {
+                    res.status(400).send(`Jobseeker could not be found`);
+                }
+            }).catch(e => {res.status(500); res.send(sendError(500, '/jobseeker error ' + e ))});
+        }];
