@@ -1,9 +1,9 @@
 var express = require('express');
-var router = express.Router({ mergeParams: true, strickt: true});
+var router = express.Router({ mergeParams: true, strickt: true });
 
 const db = require('./queries');
 
-router.use(function(req, res, next) {
+router.use(function (req, res, next) {
     console.log("Logging request... (Message does nothing atm)");
     next();
 })
@@ -148,8 +148,28 @@ router.route('/employer/:uid?')
      *          parameters:
      *              - name: uid
      *                description: UUID of the corresponding employer
-     *                in: formData
+     *                in: path
      *                requried: true
+     *                type: string
+     *              - name: name
+     *                description: The new name for the employer
+     *                in: formData
+     *                requried: false
+     *                type: string
+     *              - name: email_address
+     *                description: The new e-mail of the employer
+     *                in: formData
+     *                requried: false
+     *                type: string
+     *              - name: phone_number
+     *                description: The new phone number the employer
+     *                in: formData
+     *                requried: false
+     *                type: string
+     *              - name: location
+     *                description: The new location of the employer
+     *                in: formData
+     *                requried: false
      *                type: string
      *          responses:
      *              200:
@@ -244,8 +264,28 @@ router.route('/jobseeker/?:uid?/')
      *          parameters:
      *              - name: uid
      *                description: UUID of the corresponding jobseeker
-     *                in: formData
+     *                in: path
      *                requried: true
+     *                type: string
+     *              - name: name
+     *                description: The new name of the Jobseeker
+     *                in: formData
+     *                requried: false
+     *                type: string
+     *              - name: email_address
+     *                description: The new e-mail of the jobseeker
+     *                in: formData
+     *                requried: false
+     *                type: string
+     *              - name: phone_number
+     *                description: The new phone number of the jobseeker
+     *                in: formData
+     *                requried: false
+     *                type: string
+     *              - name: location
+     *                description: The new location of the jobseeker
+     *                in: formData
+     *                requried: false
      *                type: string
      *          responses:
      *              200:
@@ -259,7 +299,7 @@ router.route('/jobseeker/?:uid?/')
      */
     .put(db.updateJobseeker);
 
-    router.route('/jobseeker/:uid/skills')
+router.route('/jobseeker/:uid/skills')
     /**
      *  @swagger
      * 
@@ -667,5 +707,139 @@ router.route('/jobseeker/:uid/exp')
      * 
      */
     .delete(db.deleteExp)
+
+router.route('/company/:company_id?')
+    /**
+     *  @swagger
+     * 
+     *  /company/{company_id}:
+     *      get:
+     *          description: Returns the company information
+     *          tags:
+     *              - Company
+     *          produces: 
+     *              - application/json
+     *          parameters:
+     *              - name: company_id
+     *                description: id of the company
+     *                in: path
+     *                requried: true
+     *                type: string
+     * 
+     *          responses:
+     *              200:
+     *                  description: Successfully get the Company
+     *              400:
+     *                  description: Company could not be found
+     *              500:
+     *                  description: Internal server error
+     * 
+     * 
+     */
+    .get(db.getCompany)
+
+    /**
+     *  @swagger
+     * 
+     *  /company:
+     *      post:
+     *          description: Add a Company
+     *          tags:
+     *              - Company
+     *          produces: 
+     *              - application/json
+     *          parameters:
+     *              - name: name
+     *                description: Name of the company
+     *                in: formData
+     *                requried: true
+     *                type: string
+  
+     *          responses:
+     *              200:
+     *                  description: Successfully add the company
+     *              400:
+     *                  description: User could not be found
+     *              500:
+     *                  description: Internal server error
+     * 
+     */
+    .post(db.addCompany)
+
+    /**
+     *  @swagger
+     * 
+     *  /company/{company_id}:
+     *      put:
+     *          description: Update a company
+     *          tags:
+     *              - Company
+     *          produces: 
+     *              - application/json
+     *          parameters:
+     *              - name: company_id
+     *                description: id of the company
+     *                in: path
+     *                requried: true
+     *                type: string
+     *              - name: company_name
+     *                description: Name of the company
+     *                in: formData
+     *                requried: False
+     *                type: string
+     *              - name: successful_hires
+     *                description: Number of successful hires
+     *                in: formData
+     *                requried: False
+     *                type: integer
+     *              - name: num_jobs
+     *                description: Number of jobs available
+     *                in: formData
+     *                requried: False
+     *                type: integer
+     *              - name: num_employers
+     *                description: Number of employers
+     *                in: formData
+     *                requried: False
+     *                type: integer
+     * 
+     *          responses:
+     *              200:
+     *                  description: Successfully delete the company
+     *              400:
+     *                  description: User could not be found
+     *              500:
+     *                  description: Internal server error
+     */
+    .delete(db.updateCompany)
+
+    /**
+     *  @swagger
+     * 
+     *  /company/{company_id}:
+     *      delete:
+     *          description: Delete a company
+     *          tags:
+     *              - Company
+     *          produces: 
+     *              - application/json
+     *          parameters:
+     *              - name: company_id
+     *                description: id of the company
+     *                in: path
+     *                requried: true
+     *                type: string
+     * 
+     *          responses:
+     *              200:
+     *                  description: Successfully delete the company
+     *              400:
+     *                  description: User could not be found
+     *              500:
+     *                  description: Internal server error
+     * 
+     * 
+     */
+    .delete(db.deleteCompany)
 
 module.exports = router;
