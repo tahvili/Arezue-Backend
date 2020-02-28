@@ -94,7 +94,7 @@ router.route('/employer/:uid?')
      *                description: Id of the company
      *                in: formData
      *                requried: true
-     *                type: integer
+     *                type: string
      * 
      *          responses:
      *              200:
@@ -708,11 +708,11 @@ router.route('/jobseeker/:uid/exp')
      */
     .delete(db.deleteExp)
 
-router.route('/company/:company_id?')
+router.route('/company/:company_name?')
     /**
      *  @swagger
      * 
-     *  /company/{company_id}:
+     *  /company/{company_name}:
      *      get:
      *          description: Returns the company information
      *          tags:
@@ -720,7 +720,7 @@ router.route('/company/:company_id?')
      *          produces: 
      *              - application/json
      *          parameters:
-     *              - name: company_id
+     *              - name: company_name
      *                description: id of the company
      *                in: path
      *                requried: true

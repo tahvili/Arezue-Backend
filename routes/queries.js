@@ -152,6 +152,7 @@ exports.createEmployer = [
         let name = validator.escape(req.body.name);
         let email = validator.escape(req.body.email);
         let company = validator.escape(req.body.company);
+
         if (validator.isEmpty(firebaseID) || validator.isEmpty(name) || validator.isEmpty(email) || validator.isEmpty(company)) {
             res.status(400).send("One of the field is empty");
             return;
@@ -160,17 +161,9 @@ exports.createEmployer = [
             res.status(400).send("Invalid email address");
             return;
         }
-        // Need to talk about name validation
-        // if (!validator.isAlpha(name)) {
-        //     res.status(400).send("Invalid name");
-        //     return;
-        // }
-        if (!validator.isNumeric(company)) {
-            res.status(400).send("Invalid company ID");
-            return;
-        }
 
-        let create_employer = `INSERT INTO Employer (fb_id, name, email_address, Company_id) VALUES ($1, $2, $3, $4) RETURNING uid`;
+
+        let create_employer = `INSERT INTO Employer (fb_id, name, email_address, company_name) VALUES ($1, $2, $3, $4) RETURNING uid`;
         Promise.all([pool.query(create_employer, [firebaseID, name, email, company])])
             .then(result => {
                 // var rowCountsArray = values.map(r=>r.rowCount)
@@ -644,13 +637,13 @@ exports.deleteExp = [
 exports.addCompany = [
     async function (req, res, next) {
         let name = validator.escape(req.body.name);
-        let Query = `INSERT INTO company (company_name) VALUES ($1) returning company_id`;
+        let Query = `INSERT INTO company (company_name) VALUES ($1) returning company_name`;
         Promise.all([pool.query(Query, [name])])
             .then(result => {
                 var rows = result.filter(r => r.rowCount > 0).map(r => r.rows[0]);
 
                 if (rows[0]) {
-                    res.status(200).send(`Added company ${name} with id: ${rows[0].company_id}`);
+                    res.status(200).send(`Added company ${name} with id: ${rows[0].company_name}`);
                 } else {
                     res.status(400).send(`Company could not be added`);
                 }
@@ -660,10 +653,10 @@ exports.addCompany = [
 
 exports.getCompany = [
     async function (req, res, next) {
-        let id = validator.escape(req.params.company_id);
-        let Query = `SELECT * FROM company WHERE company_id = ($1)`;
+        let company_name = validator.escape(req.params.company_name);
+        let Query = `SELECT * FROM company WHERE company_name = ($1)`;
        
-        Promise.all([pool.query(Query, [id])])
+        Promise.all([pool.query(Query, [company_name])])
             .then(result => {
                 var rows = result.filter(r => r.rowCount > 0).map(r => r.rows[0]);
 
