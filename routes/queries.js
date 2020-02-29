@@ -211,31 +211,6 @@ exports.getEmployer = [
 exports.updateJobseeker = [
     async function (req, res, next) {
         let uid = validator.escape(req.params.uid);
-        let name = validator.escape(req.body.name);
-        let email = validator.escape(req.body.email_address);
-        let phone = validator.escape(req.body.phone_number);
-        let location = validator.escape(req.body.location);
-
-        if (!validator.isEmail(email)) {
-            res.status(400).send("Invalid email address");
-            return;
-        }
-        // Need to talk about name validation
-        // if (!validator.isAlpha(name)) {
-        //     res.status(400).send("Invalid name");
-        //     return;
-        // }
-        // Need to double check how we want to input phone #
-        // if (!validator.isNumeric(phone)) {
-        //     res.status(400).send("Invalid phone number");
-        //     return;
-        // }
-        // Need to talk about location validation.
-        // if (!validator.isAlpha(location)) {
-        //     res.status(400).send("Invalid location");
-        //     return;
-        // }
-
 
         let data = req.body;
         console.log(typeof data);
@@ -269,33 +244,9 @@ exports.updateJobseeker = [
 exports.updateEmployer = [
     async function (req, res, next) {
         let uid = validator.escape(req.params.uid);
-        let name = validator.escape(req.body.name);
-        let email = validator.escape(req.body.email_address);
-        let phone = validator.escape(req.body.phone_number);
-        let location = validator.escape(req.body.location);
-
-        if (!validator.isEmail(email)) {
-            res.status(400).send("Invalid email address");
-            return;
-        }
-
-        // if (!validator.isAlpha(name)) {
-        //     res.status(400).send("Invalid name");
-        //     return;
-        // }
-        // Need to double check how we want to input phone #
-        // if (!validator.isNumeric(phone)) {
-        //     res.status(400).send("Invalid phone number");
-        //     return;
-        // }
-        // if (!validator.isAlpha(location)) {
-        //     res.status(400).send("Invalid location");
-        //     return;
-        // }
 
         let data = req.body;
-        console.log(typeof data);
-        console.log(data);
+        console.log(uid)
 
         if (!validator.isUUID(uid, [4])) {
             res.status(400).send("Invalid UUID");
