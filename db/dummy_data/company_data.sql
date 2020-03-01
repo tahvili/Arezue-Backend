@@ -1,2 +1,5 @@
-insert into company (company_id, company_name, Successful_Hires, num_employers)
-values (1, 'alpha_company', 5, 2);
+insert into company (company_name, Successful_Hires, num_employers)
+values ('alpha_company', 5, 2) ON CONFLICT DO NOTHING;
+
+insert into company (company_name, Successful_Hires, num_employers)
+values ('Beta_company', 3, 50) ON CONFLICT DO NOTHING;

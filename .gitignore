@@ -1,3 +1,6 @@
+# Configuration
+.env
+
 # Miscellaneous
 *.swp
 *.log
@@ -16,3 +19,5 @@ node_modules/
 # vscode folder, depending on what we have, we may choose to include it
 .vscode/
 
+db/database.conf
+.env
