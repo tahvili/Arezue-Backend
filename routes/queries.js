@@ -287,10 +287,10 @@ exports.getSkills = [
         let Query = `SELECT * FROM skills where uid = $1`;
         Promise.all([pool.query(Query, [uid])])
             .then(result => {
-                var rows = result.filter(r => r.rowCount > 0).map(r => r.rows[0])
+                var rows = result.filter(r => r.rowCount > 0).map(r => r.rows)
 
                 if (rows[0]) {
-                    res.status(200).send(rows)
+                    res.status(200).send(rows[0])
                 } else {
                     res.status(400).send(`Jobseeker could not be found`);
                 }
@@ -313,7 +313,7 @@ exports.addSkill = [
         let Query = `INSERT INTO skills (uid, skill, ranking) VALUES ($1, $2, 0) returning uid`
         Promise.all([pool.query(Query, [uid, skill])])
             .then(result => {
-                var rows = result.filter(r => r.rowCount > 0).map(r => r.rows[0]);
+                var rows = result.filter(r => r.rowCount > 0).map(r => r.rows);
 
                 if (rows[0]) {
                     res.status(200).send(rows);
@@ -338,7 +338,7 @@ exports.deleteSkill = [
         let Query = `DELETE FROM skills WHERE uid = $1 and skill = $2 returning uid`;
         Promise.all([pool.query(Query, [uid, skill])])
             .then(result => {
-                var rows = result.filter(r => r.rowCount > 0).map(r => r.rows[0]);
+                var rows = result.filter(r => r.rowCount > 0).map(r => r.rows);
 
                 if (rows[0]) {
                     res.status(200).send(rows);
@@ -367,7 +367,7 @@ exports.getDreamCareers = [
                 var rows = {};
                 rows = result.filter(r => r.rowCount > 0).map(r => r.rows)
                 if (rows) {
-                    res.status(200).send(rows)
+                    res.status(200).send(rows[0])
                 } else {
                     res.status(400).send(`Jobseeker could not be found`);
                 }
@@ -390,7 +390,7 @@ exports.addDreamCareers = [
         let Query = `INSERT INTO dream_careers (uid, dream_career, ranking) VALUES ($1, $2, 0) returning uid`;
         Promise.all([pool.query(Query, [uid, dream_career])])
             .then(result => {
-                var rows = result.filter(r => r.rowCount > 0).map(r => r.rows[0]);
+                var rows = result.filter(r => r.rowCount > 0).map(r => r.rows);
 
                 if (rows[0]) {
                     res.status(200).send('Added dream career');
@@ -415,7 +415,7 @@ exports.deleteDreamCareers = [
         let Query = `DELETE FROM dream_careers WHERE uid = $1 and dream_career = $2 returning uid`;
         Promise.all([pool.query(Query, [uid, dream_career])])
             .then(result => {
-                var rows = result.filter(r => r.rowCount > 0).map(r => r.rows[0]);
+                var rows = result.filter(r => r.rowCount > 0).map(r => r.rows);
 
                 if (rows[0]) {
                     res.status(200).send(rows);
@@ -441,10 +441,10 @@ exports.getDreamCompanies = [
         let Query = `SELECT * FROM Dream_Companies where uid = $1`;
         Promise.all([pool.query(Query, [uid])])
             .then(result => {
-                var rows = result.filter(r => r.rowCount > 0).map(r => r.rows[0])
+                var rows = result.filter(r => r.rowCount > 0).map(r => r.rows)
 
                 if (rows[0]) {
-                    res.status(200).send(rows)
+                    res.status(200).send(rows[0])
                 } else {
                     res.status(400).send(`Jobseeker could not be found`);
                 }
@@ -467,7 +467,7 @@ exports.addDreamCompanies = [
         let Query = `INSERT INTO dream_companies (uid, dream_company, preference) VALUES ($1, $2, 0) returning uid`;
         Promise.all([pool.query(Query, [uid, dream_company])])
             .then(result => {
-                var rows = result.filter(r => r.rowCount > 0).map(r => r.rows[0]);
+                var rows = result.filter(r => r.rowCount > 0).map(r => r.rows);
 
                 if (rows[0]) {
                     res.status(200).send('Added dream career');
@@ -493,7 +493,7 @@ exports.deleteDreamCompanies = [
         let Query = `DELETE FROM dream_companies WHERE uid = $1 and dream_company = $2 returning uid`;
         Promise.all([pool.query(Query, [uid, dream_company])])
             .then(result => {
-                var rows = result.filter(r => r.rowCount > 0).map(r => r.rows[0]);
+                var rows = result.filter(r => r.rowCount > 0).map(r => r.rows);
 
                 if (rows[0]) {
                     res.status(200).send(rows);
@@ -518,10 +518,10 @@ exports.getExp = [
         let Query = `SELECT * FROM Experiences where uid = $1`;
         Promise.all([pool.query(Query, [uid])])
             .then(result => {
-                var rows = result.filter(r => r.rowCount > 0).map(r => r.rows[0])
+                var rows = result.filter(r => r.rowCount > 0).map(r => r.rows)
 
                 if (rows[0]) {
-                    res.status(200).send(rows)
+                    res.status(200).send(rows[0])
                 } else {
                     res.status(400).send(`Jobseeker could not be found`);
                 }
@@ -546,7 +546,7 @@ exports.addExp = [
         let Query = `INSERT INTO experiences (uid, title, start_date, end_date, description) VALUES ($1, $2, $3, $4, $5) returning uid`;
         Promise.all([pool.query(Query, [uid, title, start_date, end_date, description])])
             .then(result => {
-                var rows = result.filter(r => r.rowCount > 0).map(r => r.rows[0]);
+                var rows = result.filter(r => r.rowCount > 0).map(r => r.rows);
 
                 if (rows[0]) {s
                     res.status(200).send('Added job experience');
@@ -575,7 +575,7 @@ exports.deleteExp = [
         let Query = `DELETE FROM experiences WHERE uid = $1returning uid`;
         Promise.all([pool.query(Query, [uid])])
             .then(result => {
-                var rows = result.filter(r => r.rowCount > 0).map(r => r.rows[0]);
+                var rows = result.filter(r => r.rowCount > 0).map(r => r.rows);
 
                 if (rows[0]) {
                     res.status(200).send(rows);
@@ -591,7 +591,7 @@ exports.addCompany = [
         let Query = `INSERT INTO company (company_name) VALUES ($1) returning company_name`;
         Promise.all([pool.query(Query, [name])])
             .then(result => {
-                var rows = result.filter(r => r.rowCount > 0).map(r => r.rows[0]);
+                var rows = result.filter(r => r.rowCount > 0).map(r => r.rows);
 
                 if (rows[0]) {
                     res.status(200).send(`Added company ${name} with id: ${rows[0].company_name}`);
@@ -609,7 +609,7 @@ exports.getCompany = [
        
         Promise.all([pool.query(Query, [company_name])])
             .then(result => {
-                var rows = result.filter(r => r.rowCount > 0).map(r => r.rows[0]);
+                var rows = result.filter(r => r.rowCount > 0).map(r => r.rows);
 
                 if (rows[0]) {
                     res.status(200).send(rows[0]);
