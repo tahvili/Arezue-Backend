@@ -655,6 +655,12 @@ exports.getProfile = [
             let mapping = ['', 'skill', 'dream_career', 'dream_company', 'experiences'];
             // Don't filter as will need to do a loop
             let rows = values.map(r => r.rows);
+            // Need to check if jobseeker exists
+            if (rows[0].length === 0) {
+                res.status(404).send()
+                return;
+            }
+
             let result = {}
             result['jobseeker'] = {};
             result['jobseeker']['uid'] = rows[0][0]['uid'];
