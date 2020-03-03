@@ -9,7 +9,7 @@ $$;
 CREATE table IF NOT EXISTS Job (
     Job_ID serial primary key,
     EUID uuid REFERENCES employer(UID) ON DELETE CASCADE not NULL,
-    Company_ID serial REFERENCES company(Company_ID) ON DELETE CASCADE not NULL,
+    Company_Name varchar(70) REFERENCES company(Company_Name) ON DELETE CASCADE not NULL,
     Title VARCHAR(70) not NULL,
     Wage text not NULL,
     Position VARCHAR(70) not NULL,
