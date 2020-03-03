@@ -59,10 +59,6 @@ router.route('/init')
      */
     .post(db.init);
 
-// router.route('/employer/:uid')
-//     .get(db.getEmployer);
-// router.get('/employer/:uid/test', db.getEmployer);
-
 router.route('/employer/:uid?')
     /**
      *  @swagger
@@ -298,6 +294,36 @@ router.route('/jobseeker/?:uid?/')
      * 
      */
     .put(db.updateJobseeker);
+
+router.route('/jobseeker/:uid/profile/')
+    /**
+     *  @swagger
+     * 
+     *  /jobseeker/{uid}/profile:
+     *      get:
+     *          description: Return the default profile for a jobseeker
+     *          tags:
+     *              - Jobseeker, profile
+     *          produces: 
+     *              - application/json
+     *          parameters:
+     *              - name: uid
+     *                description: UID for the specific user
+     *                in: path
+     *                requried: true
+     *                type: string
+     * 
+     *          responses:
+     *              200:
+     *                  description: Successfully get the Jobseeker profile
+     *              400:
+     *                  description: User could not be found
+     *              500:
+     *                  description: Internal server error
+     * 
+     * 
+     */
+    .get(db.getProfile);
 
 router.route('/jobseeker/:uid/skills')
     /**
@@ -841,5 +867,6 @@ router.route('/company/:company_name?')
      * 
      */
     .delete(db.deleteCompany)
+
 
 module.exports = router;
