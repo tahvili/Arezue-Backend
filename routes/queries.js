@@ -646,13 +646,16 @@ exports.getProfile = [
         let query_dream_careers = `SELECT * FROM dream_careers WHERE uid = $1`;
         let query_dream_companies = `SELECT * FROM dream_companies WHERE uid = $1`;
         let query_experiences = `SELECT * FROM experiences WHERE uid = $1`;
+        let query_certification = `SELECT * FROM certification WHERE uid = $1`;
+        let query_education = `SELECT * FROM education WHERE uid = $1`;
         
         Promise.all([await pool.query(query_jobseeker, [uid]), await pool.query(query_skills, [uid]),
         await pool.query(query_dream_careers, [uid]), await pool.query(query_dream_companies, [uid]),
-        await pool.query(query_experiences, [uid])])
+        await pool.query(query_experiences, [uid]), await pool.query(query_certification, [uid]),
+        await pool.query(query_education, [uid])])
         .then(values => {
             
-            let mapping = ['', 'skill', 'dream_career', 'dream_company', 'experiences'];
+            let mapping = ['', 'skill', 'dream_career', 'dream_company', 'experiences', 'certification', 'education'];
             // Don't filter as will need to do a loop
             let rows = values.map(r => r.rows);
             // Need to check if jobseeker exists
@@ -660,7 +663,7 @@ exports.getProfile = [
                 res.status(404).send()
                 return;
             }
-
+            // console.log(rows);
             let result = {}
             result['jobseeker'] = {};
             result['jobseeker']['uid'] = rows[0][0]['uid'];
@@ -672,7 +675,8 @@ exports.getProfile = [
             })
             
             for (let i = 1; i < rows.length; i++) {
-                if (mapping[i] === 'experiences') {
+                // console.log(mapping[i])
+                if (mapping[i] === 'experiences' || mapping[i] === 'education' || mapping[i] === 'certification') {
                     Object.keys(rows[i]).forEach(function(key) {
                         delete rows[i][key]['uid'];
                     })
