@@ -708,7 +708,7 @@ router.route('/jobseeker/:uid/exp')
      */
     .delete(db.deleteExp)
 
-    router.route('/jobseeker/:uid/education')
+router.route('/jobseeker/:uid/education')
     /**
     *  @swagger
     * 
@@ -756,38 +756,88 @@ router.route('/jobseeker/:uid/exp')
     * 
     * 
     */
-   .post(db.addEducation)
+    .post(db.addEducation)
 
-   /**
+    /**
+     *  @swagger
+     * 
+     *  /jobseeker/{uid}/education:
+     *      get:
+     *          description: Returns the education experience of specified jobseeker
+     *          tags:
+     *              - Jobseeker, Education
+     *          produces: 
+     *              - application/json
+     *          parameters:
+     *              - name: uid
+     *                description: UID for the specific user
+     *                in: path
+     *                requried: true
+     *                type: string
+     * 
+     *          responses:
+     *              200:
+     *                  description: Successfully get the Jobseeker
+     *              400:
+     *                  description: User could not be found
+     *              500:
+     *                  description: Internal server error
+     * 
+     * 
+     */
+    .get(db.getEducation)
+    /**
     *  @swagger
     * 
     *  /jobseeker/{uid}/education:
-    *      get:
-    *          description: Returns the education experience of specified jobseeker
+    *      put:
+    *          description: Modify the education of a jobseeker
     *          tags:
     *              - Jobseeker, Education
     *          produces: 
     *              - application/json
     *          parameters:
     *              - name: uid
-    *                description: UID for the specific user
+    *                description: UUID of the corresponding jobseeker
     *                in: path
     *                requried: true
     *                type: string
-    * 
+    *              - name: ed_id
+    *                description: The id of the education field to be updated
+    *                in: formData
+    *                requried: true
+    *                type: integer
+    *              - name: school_name
+    *                description: The name of the school
+    *                in: formData
+    *                requried: true
+    *                type: string
+    *              - name: start_date
+    *                description: The start date of the education experience
+    *                in: formData
+    *                requried: true
+    *                type: string
+    *              - name: grad_date
+    *                description: The graduation date of the education experience
+    *                in: formData
+    *                requried: true
+    *                type: string
+    *              - name: program
+    *                description: The program of study
+    *                in: formData
+    *                requried: true
+    *                type: string
     *          responses:
     *              200:
-    *                  description: Successfully get the Jobseeker
+    *                  description: Successfully modified the education
     *              400:
     *                  description: User could not be found
     *              500:
     *                  description: Internal server error
-    * 
-    * 
     */
-   .get(db.getEducation)
+    .put(db.updateEducation)
 
-   /**
+    /**
     *  @swagger
     * 
     *  /jobseeker/{uid}/education:
@@ -816,7 +866,7 @@ router.route('/jobseeker/:uid/exp')
     */
    .delete(db.deleteEducation)
 
-   router.route('/jobseeker/:uid/certification')
+router.route('/jobseeker/:uid/certification')
     /**
     *  @swagger
     * 
@@ -864,65 +914,65 @@ router.route('/jobseeker/:uid/exp')
     * 
     * 
     */
-   .post(db.addCert)
+    .post(db.addCert)
 
-   /**
-    *  @swagger
-    * 
-    *  /jobseeker/{uid}/certification:
-    *      get:
-    *          description: Returns the certification of specified jobseeker
-    *          tags:
-    *              - Jobseeker, Certification
-    *          produces: 
-    *              - application/json
-    *          parameters:
-    *              - name: uid
-    *                description: UID for the specific user
-    *                in: path
-    *                requried: true
-    *                type: string
-    * 
-    *          responses:
-    *              200:
-    *                  description: Successfully get the Jobseeker
-    *              400:
-    *                  description: User could not be found
-    *              500:
-    *                  description: Internal server error
-    * 
-    * 
-    */
-   .get(db.getCert)
+    /**
+     *  @swagger
+     * 
+     *  /jobseeker/{uid}/certification:
+     *      get:
+     *          description: Returns the certification of specified jobseeker
+     *          tags:
+     *              - Jobseeker, Certification
+     *          produces: 
+     *              - application/json
+     *          parameters:
+     *              - name: uid
+     *                description: UID for the specific user
+     *                in: path
+     *                requried: true
+     *                type: string
+     * 
+     *          responses:
+     *              200:
+     *                  description: Successfully get the Jobseeker
+     *              400:
+     *                  description: User could not be found
+     *              500:
+     *                  description: Internal server error
+     * 
+     * 
+     */
+    .get(db.getCert)
 
-   /**
-    *  @swagger
-    * 
-    *  /jobseeker/{uid}/certification:
-    *      delete:
-    *          description: Delete an certification from jobseeker
-    *          tags:
-    *              - Jobseeker, Certification
-    *          produces: 
-    *              - application/json
-    *          parameters:
-    *              - name: uid
-    *                description: UID for the specific user
-    *                in: path
-    *                requried: true
-    *                type: string
-    * 
-    *          responses:
-    *              200:
-    *                  description: Successfully get the Jobseeker
-    *              400:
-    *                  description: User could not be found
-    *              500:
-    *                  description: Internal server error
-    * 
-    * 
-    */
-   .delete(db.deleteCert)
+    /**
+     *  @swagger
+     * 
+     *  /jobseeker/{uid}/certification:
+     *      delete:
+     *          description: Delete an certification from jobseeker
+     *          tags:
+     *              - Jobseeker, Certification
+     *          produces: 
+     *              - application/json
+     *          parameters:
+     *              - name: uid
+     *                description: UID for the specific user
+     *                in: path
+     *                requried: true
+     *                type: string
+     * 
+     *          responses:
+     *              200:
+     *                  description: Successfully get the Jobseeker
+     *              400:
+     *                  description: User could not be found
+     *              500:
+     *                  description: Internal server error
+     * 
+     * 
+     */
+    .delete(db.deleteCert)
 
 
 router.route('/company/:company_name?')
