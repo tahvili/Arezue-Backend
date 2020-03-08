@@ -708,7 +708,7 @@ router.route('/jobseeker/:uid/exp')
      */
     .delete(db.deleteExp)
 
-router.route('/jobseeker/:uid/education')
+router.route('/jobseeker/:uid/education/:ed_id?')
     /**
     *  @swagger
     * 
@@ -803,7 +803,7 @@ router.route('/jobseeker/:uid/education')
     *                requried: true
     *                type: string
     *              - name: ed_id
-    *                description: The id of the education field to be updated
+    *                description: The id of the education experience to be updated
     *                in: formData
     *                requried: true
     *                type: integer
@@ -829,7 +829,7 @@ router.route('/jobseeker/:uid/education')
     *                type: string
     *          responses:
     *              200:
-    *                  description: Successfully modified the education
+    *                  description: Successfully modified education experience
     *              400:
     *                  description: User could not be found
     *              500:
@@ -840,9 +840,9 @@ router.route('/jobseeker/:uid/education')
     /**
     *  @swagger
     * 
-    *  /jobseeker/{uid}/education:
+    *  /jobseeker/{uid}/education/{ed_id}:
     *      delete:
-    *          description: Delete an education from jobseeker
+    *          description: Delete an education experience from a jobseeker
     *          tags:
     *              - Jobseeker, Education
     *          produces: 
@@ -850,6 +850,11 @@ router.route('/jobseeker/:uid/education')
     *          parameters:
     *              - name: uid
     *                description: UID for the specific user
+    *                in: path
+    *                requried: true
+    *                type: string
+    *              - name: ed_id
+    *                description: id of the education experience
     *                in: path
     *                requried: true
     *                type: string
@@ -862,11 +867,10 @@ router.route('/jobseeker/:uid/education')
     *              500:
     *                  description: Internal server error
     * 
-    * 
     */
    .delete(db.deleteEducation)
 
-router.route('/jobseeker/:uid/certification')
+router.route('/jobseeker/:uid/certification/:c_id?')
     /**
     *  @swagger
     * 
@@ -944,11 +948,61 @@ router.route('/jobseeker/:uid/certification')
      * 
      */
     .get(db.getCert)
+    /**
+    *  @swagger
+    * 
+    *  /jobseeker/{uid}/certification:
+    *      put:
+    *          description: Modify the certification of a jobseeker
+    *          tags:
+    *              - Jobseeker, Certification
+    *          produces: 
+    *              - application/json
+    *          parameters:
+    *              - name: uid
+    *                description: UUID of the corresponding jobseeker
+    *                in: path
+    *                requried: true
+    *                type: string
+    *              - name: c_id
+    *                description: The id of the certification to be updated
+    *                in: formData
+    *                requried: true
+    *                type: integer
+    *              - name: cert_name
+    *                description: The name of the cert
+    *                in: formData
+    *                requried: true
+    *                type: string
+    *              - name: start_date
+    *                description: The start date of the cert
+    *                in: formData
+    *                requried: false
+    *                type: string
+    *              - name: end_date
+    *                description: The end date of the education cert
+    *                in: formData
+    *                requried: false
+    *                type: string
+    *              - name: issuer
+    *                description: The issuer of the cert
+    *                in: formData
+    *                requried: true
+    *                type: string
+    *          responses:
+    *              200:
+    *                  description: Successfully modified education experience
+    *              400:
+    *                  description: User could not be found
+    *              500:
+    *                  description: Internal server error
+    */
+   .put(db.updateCert)
 
     /**
      *  @swagger
      * 
-     *  /jobseeker/{uid}/certification:
+     *  /jobseeker/{uid}/certification/{c_id}:
      *      delete:
      *          description: Delete an certification from jobseeker
      *          tags:
@@ -961,10 +1015,15 @@ router.route('/jobseeker/:uid/certification')
      *                in: path
      *                requried: true
      *                type: string
+     *              - name: c_id
+     *                description: id of the cert
+     *                in: path
+     *                requried: true
+     *                type: string
      * 
      *          responses:
      *              200:
-     *                  description: Successfully get the Jobseeker
+     *                  description: Successfully delete the cert
      *              400:
      *                  description: User could not be found
      *              500:

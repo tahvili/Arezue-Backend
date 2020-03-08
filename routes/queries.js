@@ -548,7 +548,8 @@ exports.addExp = [
             .then(result => {
                 var rows = result.filter(r => r.rowCount > 0).map(r => r.rows[0]);
 
-                if (rows[0]) {s
+                if (rows[0]) {
+                    s
                     res.status(200).send('Added job experience');
                 } else {
                     res.status(400).send(`Jobseeker could not be found`);
@@ -572,7 +573,7 @@ exports.deleteExp = [
             res.status(400).send("Invalid UUID");
             return;
         }
-        let Query = `DELETE FROM experiences WHERE uid = $1returning uid`;
+        let Query = `DELETE FROM experiences WHERE uid = $1 returning uid`;
         Promise.all([pool.query(Query, [uid])])
             .then(result => {
                 var rows = result.filter(r => r.rowCount > 0).map(r => r.rows[0]);
@@ -606,7 +607,7 @@ exports.getCompany = [
     async function (req, res, next) {
         let company_name = validator.escape(req.params.company_name);
         let Query = `SELECT * FROM company WHERE company_name = ($1)`;
-       
+
         Promise.all([pool.query(Query, [company_name])])
             .then(result => {
                 var rows = result.filter(r => r.rowCount > 0).map(r => r.rows[0]);
@@ -683,24 +684,76 @@ exports.getEducation = [
 
 
 exports.updateEducation = [
+    async function (req, res, next) {
+        let uid = validator.escape(req.params.uid);
+        let ed_id = validator.escape(req.body.ed_id);
+        // let name = validator.escape(req.body.school_name);
+        // let start = validator.escape(req.body.start_date);
+        // let grad = validator.escape(req.body.grad_date);
+        // let program = validator.escape(req.body.program);
+        if (!validator.isUUID(uid, [4])) {
+            res.status(400).send("Invalid UUID");
+            return;
+        }
+        let data = req.body;
+        delete data['ed_id'];
+        pairs = Object.keys(data).map((key, index) => `${key}=$${index + 1}`).join(", ");
 
+        values = Object.values(data)
+        console.log(pairs);
+        var query = `UPDATE education set ${pairs} where ed_id = $${values.length + 1} RETURNING ed_id`;
+        Promise.all([pool.query(query, values.concat(ed_id))])
+            .then(result => {
+                var rows = result.filter(r => r.rowCount > 0).map(r => r.rows[0])
+
+                if (rows[0]) {
+                    res.status(200).send(rows[0]);
+                } else {
+                    res.status(400).send(`Jobseeker could not be updated`);
+                }
+
+            })
+            .catch(e => { res.status(500); res.send(sendError(500, '/education error ' + e)) });
+    }
 ];
 
 exports.deleteEducation = [
+    async function (req, res, next) {
+        let uid = validator.escape(req.params.uid);
+        let ed_id = validator.escape(req.params.ed_id);
 
+        if (!validator.isUUID(uid, [4])) {
+            res.status(400).send("Invalid UUID");
+            return;
+        }
+
+        var query = `DELETE FROM education where uid = $1 and ed_id = $2 returning ed_id`;
+        Promise.all([pool.query(query, [uid, ed_id])])
+            .then(result => {
+                var rows = result.filter(r => r.rowCount > 0).map(r => r.rows[0])
+
+                if (rows[0]) {
+                    res.status(200).send(rows[0]);
+                } else {
+                    res.status(400).send(`Jobseeker could not be updated`);
+                }
+
+            })
+            .catch(e => { res.status(500); res.send(sendError(500, '/education error ' + e)) });
+    }
 ];
 
 exports.addCert = [
     async function (req, res, next) {
         let uid = validator.escape(req.params.uid);
         let name = validator.escape(req.body.cert_name);
-        if (req.body.start_date){
+        if (req.body.start_date) {
             var start_date = validator.escape(req.body.start_date);
         }
         if (req.body.end_date) {
             var end_date = validator.escape(req.body.end_date);
         }
-        
+
         let issuer = validator.escape(req.body.issuer);
 
 
@@ -748,9 +801,58 @@ exports.getCert = [
     }];
 
 exports.updateCert = [
+    async function (req, res, next) {
+        let uid = validator.escape(req.params.uid);
+        let c_id = validator.escape(req.body.c_id);
 
+        if (!validator.isUUID(uid, [4])) {
+            res.status(400).send("Invalid UUID");
+            return;
+        }
+        let data = req.body;
+        delete data['c_id'];
+        pairs = Object.keys(data).map((key, index) => `${key}=$${index + 1}`).join(", ");
+        values = Object.values(data)
+        // values.concat(c_id);
+        console.log(`Values: ${values}`)
+        var query = `UPDATE certification set ${pairs} where c_id = $${values.length + 1} RETURNING c_id`;
+        Promise.all([pool.query(query, values.concat(c_id))])
+            .then(result => {
+                var rows = result.filter(r => r.rowCount > 0).map(r => r.rows[0])
+
+                if (rows[0]) {
+                    res.status(200).send(rows[0]);
+                } else {
+                    res.status(400).send(`Jobseeker could not be updated`);
+                }
+
+            })
+            .catch(e => { res.status(500); res.send(sendError(500, '/certification error ' + e)) });
+    }
 ];
 
 exports.deleteCert = [
+    async function (req, res, next) {
+        let uid = validator.escape(req.params.uid);
+        let c_id = validator.escape(req.params.c_id);
 
+        if (!validator.isUUID(uid, [4])) {
+            res.status(400).send("Invalid UUID");
+            return;
+        }
+
+        var query = `DELETE FROM certification where uid = $1 and c_id = $2 returning c_id`;
+        Promise.all([pool.query(query, [uid, c_id])])
+            .then(result => {
+                var rows = result.filter(r => r.rowCount > 0).map(r => r.rows[0])
+
+                if (rows[0]) {
+                    res.status(200).send(rows[0]);
+                } else {
+                    res.status(400).send(`Certification could not be deleted`);
+                }
+
+            })
+            .catch(e => { res.status(500); res.send(sendError(500, '/certification error ' + e)) });
+    }
 ];
