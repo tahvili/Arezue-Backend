@@ -20,4 +20,7 @@ CREATE table IF NOT EXISTS Job (
     Expiry_Date date not NULL default current_date + 30, -- 30 Days by default
     Status VARCHAR(20) not NULL,
     Max_Candidate int not NULL
+
+    -- Potentially for employer to rank the skill that is more important when they are creating the job
+    
 );
