@@ -10,4 +10,4 @@ CREATE table IF NOT EXISTS Skills (
     -- Potentially modify the Keywords table for the skills for the job that they require
     -- Skill now have an id
 
-);
+);  

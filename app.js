@@ -6,7 +6,6 @@ var logger = require('morgan');
 
 var bodyParser = require('body-parser')
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
 var apiRouter = require('./routes/api');
 
 var app = express();
@@ -25,7 +24,7 @@ var options = {
       description: 'API for all api calls to Arezue server'
     }
   },
-  apis: ['./routes/*'],
+  apis: ['./routes/API/universal.js', './routes/API/company.js', './routes/API/employer.js', './routes/API/jobseeker.js'],
 };
 const swaggerSpec = swaggerJSDoc(options);
 
@@ -51,7 +50,6 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
 app.use('/api/v1', apiRouter);
 
 // catch 404 and forward to error handler
