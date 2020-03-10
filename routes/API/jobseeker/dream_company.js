@@ -33,13 +33,13 @@ exports.getDreamCompanies = [
         let Query = `SELECT * FROM Dream_Companies where uid = $1`;
         Promise.all([pool.query(Query, [uid])])
             .then(result => {
-                var rows = result.filter(r => r.rowCount > 0).map(r => r.rows)
+            
+                var dc = {};
                 res.type('application/json');
-                if (rows[0]) {
-                    if (rows.length == 0) {
-                        res.status(200).send([]);
-                    }
-                    res.status(200).send(rows[0])
+                if (result[0].rows) {
+                    dc.dream_companies = result[0].rows;
+
+                    res.status(200).send(dc)
                 } else {
                     res.status(400).send(`Jobseeker could not be found`);
                 }

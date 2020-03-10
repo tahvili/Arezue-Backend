@@ -161,11 +161,11 @@ router.route('/:uid/profile/?')
      */
     .get(profile.getProfile);
 
-router.route('/:uid/skills')
+router.route('/:uid/skill')
     /**
      *  @swagger
      * 
-     *  /jobseeker/{uid}/skills:
+     *  /jobseeker/{uid}/skill:
      *      get:
      *          description: Returns the skills of specified jobseeker
      *          tags:
@@ -193,7 +193,7 @@ router.route('/:uid/skills')
     /**
      *  @swagger
      * 
-     *  /jobseeker/{uid}/skills:
+     *  /jobseeker/{uid}/skill:
      *      post:
      *          description: Add a new skill to a jobseeker table
      *          tags:
@@ -231,7 +231,7 @@ router.route('/:uid/skills')
     /**
      *  @swagger
      * 
-     *  /jobseeker/{uid}/skills:
+     *  /jobseeker/{uid}/skill:
      *      delete:
      *          description: Delete a skill added to the database for a jobseeker
      *          tags:
@@ -589,15 +589,15 @@ router.route('/:uid/certification/:c_id?')
      */
     .delete(cert.deleteCert)
 
-router.route('/:uid/dream_careers')
+router.route('/:uid/dream_career')
     /**
      *  @swagger
      * 
-     *  /jobseeker/{uid}/dream_careers:
+     *  /jobseeker/{uid}/dream_career:
      *      get:
      *          description: Returns the dream careers of specified jobseeker
      *          tags:
-     *              - Jobseeker, Dream Careers
+     *              - Jobseeker, Dream Career
      *          produces: 
      *              - application/json
      *          parameters:
@@ -621,11 +621,11 @@ router.route('/:uid/dream_careers')
     /**
      *  @swagger
      * 
-     *  /jobseeker/{uid}/dream_careers:
+     *  /jobseeker/{uid}/dream_career:
      *      post:
      *          description: Add a new dream career to a jobseeker table
      *          tags:
-     *              - Jobseeker, Dream Careers
+     *              - Jobseeker, Dream Career
      *          produces: 
      *              - application/json
      *          parameters:
@@ -635,19 +635,19 @@ router.route('/:uid/dream_careers')
      *                requried: true
      *                type: string
      *              - name: dream_career
-     *                description: Skill to add for a user
+     *                description: Dream career to add for a user
      *                in: formData
      *                required: true
      *                type: string
      *              - name: ranking
-     *                description: Ranking of the skill
+     *                description: Ranking of the career
      *                in: formData
      *                required: false
      *                type: integer
      * 
      *          responses:
      *              200:
-     *                  description: Successfully get the Jobseeker
+     *                  description: Successfully add the dream career
      *              400:
      *                  description: User could not be found
      *              500:
@@ -659,11 +659,11 @@ router.route('/:uid/dream_careers')
     /**
      *  @swagger
      * 
-     *  /jobseeker/{uid}/dream_careers:
+     *  /jobseeker/{uid}/dream_career:
      *      delete:
      *          description: Delete a drema career added to the database for a jobseeker
      *          tags:
-     *              - Jobseeker, Dream Careers
+     *              - Jobseeker, Dream Career
      *          produces: 
      *              - application/json
      *          parameters:
@@ -690,15 +690,15 @@ router.route('/:uid/dream_careers')
      */
     .delete(dream_career.deleteDreamCareers)
 
-router.route('/:uid/dream_companies')
+router.route('/:uid/dream_company')
     /**
      *  @swagger
      * 
-     *  /jobseeker/{uid}/dream_companies:
+     *  /jobseeker/{uid}/dream_company:
      *      get:
      *          description: Returns the dream careers of specified jobseeker
      *          tags:
-     *              - Jobseeker, Dream Companies
+     *              - Jobseeker, Dream Company
      *          produces: 
      *              - application/json
      *          parameters:
@@ -722,11 +722,11 @@ router.route('/:uid/dream_companies')
     /**
      *  @swagger
      * 
-     *  /jobseeker/{uid}/dream_companies:
+     *  /jobseeker/{uid}/dream_company:
      *      post:
      *          description: Add a new dream company to a jobseeker table
      *          tags:
-     *              - Jobseeker, Dream Companies
+     *              - Jobseeker, Dream Company
      *          produces: 
      *              - application/json
      *          parameters:
@@ -760,11 +760,11 @@ router.route('/:uid/dream_companies')
     /**
      *  @swagger
      * 
-     *  /jobseeker/{uid}/dream_companies:
+     *  /jobseeker/{uid}/dream_company:
      *      delete:
      *          description: Delete a dream company added to the database for a jobseeker
      *          tags:
-     *              - Jobseeker, Dream Companies
+     *              - Jobseeker, Dream Company
      *          produces: 
      *              - application/json
      *          parameters:
