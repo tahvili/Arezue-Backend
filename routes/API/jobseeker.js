@@ -161,7 +161,7 @@ router.route('/:uid/profile/?')
      */
     .get(profile.getProfile);
 
-router.route('/:uid/skill')
+router.route('/:uid/skill/?:skill?')
     /**
      *  @swagger
      * 
@@ -231,7 +231,7 @@ router.route('/:uid/skill')
     /**
      *  @swagger
      * 
-     *  /jobseeker/{uid}/skill:
+     *  /jobseeker/{uid}/skill/{skill}:
      *      delete:
      *          description: Delete a skill added to the database for a jobseeker
      *          tags:
@@ -246,7 +246,7 @@ router.route('/:uid/skill')
      *                type: string
      *              - name: skill
      *                description: Skill to delete
-     *                in: header
+     *                in: path
      *                required: true
      *                type: string
      * 
@@ -262,7 +262,7 @@ router.route('/:uid/skill')
      */
     .delete(skill.deleteSkill)
 
-    router.route('/:uid/education/:ed_id?')
+router.route('/:uid/education/?:ed_id?')
     /**
     *  @swagger
     * 
@@ -340,7 +340,6 @@ router.route('/:uid/skill')
      * 
      */
     .get(ed.getEducation)
-
     /**
     *  @swagger
     * 
@@ -425,7 +424,7 @@ router.route('/:uid/skill')
     */
    .delete(ed.deleteEducation)
 
-router.route('/:uid/certification/:c_id?')
+router.route('/:uid/certification/?:c_id?')
     /**
     *  @swagger
     * 
@@ -589,7 +588,7 @@ router.route('/:uid/certification/:c_id?')
      */
     .delete(cert.deleteCert)
 
-router.route('/:uid/dream_career')
+router.route('/:uid/dream_career/?:dream_career?')
     /**
      *  @swagger
      * 
@@ -659,7 +658,7 @@ router.route('/:uid/dream_career')
     /**
      *  @swagger
      * 
-     *  /jobseeker/{uid}/dream_career:
+     *  /jobseeker/{uid}/dream_career/{dream_career}:
      *      delete:
      *          description: Delete a drema career added to the database for a jobseeker
      *          tags:
@@ -674,7 +673,7 @@ router.route('/:uid/dream_career')
      *                type: string
      *              - name: dream_career
      *                description: Dream career to add for a user
-     *                in: header
+     *                in: path
      *                required: true
      *                type: string
      * 
@@ -690,7 +689,7 @@ router.route('/:uid/dream_career')
      */
     .delete(dream_career.deleteDreamCareers)
 
-router.route('/:uid/dream_company')
+router.route('/:uid/dream_company/?:dream_company?')
     /**
      *  @swagger
      * 
@@ -760,7 +759,7 @@ router.route('/:uid/dream_company')
     /**
      *  @swagger
      * 
-     *  /jobseeker/{uid}/dream_company:
+     *  /jobseeker/{uid}/dream_company/{dream_company}:
      *      delete:
      *          description: Delete a dream company added to the database for a jobseeker
      *          tags:
@@ -775,7 +774,7 @@ router.route('/:uid/dream_company')
      *                type: string
      *              - name: dream_company
      *                description: Dream company to delete from the user
-     *                in: header
+     *                in: path
      *                required: true
      *                type: string
      * 
@@ -791,7 +790,7 @@ router.route('/:uid/dream_company')
      */
     .delete(dream_company.deleteDreamCompanies)
 
-    router.route('/:uid/exp')
+router.route('/:uid/exp/?:exp_id?')
     /**
      *  @swagger
      * 
@@ -871,7 +870,7 @@ router.route('/:uid/dream_company')
     /**
      *  @swagger
      * 
-     *  /jobseeker/{uid}/exp:
+     *  /jobseeker/{uid}/exp/{exp_id}:
      *      delete:
      *          description: Delete an experience from jobseeker (ONLY SUPPORST 1 RIGHT NOW)
      *          tags:
@@ -886,7 +885,7 @@ router.route('/:uid/dream_company')
      *                type: string
      *              - name: exp_id
      *                description: Experience ID of the specific experience
-     *                in: header
+     *                in: path
      *                required: true
      *                type: string
      * 

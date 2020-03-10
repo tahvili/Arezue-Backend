@@ -68,7 +68,7 @@ exports.addExp = [
 exports.deleteExp = [
     async function (req, res, next) {
         let uid = validator.escape(req.params.uid);
-        let e_id = validator.escape(req.headers.exp_id);
+        let e_id = validator.escape(req.params.exp_id);
         // let title = validator.escape(req.body.title);
         // let start_date = validator.escape(req.body.start_date);
         // let end_date = validator.escape(req.body.end_date);
