@@ -190,6 +190,7 @@ router.route('/:uid/skill/?:skill?')
      * 
      */
     .get(skill.getSkills)
+
     /**
      *  @swagger
      * 
@@ -216,10 +217,20 @@ router.route('/:uid/skill/?:skill?')
      *                in: formData
      *                required: false
      *                type: integer
+     *              - name: level
+     *                description: Level of expertise with the skill. 1 is expert and 5 is beginner.
+     *                in: formData
+     *                required: true
+     *                type: integer
+     *              - name: years
+     *                description: years of experience with the skill
+     *                in: formData
+     *                required: true
+     *                type: integer
      * 
      *          responses:
      *              200:
-     *                  description: Successfully get the Jobseeker
+     *                  description: Successfully add the Jobseeker's skill
      *              400:
      *                  description: User could not be found
      *              500:
@@ -867,6 +878,61 @@ router.route('/:uid/exp/?:exp_id?')
      * 
      */
     .post(experience.addExp)
+
+    /**
+     *  @swagger
+     * 
+     *  /jobseeker/{uid}/exp:
+     *      put:
+     *          description: update an experience from jobseeker (ONLY SUPPORST 1 RIGHT NOW)
+     *          tags:
+     *              - Jobseeker, Experiences
+     *          produces: 
+     *              - application/json
+     *          parameters:
+     *              - name: uid
+     *                description: UID for the specific user
+     *                in: path
+     *                requried: true
+     *                type: string
+     *              - name: exp_id
+     *                description: Experience ID of the specific experience
+     *                in: formData
+     *                required: true
+     *                type: string
+     *              - name: title
+     *                description: Title of the past job experience
+     *                in: formData
+     *                required: true
+     *                type: string
+     *              - name: start_date
+     *                description: Starting date of job
+     *                in: formData
+     *                required: true
+     *                type: string
+     *              - name: end_date
+     *                description: Ending date of job
+     *                in: formData
+     *                required: true
+     *                type: string
+     *              - name: description
+     *                description: The description of the job
+     *                in: formData
+     *                required: true
+     *                type: string
+     * 
+     *          responses:
+     *              200:
+     *                  description: Successfully update the experience
+     *              400:
+     *                  description: User could not be found
+     *              500:
+     *                  description: Internal server error
+     * 
+     * 
+     */
+    .put(experience.updateExp)
+
     /**
      *  @swagger
      * 
