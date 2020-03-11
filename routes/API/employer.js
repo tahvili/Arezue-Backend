@@ -6,6 +6,7 @@ var router = express.Router({
 const bodyParser = require('body-parser');
 
 const basic = require('./employer/basic');
+const job = require('./employer/job');
 
 router.route('/:uid?')
     /**
@@ -126,5 +127,8 @@ router.route('/:uid?')
      * 
      */
     .put(basic.updateEmployer)
+
+router.route('/:uid/job/?:job_id?')
+    .get(job.getJob)
 
 module.exports = router;
