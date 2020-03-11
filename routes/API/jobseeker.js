@@ -12,6 +12,8 @@ const skill = require('./jobseeker/skill');
 const dream_career = require('./jobseeker/dream_career');
 const dream_company = require('./jobseeker/dream_company');
 const experience = require('./jobseeker/experience'); 
+const ed = require('./jobseeker/education'); 
+const cert = require('./jobseeker/certification'); 
 
 router.route('/:uid?')
     /**
@@ -159,11 +161,11 @@ router.route('/:uid/profile/?')
      */
     .get(profile.getProfile);
 
-router.route('/:uid/skills')
+router.route('/:uid/skill/?:skill?')
     /**
      *  @swagger
      * 
-     *  /jobseeker/{uid}/skills:
+     *  /jobseeker/{uid}/skill:
      *      get:
      *          description: Returns the skills of specified jobseeker
      *          tags:
@@ -191,7 +193,7 @@ router.route('/:uid/skills')
     /**
      *  @swagger
      * 
-     *  /jobseeker/{uid}/skills:
+     *  /jobseeker/{uid}/skill:
      *      post:
      *          description: Add a new skill to a jobseeker table
      *          tags:
@@ -229,7 +231,7 @@ router.route('/:uid/skills')
     /**
      *  @swagger
      * 
-     *  /jobseeker/{uid}/skills:
+     *  /jobseeker/{uid}/skill/{skill}:
      *      delete:
      *          description: Delete a skill added to the database for a jobseeker
      *          tags:
@@ -244,7 +246,7 @@ router.route('/:uid/skills')
      *                type: string
      *              - name: skill
      *                description: Skill to delete
-     *                in: header
+     *                in: path
      *                required: true
      *                type: string
      * 
@@ -260,15 +262,341 @@ router.route('/:uid/skills')
      */
     .delete(skill.deleteSkill)
 
-router.route('/:uid/dream_careers')
+router.route('/:uid/education/?:ed_id?')
+    /**
+    *  @swagger
+    * 
+    *  /jobseeker/{uid}/education:
+    *      post:
+    *          description: Add a new education experience to jobseeker
+    *          tags:
+    *              - Jobseeker, Education
+    *          produces: 
+    *              - application/json
+    *          parameters:
+    *              - name: uid
+    *                description: UID for the specific user
+    *                in: path
+    *                requried: true
+    *                type: string
+    *              - name: school_name
+    *                description: Name of the school
+    *                in: formData
+    *                required: true
+    *                type: string
+    *              - name: start_date
+    *                description: Start date
+    *                in: formData
+    *                required: true
+    *                type: string
+    *              - name: grad_date
+    *                description: Graduation date
+    *                in: formData
+    *                required: true
+    *                type: string
+    *              - name: program
+    *                description: Name of the program
+    *                in: formData
+    *                required: true
+    *                type: string
+    * 
+    *          responses:
+    *              200:
+    *                  description: Successfully get the Jobseeker
+    *              400:
+    *                  description: User could not be found
+    *              500:
+    *                  description: Internal server error
+    * 
+    * 
+    */
+    .post(ed.addEducation)
+
     /**
      *  @swagger
      * 
-     *  /jobseeker/{uid}/dream_careers:
+     *  /jobseeker/{uid}/education:
+     *      get:
+     *          description: Returns the education experience of specified jobseeker
+     *          tags:
+     *              - Jobseeker, Education
+     *          produces: 
+     *              - application/json
+     *          parameters:
+     *              - name: uid
+     *                description: UID for the specific user
+     *                in: path
+     *                requried: true
+     *                type: string
+     * 
+     *          responses:
+     *              200:
+     *                  description: Successfully get the Jobseeker
+     *              400:
+     *                  description: User could not be found
+     *              500:
+     *                  description: Internal server error
+     * 
+     * 
+     */
+    .get(ed.getEducation)
+    /**
+    *  @swagger
+    * 
+    *  /jobseeker/{uid}/education:
+    *      put:
+    *          description: Modify the education of a jobseeker
+    *          tags:
+    *              - Jobseeker, Education
+    *          produces: 
+    *              - application/json
+    *          parameters:
+    *              - name: uid
+    *                description: UUID of the corresponding jobseeker
+    *                in: path
+    *                requried: true
+    *                type: string
+    *              - name: ed_id
+    *                description: The id of the education experience to be updated
+    *                in: formData
+    *                requried: true
+    *                type: integer
+    *              - name: school_name
+    *                description: The name of the school
+    *                in: formData
+    *                requried: true
+    *                type: string
+    *              - name: start_date
+    *                description: The start date of the education experience
+    *                in: formData
+    *                requried: true
+    *                type: string
+    *              - name: grad_date
+    *                description: The graduation date of the education experience
+    *                in: formData
+    *                requried: true
+    *                type: string
+    *              - name: program
+    *                description: The program of study
+    *                in: formData
+    *                requried: true
+    *                type: string
+    *          responses:
+    *              200:
+    *                  description: Successfully modified education experience
+    *              400:
+    *                  description: User could not be found
+    *              500:
+    *                  description: Internal server error
+    */
+    .put(ed.updateEducation)
+
+    /**
+    *  @swagger
+    * 
+    *  /jobseeker/{uid}/education/{ed_id}:
+    *      delete:
+    *          description: Delete an education experience from a jobseeker
+    *          tags:
+    *              - Jobseeker, Education
+    *          produces: 
+    *              - application/json
+    *          parameters:
+    *              - name: uid
+    *                description: UID for the specific user
+    *                in: path
+    *                requried: true
+    *                type: string
+    *              - name: ed_id
+    *                description: id of the education experience
+    *                in: path
+    *                requried: true
+    *                type: string
+    * 
+    *          responses:
+    *              200:
+    *                  description: Successfully get the Jobseeker
+    *              400:
+    *                  description: User could not be found
+    *              500:
+    *                  description: Internal server error
+    * 
+    */
+   .delete(ed.deleteEducation)
+
+router.route('/:uid/certification/?:c_id?')
+    /**
+    *  @swagger
+    * 
+    *  /jobseeker/{uid}/certification:
+    *      post:
+    *          description: Add a new certification to jobseeker
+    *          tags:
+    *              - Jobseeker, Certification
+    *          produces: 
+    *              - application/json
+    *          parameters:
+    *              - name: uid
+    *                description: UID for the specific user
+    *                in: path
+    *                requried: true
+    *                type: string
+    *              - name: cert_name
+    *                description: Name of the certification
+    *                in: formData
+    *                required: true
+    *                type: string
+    *              - name: start_date
+    *                description: Start date
+    *                in: formData
+    *                required: false
+    *                type: string
+    *              - name: end_date
+    *                description: End date
+    *                in: formData
+    *                required: false
+    *                type: string
+    *              - name: issuer
+    *                description: Name of the issuer of the certificate
+    *                in: formData
+    *                required: true
+    *                type: string
+    * 
+    *          responses:
+    *              200:
+    *                  description: Successfully get the Jobseeker
+    *              400:
+    *                  description: User could not be found
+    *              500:
+    *                  description: Internal server error
+    * 
+    * 
+    */
+    .post(cert.addCert)
+
+    /**
+     *  @swagger
+     * 
+     *  /jobseeker/{uid}/certification:
+     *      get:
+     *          description: Returns the certification of specified jobseeker
+     *          tags:
+     *              - Jobseeker, Certification
+     *          produces: 
+     *              - application/json
+     *          parameters:
+     *              - name: uid
+     *                description: UID for the specific user
+     *                in: path
+     *                requried: true
+     *                type: string
+     * 
+     *          responses:
+     *              200:
+     *                  description: Successfully get the Jobseeker
+     *              400:
+     *                  description: User could not be found
+     *              500:
+     *                  description: Internal server error
+     * 
+     * 
+     */
+    .get(cert.getCert)
+
+    /**
+    *  @swagger
+    * 
+    *  /jobseeker/{uid}/certification:
+    *      put:
+    *          description: Modify the certification of a jobseeker
+    *          tags:
+    *              - Jobseeker, Certification
+    *          produces: 
+    *              - application/json
+    *          parameters:
+    *              - name: uid
+    *                description: UUID of the corresponding jobseeker
+    *                in: path
+    *                requried: true
+    *                type: string
+    *              - name: c_id
+    *                description: The id of the certification to be updated
+    *                in: formData
+    *                requried: true
+    *                type: integer
+    *              - name: cert_name
+    *                description: The name of the cert
+    *                in: formData
+    *                requried: true
+    *                type: string
+    *              - name: start_date
+    *                description: The start date of the cert
+    *                in: formData
+    *                requried: false
+    *                type: string
+    *              - name: end_date
+    *                description: The end date of the education cert
+    *                in: formData
+    *                requried: false
+    *                type: string
+    *              - name: issuer
+    *                description: The issuer of the cert
+    *                in: formData
+    *                requried: true
+    *                type: string
+    *          responses:
+    *              200:
+    *                  description: Successfully modified education experience
+    *              400:
+    *                  description: User could not be found
+    *              500:
+    *                  description: Internal server error
+    */
+   .put(cert.updateCert)
+
+    /**
+     *  @swagger
+     * 
+     *  /jobseeker/{uid}/certification/{c_id}:
+     *      delete:
+     *          description: Delete an certification from jobseeker
+     *          tags:
+     *              - Jobseeker, Certification
+     *          produces: 
+     *              - application/json
+     *          parameters:
+     *              - name: uid
+     *                description: UID for the specific user
+     *                in: path
+     *                requried: true
+     *                type: string
+     *              - name: c_id
+     *                description: id of the cert
+     *                in: path
+     *                requried: true
+     *                type: string
+     * 
+     *          responses:
+     *              200:
+     *                  description: Successfully delete the cert
+     *              400:
+     *                  description: User could not be found
+     *              500:
+     *                  description: Internal server error
+     * 
+     * 
+     */
+    .delete(cert.deleteCert)
+
+router.route('/:uid/dream_career/?:dream_career?')
+    /**
+     *  @swagger
+     * 
+     *  /jobseeker/{uid}/dream_career:
      *      get:
      *          description: Returns the dream careers of specified jobseeker
      *          tags:
-     *              - Jobseeker, Dream Careers
+     *              - Jobseeker, Dream Career
      *          produces: 
      *              - application/json
      *          parameters:
@@ -292,11 +620,11 @@ router.route('/:uid/dream_careers')
     /**
      *  @swagger
      * 
-     *  /jobseeker/{uid}/dream_careers:
+     *  /jobseeker/{uid}/dream_career:
      *      post:
      *          description: Add a new dream career to a jobseeker table
      *          tags:
-     *              - Jobseeker, Dream Careers
+     *              - Jobseeker, Dream Career
      *          produces: 
      *              - application/json
      *          parameters:
@@ -306,19 +634,19 @@ router.route('/:uid/dream_careers')
      *                requried: true
      *                type: string
      *              - name: dream_career
-     *                description: Skill to add for a user
+     *                description: Dream career to add for a user
      *                in: formData
      *                required: true
      *                type: string
      *              - name: ranking
-     *                description: Ranking of the skill
+     *                description: Ranking of the career
      *                in: formData
      *                required: false
      *                type: integer
      * 
      *          responses:
      *              200:
-     *                  description: Successfully get the Jobseeker
+     *                  description: Successfully add the dream career
      *              400:
      *                  description: User could not be found
      *              500:
@@ -330,11 +658,11 @@ router.route('/:uid/dream_careers')
     /**
      *  @swagger
      * 
-     *  /jobseeker/{uid}/dream_careers:
+     *  /jobseeker/{uid}/dream_career/{dream_career}:
      *      delete:
      *          description: Delete a drema career added to the database for a jobseeker
      *          tags:
-     *              - Jobseeker, Dream Careers
+     *              - Jobseeker, Dream Career
      *          produces: 
      *              - application/json
      *          parameters:
@@ -345,7 +673,7 @@ router.route('/:uid/dream_careers')
      *                type: string
      *              - name: dream_career
      *                description: Dream career to add for a user
-     *                in: header
+     *                in: path
      *                required: true
      *                type: string
      * 
@@ -361,15 +689,15 @@ router.route('/:uid/dream_careers')
      */
     .delete(dream_career.deleteDreamCareers)
 
-router.route('/:uid/dream_companies')
+router.route('/:uid/dream_company/?:dream_company?')
     /**
      *  @swagger
      * 
-     *  /jobseeker/{uid}/dream_companies:
+     *  /jobseeker/{uid}/dream_company:
      *      get:
      *          description: Returns the dream careers of specified jobseeker
      *          tags:
-     *              - Jobseeker, Dream Companies
+     *              - Jobseeker, Dream Company
      *          produces: 
      *              - application/json
      *          parameters:
@@ -393,11 +721,11 @@ router.route('/:uid/dream_companies')
     /**
      *  @swagger
      * 
-     *  /jobseeker/{uid}/dream_companies:
+     *  /jobseeker/{uid}/dream_company:
      *      post:
      *          description: Add a new dream company to a jobseeker table
      *          tags:
-     *              - Jobseeker, Dream Companies
+     *              - Jobseeker, Dream Company
      *          produces: 
      *              - application/json
      *          parameters:
@@ -431,11 +759,11 @@ router.route('/:uid/dream_companies')
     /**
      *  @swagger
      * 
-     *  /jobseeker/{uid}/dream_companies:
+     *  /jobseeker/{uid}/dream_company/{dream_company}:
      *      delete:
      *          description: Delete a dream company added to the database for a jobseeker
      *          tags:
-     *              - Jobseeker, Dream Companies
+     *              - Jobseeker, Dream Company
      *          produces: 
      *              - application/json
      *          parameters:
@@ -446,7 +774,7 @@ router.route('/:uid/dream_companies')
      *                type: string
      *              - name: dream_company
      *                description: Dream company to delete from the user
-     *                in: header
+     *                in: path
      *                required: true
      *                type: string
      * 
@@ -462,7 +790,7 @@ router.route('/:uid/dream_companies')
      */
     .delete(dream_company.deleteDreamCompanies)
 
-    router.route('/:uid/exp')
+router.route('/:uid/exp/?:exp_id?')
     /**
      *  @swagger
      * 
@@ -542,7 +870,7 @@ router.route('/:uid/dream_companies')
     /**
      *  @swagger
      * 
-     *  /jobseeker/{uid}/exp:
+     *  /jobseeker/{uid}/exp/{exp_id}:
      *      delete:
      *          description: Delete an experience from jobseeker (ONLY SUPPORST 1 RIGHT NOW)
      *          tags:
@@ -557,7 +885,7 @@ router.route('/:uid/dream_companies')
      *                type: string
      *              - name: exp_id
      *                description: Experience ID of the specific experience
-     *                in: header
+     *                in: path
      *                required: true
      *                type: string
      * 

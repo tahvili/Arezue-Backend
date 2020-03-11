@@ -76,7 +76,7 @@ exports.addDreamCompanies = [
 exports.deleteDreamCompanies = [
     async function (req, res, next) {
         let uid = validator.escape(req.params.uid);
-        let dream_company = validator.escape(req.headers.dream_company);
+        let dream_company = validator.escape(req.params.dream_company);
         if (validator.isEmpty(uid) || validator.isEmpty(dream_company)) {
             res.status(400).send("One of the field is empty");
             return;
@@ -90,7 +90,7 @@ exports.deleteDreamCompanies = [
             .then(result => {
                 var rows = result.filter(r => r.rowCount > 0).map(r => r.rows);
 
-                if (rows[0]) {
+                if (rows.length == 1) {
                     res.status(200).send(rows[0][0]);
                 } else {
                     res.status(400).send(`Jobseeker could not be found`);

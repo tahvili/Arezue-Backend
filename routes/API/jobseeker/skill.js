@@ -80,7 +80,7 @@ exports.addSkill = [
 exports.deleteSkill = [
     async function (req, res, next) {
         let uid = validator.escape(req.params.uid);
-        let skill = validator.escape(req.headers.skill);
+        let skill = validator.escape(req.params.skill);
         if (validator.isEmpty(uid) || validator.isEmpty(skill)) {
             res.status(400).send("One of the field is empty");
             return;
@@ -94,10 +94,10 @@ exports.deleteSkill = [
             .then(result => {
                 var rows = result.filter(r => r.rowCount > 0).map(r => r.rows);
 
-                if (rows[0]) {
-                    res.status(200).send(rows);
+                if (rows.length == 1) {
+                    res.status(200).send(rows[0][0]);
                 } else {
-                    res.status(400).send(`Jobseeker could not be found`);
+                    res.status(404).send('Delete is case sensitive');
                 }
             })
             .catch(e => {
