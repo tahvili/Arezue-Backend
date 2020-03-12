@@ -14,6 +14,7 @@ const dream_company = require('./jobseeker/dream_company');
 const experience = require('./jobseeker/experience'); 
 const ed = require('./jobseeker/education'); 
 const cert = require('./jobseeker/certification'); 
+const resume = require('./jobseeker/resume');
 
 router.route('/?:uid?')
     /**
@@ -965,7 +966,12 @@ router.route('/:uid/exp/?:exp_id?')
      * 
      * 
      */
-    .delete(experience.deleteExp)
+    .delete(experience.deleteExp);
 
+router.route('/:uid/resumes/?')
+    .get(resume.getAllResume);
 
+router.route('/:uid/resumes/:resume_id')
+    .get(resume.getResume)
+    .put(resume.updateResume)
 module.exports = router;
