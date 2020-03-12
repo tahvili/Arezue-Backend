@@ -129,9 +129,107 @@ router.route('/?:uid?')
     .put(basic.updateEmployer)
 
 router.route('/:uid/jobs/?')
+    /**
+    *   @swagger
+    * 
+    *   /employer/{uid}/jobs:
+    *       get:
+    *           description: Get all the jobs for an employer
+    *           tags:
+    *               - Employer | Job
+    *           produces:
+    *               - application/json
+    *           parameters:
+    *               - name: uid
+    *                 description: The uid of the employer of target
+    *                 in: path
+    *                 required: true
+    *                 type: string
+    *           responses:
+    *               200:
+    *                   description: Successfully returned back the all the job
+    *               400:
+    *                   description: One of the supplied argument does not follow our syntax
+    *               404:
+    *                   description: No job found or no employer is found
+    *               422:
+    *                   description: Information missing
+    *               500:
+    *                   description: There is an error in the backend
+    *               
+    */
     .get(job.getAllJob)
 
-router.route('/:uid/jobs/:job_id')
-    .get();
+router.route('/:uid/jobs/?:job_id?')
+    /**
+    *   @swagger
+    * 
+    *   /employer/{uid}/jobs/{job_id}:
+    *       get:
+    *           description: Get a specific job for an employer
+    *           tags:
+    *               - Employer | Job
+    *           produces:
+    *               - application/json
+    *           parameters:
+    *               - name: uid
+    *                 description: The uid of the employer of target
+    *                 in: path
+    *                 required: true
+    *                 type: string
+    *               - name: job_id
+    *                 description: The ID of the job of target
+    *                 in: path
+    *                 required: true
+    *                 type: string
+    *           responses:
+    *               200:
+    *                   description: Successfully returned back the specified job
+    *               400:
+    *                   description: One of the supplied argument does not follow our syntax
+    *               404:
+    *                   description: No job found or no employer is found
+    *               422:
+    *                   description: Information missing
+    *               500:
+    *                   description: There is an error in the backend
+    *               
+    */
+    .get(job.getJob)
+    /**
+    *   @swagger
+    * 
+    *   /employer/{uid}/jobs:
+    *       get:
+    *           description: Get a specific job for an employer
+    *           tags:
+    *               - Employer | Job
+    *           produces:
+    *               - application/json
+    *           parameters:
+    *               - name: uid
+    *                 description: The uid of the employer of target
+    *                 in: path
+    *                 required: true
+    *                 type: string
+    *               - name: job_id
+    *                 description: The ID of the job of target
+    *                 in: path
+    *                 required: true
+    *                 type: string
+    *           responses:
+    *               200:
+    *                   description: Successfully returned back the specified job
+    *               400:
+    *                   description: One of the supplied argument does not follow our syntax
+    *               404:
+    *                   description: No job found or no employer is found
+    *               422:
+    *                   description: Information missing
+    *               500:
+    *                   description: There is an error in the backend
+    *               
+    */
+    .post(job.addJob);
 
 module.exports = router;
