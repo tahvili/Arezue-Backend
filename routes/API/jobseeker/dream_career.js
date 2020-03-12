@@ -55,11 +55,8 @@ exports.getDreamCareers = [
 exports.addDreamCareers = [
     async function (req, res, next) {
         let uid = validator.escape(req.params.uid);
-        if (uid != req.params.uid) return res.status(400).send();
         let dream_career = validator.escape(req.body.dream_career);
-        if (dream_career != req.body.dream_career) return res.status(400).send();
         let ranking = validator.escape(req.body.ranking);
-        if (ranking != req.body.ranking) return res.status(400).send();
         if (validator.isEmpty(uid) || validator.isEmpty(dream_career)) {
             res.status(400).send("One of the field is empty");
             return;
@@ -68,6 +65,10 @@ exports.addDreamCareers = [
             res.status(400).send("Invalid UUID");
             return;
         }
+        if (uid != req.params.uid) return res.status(400).send();
+        if (dream_career != req.body.dream_career) return res.status(400).send();
+        if (ranking != req.body.ranking) return res.status(400).send();
+
         let Query = `INSERT INTO dream_careers (uid, dream_career, ranking) VALUES ($1, $2, $3) returning uid`;
         Promise.all([pool.query(Query, [uid, dream_career, ranking])])
             .then(result => {
