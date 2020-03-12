@@ -15,7 +15,7 @@ const experience = require('./jobseeker/experience');
 const ed = require('./jobseeker/education'); 
 const cert = require('./jobseeker/certification'); 
 
-router.route('/:uid?')
+router.route('/?:uid?')
     /**
      *  @swagger
      * 
@@ -900,5 +900,6 @@ router.route('/:uid/exp/?:exp_id?')
      * 
      */
     .delete(experience.deleteExp)
+
 
 module.exports = router;
