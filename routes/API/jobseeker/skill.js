@@ -71,21 +71,19 @@ exports.addSkill = [
         let addPreSkill = `INSERT INTO pre_skills(skill) values(LOWER($1)) RETURNING id;`;
         let addSkill = `INSERT INTO skills(uid, skill_id, level, years) VALUES($1, $2, $3, $4) returning uid`;
 
-        var promise = pool.query(getSkillId, [skill])
-        promise.then(result => {
-            console.log(result)
+        await Promise.all([pool.query(getSkillId, [skill])])
+        .then(result => {
             if (result.rowCount > 0) {
                 console.log(`id: ${result.rows[0].id}`)
-                var promise2 = pool.query(addSkill, [uid, result.rows[0].id], level, years)
-                promise2.then(result2 => {
-                    console.log(result2)
-                })
+                Promise.all([pool.query(addSkill, [uid, result.rows[0].id, level, years])])
+                .then(result2 => {
+                    console.log(result2);
+                });
             } else {
-                var promise3 = pool.query(addPreSkill, [skill])
-                promise3.then(result3 => {
-                    console.log(result3)
-
-                })
+                Promise.all([pool.query(addPreSkill, [skill])])
+                .then(result2 => {
+                    console.log(result2);
+                });
             }
         })
         .catch(e => console.error(e.stack))
