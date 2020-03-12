@@ -200,7 +200,7 @@ router.route('/:uid/jobs/?:job_id?')
     *   @swagger
     * 
     *   /employer/{uid}/jobs:
-    *       get:
+    *       post:
     *           description: Get a specific job for an employer
     *           tags:
     *               - Employer | Job
@@ -215,6 +215,51 @@ router.route('/:uid/jobs/?:job_id?')
     *               - name: job_id
     *                 description: The ID of the job of target
     *                 in: path
+    *                 required: true
+    *                 type: string
+    *               - name: company_name
+    *                 description: The name of the company
+    *                 in: formData
+    *                 required: true
+    *                 type: string
+    *               - name: title
+    *                 description: The title of the job
+    *                 in: formData
+    *                 required: true
+    *                 type: string
+    *               - name: wage
+    *                 description: The wage for the job
+    *                 in: formData
+    *                 required: true
+    *                 type: string
+    *               - name: position
+    *                 description: The position of the job
+    *                 in: formData
+    *                 required: true
+    *                 type: string
+    *               - name: hours
+    *                 description: The required hours for the job
+    *                 in: formData
+    *                 required: true
+    *                 type: string
+    *               - name: location
+    *                 description: The location of where the job
+    *                 in: formData
+    *                 required: true
+    *                 type: string
+    *               - name: description
+    *                 description: The description for the job
+    *                 in: formData
+    *                 required: true
+    *                 type: string
+    *               - name: status
+    *                 description: The type of the job
+    *                 in: formData
+    *                 required: true
+    *                 type: string
+    *               - name: max_candidate
+    *                 description: The maximum amount of people lookoing to get hired
+    *                 in: formData
     *                 required: true
     *                 type: string
     *           responses:
@@ -254,7 +299,7 @@ router.route('/:uid/jobs/?:job_id?')
     *                 type: string
     *               - name: data
     *                 description: Everything that needs to be updated in a json file
-    *                 in: body
+    *                 in: requestBody
     *                 required: true
     *                 type: array
     *                 items: {}
