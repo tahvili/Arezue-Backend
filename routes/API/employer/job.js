@@ -20,5 +20,7 @@ function sendError(statusCode, message, additionalInfo = {}) {
 }
 
 exports.getJob = [
-    async function(req, res, )
+    async function(req, res, next) {
+
+    }
 ]
