@@ -19,7 +19,7 @@ function sendError(statusCode, message, additionalInfo = {}) {
     })
 }
 
-exports.getJob = [
+exports.getAllJob = [
     async function(req, res, next) {
 
     }

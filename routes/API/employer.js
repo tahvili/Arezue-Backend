@@ -8,7 +8,7 @@ const bodyParser = require('body-parser');
 const basic = require('./employer/basic');
 const job = require('./employer/job');
 
-router.route('/:uid?')
+router.route('/?:uid?')
     /**
      *  @swagger
      * 
@@ -128,7 +128,10 @@ router.route('/:uid?')
      */
     .put(basic.updateEmployer)
 
-router.route('/:uid/job/?:job_id?')
-    .get(job.getJob)
+router.route('/:uid/jobs/?')
+    .get(job.getAllJob)
+
+router.route('/:uid/jobs/:job_id')
+    .get();
 
 module.exports = router;
