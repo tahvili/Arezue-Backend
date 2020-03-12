@@ -56,6 +56,7 @@ exports.addDreamCareers = [
     async function (req, res, next) {
         let uid = validator.escape(req.params.uid);
         let dream_career = validator.escape(req.body.dream_career);
+        let ranking = validator.escape(req.body.ranking);
         if (validator.isEmpty(uid) || validator.isEmpty(dream_career)) {
             res.status(400).send("One of the field is empty");
             return;
@@ -64,8 +65,12 @@ exports.addDreamCareers = [
             res.status(400).send("Invalid UUID");
             return;
         }
-        let Query = `INSERT INTO dream_careers (uid, dream_career, ranking) VALUES ($1, $2, 0) returning uid`;
-        Promise.all([pool.query(Query, [uid, dream_career])])
+        if (uid != req.params.uid) return res.status(400).send();
+        if (dream_career != req.body.dream_career) return res.status(400).send();
+        if (ranking != req.body.ranking) return res.status(400).send();
+
+        let Query = `INSERT INTO dream_careers (uid, dream_career, ranking) VALUES ($1, $2, $3) returning uid`;
+        Promise.all([pool.query(Query, [uid, dream_career, ranking])])
             .then(result => {
                 var rows = result.filter(r => r.rowCount > 0).map(r => r.rows);
 
@@ -76,7 +81,7 @@ exports.addDreamCareers = [
                 }
             }).catch(e => {
                 res.status(500);
-                res.send(sendError(500, '/jobseeker error ' + e))
+                res.send(sendError(500, '/jobseeker ' + e))
             });
     }
 ];

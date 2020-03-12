@@ -6,8 +6,9 @@ var router = express.Router({
 const bodyParser = require('body-parser');
 
 const basic = require('./employer/basic');
+const job = require('./employer/job');
 
-router.route('/:uid?')
+router.route('/?:uid?')
     /**
      *  @swagger
      * 
@@ -126,5 +127,230 @@ router.route('/:uid?')
      * 
      */
     .put(basic.updateEmployer)
+
+router.route('/:uid/jobs/?')
+    /**
+    *   @swagger
+    * 
+    *   /employer/{uid}/jobs:
+    *       get:
+    *           description: Get all the jobs for an employer (Note swagger has a bug that says this has job_id as parameter, but it does not)
+    *           tags:
+    *               - Employer | Job
+    *           produces:
+    *               - application/json
+    *           parameters:
+    *               - name: uid
+    *                 description: The uid of the employer of target
+    *                 in: path
+    *                 required: true
+    *                 type: string
+    *           responses:
+    *               200:
+    *                   description: Successfully returned back the all the job
+    *               400:
+    *                   description: One of the supplied argument does not follow our syntax
+    *               404:
+    *                   description: No job found or no employer is found
+    *               422:
+    *                   description: Information missing
+    *               500:
+    *                   description: There is an error in the backend
+    *               
+    */
+    .get(job.getAllJob);
+
+router.route('/:uid/jobs/?:job_id?')
+    /**
+    *   @swagger
+    * 
+    *   /employer/{uid}/jobs/{job_id}:
+    *       get:
+    *           description: Get a specific job for an employer
+    *           tags:
+    *               - Employer | Job
+    *           produces:
+    *               - application/json
+    *           parameters:
+    *               - name: uid
+    *                 description: The uid of the employer of target
+    *                 in: path
+    *                 required: true
+    *                 type: string
+    *               - name: job_id
+    *                 description: The ID of the job of target
+    *                 in: path
+    *                 required: true
+    *                 type: string
+    *           responses:
+    *               200:
+    *                   description: Successfully returned back the specified job
+    *               400:
+    *                   description: One of the supplied argument does not follow our syntax
+    *               404:
+    *                   description: No job found or no employer is found
+    *               422:
+    *                   description: Information missing
+    *               500:
+    *                   description: There is an error in the backend
+    *               
+    */
+    .get(job.getJob)
+    /**
+    *   @swagger
+    * 
+    *   /employer/{uid}/jobs:
+    *       post:
+    *           description: Get a specific job for an employer
+    *           tags:
+    *               - Employer | Job
+    *           produces:
+    *               - application/json
+    *           parameters:
+    *               - name: uid
+    *                 description: The uid of the employer of target
+    *                 in: path
+    *                 required: true
+    *                 type: string
+    *               - name: job_id
+    *                 description: The ID of the job of target
+    *                 in: path
+    *                 required: true
+    *                 type: string
+    *               - name: company_name
+    *                 description: The name of the company
+    *                 in: formData
+    *                 required: true
+    *                 type: string
+    *               - name: title
+    *                 description: The title of the job
+    *                 in: formData
+    *                 required: true
+    *                 type: string
+    *               - name: wage
+    *                 description: The wage for the job
+    *                 in: formData
+    *                 required: true
+    *                 type: string
+    *               - name: position
+    *                 description: The position of the job
+    *                 in: formData
+    *                 required: true
+    *                 type: string
+    *               - name: hours
+    *                 description: The required hours for the job
+    *                 in: formData
+    *                 required: true
+    *                 type: string
+    *               - name: location
+    *                 description: The location of where the job
+    *                 in: formData
+    *                 required: true
+    *                 type: string
+    *               - name: description
+    *                 description: The description for the job
+    *                 in: formData
+    *                 required: true
+    *                 type: string
+    *               - name: status
+    *                 description: The type of the job
+    *                 in: formData
+    *                 required: true
+    *                 type: string
+    *               - name: max_candidate
+    *                 description: The maximum amount of people lookoing to get hired
+    *                 in: formData
+    *                 required: true
+    *                 type: string
+    *           responses:
+    *               200:
+    *                   description: Successfully created the job
+    *               400:
+    *                   description: One of the supplied argument does not follow our syntax
+    *               404:
+    *                   description: No job found or no employer is found
+    *               422:
+    *                   description: Information missing
+    *               500:
+    *                   description: There is an error in the backend
+    *               
+    */
+    .post(job.addJob)
+    /**
+    *   @swagger
+    * 
+    *   /employer/{uid}/jobs/{job_id}:
+    *       put:
+    *           description: Get a specific job for an employer
+    *           tags:
+    *               - Employer | Job
+    *           produces:
+    *               - application/json
+    *           parameters:
+    *               - name: uid
+    *                 description: The uid of the employer of target
+    *                 in: path
+    *                 required: true
+    *                 type: string
+    *               - name: job_id
+    *                 description: The ID of the job of target
+    *                 in: path
+    *                 required: true
+    *                 type: string
+    *               - name: data
+    *                 description: Everything that needs to be updated in a json file
+    *                 in: requestBody
+    *                 required: true
+    *                 type: array
+    *                 items: {}
+    *           responses:
+    *               200:
+    *                   description: Successfully updated the specified job
+    *               400:
+    *                   description: One of the supplied argument does not follow our syntax
+    *               404:
+    *                   description: No job found or no employer is found
+    *               422:
+    *                   description: Information missing
+    *               500:
+    *                   description: There is an error in the backend
+    *               
+    */
+    .put(job.updateJob)
+    /**
+    *   @swagger
+    * 
+    *   /employer/{uid}/jobs/{job_id}:
+    *       delete:
+    *           description: Get a specific job for an employer
+    *           tags:
+    *               - Employer | Job
+    *           produces:
+    *               - application/json
+    *           parameters:
+    *               - name: uid
+    *                 description: The uid of the employer of target
+    *                 in: path
+    *                 required: true
+    *                 type: string
+    *               - name: job_id
+    *                 description: The ID of the job of target
+    *                 in: path
+    *                 required: true
+    *                 type: string
+    *           responses:
+    *               200:
+    *                   description: Successfully deleted the job
+    *               400:
+    *                   description: One of the supplied argument does not follow our syntax
+    *               404:
+    *                   description: No job found or no employer is found
+    *               422:
+    *                   description: Information missing
+    *               500:
+    *                   description: There is an error in the backend
+    *               
+    */
+    .delete(job.deleteJob);
 
 module.exports = router;
