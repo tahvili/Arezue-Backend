@@ -134,7 +134,7 @@ router.route('/:uid/jobs/?')
     * 
     *   /employer/{uid}/jobs:
     *       get:
-    *           description: Get all the jobs for an employer
+    *           description: Get all the jobs for an employer (Note swagger has a bug that says this has job_id as parameter, but it does not)
     *           tags:
     *               - Employer | Job
     *           produces:
@@ -158,7 +158,7 @@ router.route('/:uid/jobs/?')
     *                   description: There is an error in the backend
     *               
     */
-    .get(job.getAllJob)
+    .get(job.getAllJob);
 
 router.route('/:uid/jobs/?:job_id?')
     /**
@@ -219,7 +219,7 @@ router.route('/:uid/jobs/?:job_id?')
     *                 type: string
     *           responses:
     *               200:
-    *                   description: Successfully returned back the specified job
+    *                   description: Successfully created the job
     *               400:
     *                   description: One of the supplied argument does not follow our syntax
     *               404:
@@ -231,6 +231,81 @@ router.route('/:uid/jobs/?:job_id?')
     *               
     */
     .post(job.addJob)
-    .put(job.updateJob);
+    /**
+    *   @swagger
+    * 
+    *   /employer/{uid}/jobs/{job_id}:
+    *       put:
+    *           description: Get a specific job for an employer
+    *           tags:
+    *               - Employer | Job
+    *           produces:
+    *               - application/json
+    *           parameters:
+    *               - name: uid
+    *                 description: The uid of the employer of target
+    *                 in: path
+    *                 required: true
+    *                 type: string
+    *               - name: job_id
+    *                 description: The ID of the job of target
+    *                 in: path
+    *                 required: true
+    *                 type: string
+    *               - name: data
+    *                 description: Everything that needs to be updated in a json file
+    *                 in: body
+    *                 required: true
+    *                 type: array
+    *                 items: {}
+    *           responses:
+    *               200:
+    *                   description: Successfully updated the specified job
+    *               400:
+    *                   description: One of the supplied argument does not follow our syntax
+    *               404:
+    *                   description: No job found or no employer is found
+    *               422:
+    *                   description: Information missing
+    *               500:
+    *                   description: There is an error in the backend
+    *               
+    */
+    .put(job.updateJob)
+    /**
+    *   @swagger
+    * 
+    *   /employer/{uid}/jobs/{job_id}:
+    *       delete:
+    *           description: Get a specific job for an employer
+    *           tags:
+    *               - Employer | Job
+    *           produces:
+    *               - application/json
+    *           parameters:
+    *               - name: uid
+    *                 description: The uid of the employer of target
+    *                 in: path
+    *                 required: true
+    *                 type: string
+    *               - name: job_id
+    *                 description: The ID of the job of target
+    *                 in: path
+    *                 required: true
+    *                 type: string
+    *           responses:
+    *               200:
+    *                   description: Successfully deleted the job
+    *               400:
+    *                   description: One of the supplied argument does not follow our syntax
+    *               404:
+    *                   description: No job found or no employer is found
+    *               422:
+    *                   description: Information missing
+    *               500:
+    *                   description: There is an error in the backend
+    *               
+    */
+    .delete(job.deleteJob);
 
 module.exports = router;

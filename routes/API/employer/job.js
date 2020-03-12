@@ -34,13 +34,12 @@ exports.getAllJob = [
         Promise.all([pool.query(query, [euid])])
             .then(result => {
                 let rows = result.map(r => r.rows)[0];
-                let returning = [];
-                console.log(rows);
+                let returning = {'data': []};
                 if (rows.length > 0) {
                     res.type('application/json');
                     Object.keys(rows).forEach(function(key) {
                         delete rows[key]['euid'];
-                        returning.push(rows[key]);
+                        returning.data.push(rows[key]);
                     });
                     return res.status(200).send(returning);
                 } else {
@@ -139,6 +138,7 @@ exports.updateJob = [
         let euid = validator.escape(req.params.uid);
         let job_id = validator.escape(req.params.job_id);
         let data = req.body;
+        if (data == '') return res.status(400).send();
 
         if (validator.isEmpty(euid) || validator.isEmpty(job_id) || data == {}) {
             res.status(422).send();
@@ -151,8 +151,7 @@ exports.updateJob = [
         pairs = Object.keys(data).map((key, index) => `${key}=$${index + 1}`).join(", ");
         values = Object.values(data);
         let update_job = `UPDATE job set ${pairs} where job_id = $${values.length + 1} and euid = $${values.length + 2} returning euid AS uid`;
-        // values.concat(euid);
-        // values.concat(job_id);
+
         Promise.all([pool.query(update_job, values.concat(job_id, euid))])
             .then(result => {
                 let rows = result.map(r => r.rows[0]);
@@ -170,3 +169,33 @@ exports.updateJob = [
 
     }
 ];
+
+exports.deleteJob = [
+    async function(req, res, next) {
+        let euid = validator.escape(req.params.uid);
+        let job_id = validator.escape(req.params.job_id);
+        if (validator.isEmpty(euid) || validator.isEmpty(job_id)) {
+            res.status(422).send();
+            return;
+        }
+        if (!validator.isUUID(euid, [4]) || !validator.isInt(job_id)) {
+            res.status(400).send();
+            return;
+        }
+        let query = `DELETE FROM job WHERE euid = $1 and job_id = $2 returning euid`;
+        Promise.all([pool.query(query, [euid, job_id])])
+            .then(result => {
+                let rows = result.map(r => r.rows[0]);
+                if (rows[0]) {
+                    res.status(200).send(rows[0]);
+                } else {
+                    res.status(404).send();
+                }
+                return;
+
+            })
+            .catch(e => {
+                res.status(500, res.send(sendError(500, '/employer ' + e)));
+            });
+    }
+]
