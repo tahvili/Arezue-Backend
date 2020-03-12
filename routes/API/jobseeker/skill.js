@@ -65,16 +65,27 @@ exports.addSkill = [
         }
     // https://stackoverflow.com/questions/28250680/how-do-i-access-previous-promise-results-in-a-then-chain
     // https://stackoverflow.com/questions/39693228/building-promise-chain-with-logic-using-postgresql
-        var skill_id = 0;
+    // https://stackoverflow.com/questions/33257412/how-to-handle-the-if-else-in-promise-then
+    // https://stackoverflow.com/questions/40804351/how-do-i-chain-multiple-conditional-promises
         let getSkillId = `SELECT id FROM pre_skills WHERE LOWER(skill) = LOWER($1)`;
         let addPreSkill = `INSERT INTO pre_skills(skill) values(LOWER($1)) RETURNING id;`;
-        let addSkill = `INSERT INTO skills (uid, skill_id, level, years) VALUES ($1, $2, $3, $4) returning uid`;
+        let addSkill = `INSERT INTO skills(uid, skill_id, level, years) VALUES($1, $2, $3, $4) returning uid`;
 
         var promise = pool.query(getSkillId, [skill])
-        .then(res => {
-            console.log(res.rows[0])
-            if (res.rows[0]) {
-                
+        promise.then(result => {
+            console.log(result)
+            if (result.rowCount > 0) {
+                console.log(`id: ${result.rows[0].id}`)
+                var promise2 = pool.query(addSkill, [uid, result.rows[0].id], level, years)
+                promise2.then(result2 => {
+                    console.log(result2)
+                })
+            } else {
+                var promise3 = pool.query(addPreSkill, [skill])
+                promise3.then(result3 => {
+                    console.log(result3)
+
+                })
             }
         })
         .catch(e => console.error(e.stack))
