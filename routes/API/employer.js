@@ -230,6 +230,7 @@ router.route('/:uid/jobs/?:job_id?')
     *                   description: There is an error in the backend
     *               
     */
-    .post(job.addJob);
+    .post(job.addJob)
+    .put(job.updateJob);
 
 module.exports = router;

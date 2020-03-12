@@ -26,7 +26,7 @@ exports.getAllJob = [
             res.status(422).send();
             return;
         }
-        if (!validator.isUUID(uid, [4])) {
+        if (!validator.isUUID(euid, [4])) {
             res.status(400).send();
             return;
         }
@@ -39,7 +39,7 @@ exports.getAllJob = [
                 if (rows.length > 0) {
                     res.type('application/json');
                     Object.keys(rows).forEach(function(key) {
-                        delete rows.key.euid;
+                        delete rows[key]['euid'];
                         returning.push(rows[key]);
                     });
                     return res.status(200).send(returning);
@@ -48,7 +48,7 @@ exports.getAllJob = [
                 }
             })
             .catch(e => {
-                res.status(500, res.send(sendError(500, '/employer' + e)));
+                res.status(500, res.send(sendError(500, '/employer ' + e)));
             });
     }
 ];
@@ -69,7 +69,7 @@ exports.getJob = [
         Promise.all([pool.query(query, [job_id, euid])])
             .then(result => {
                 let rows = result.map(r => r.rows)[0];
-                if (rows.length == 1) {
+                if (rows.length > 0) {
                     delete rows[0].euid;
                     return res.status(200).send(rows[0]);
                 } else {
@@ -131,5 +131,42 @@ exports.addJob = [
             .catch(e => {
                 res.status(500, res.send(sendError(500, '/employer ' + e)));
             });
+    }
+];
+
+exports.updateJob = [
+    async function(req, res, next) {
+        let euid = validator.escape(req.params.uid);
+        let job_id = validator.escape(req.params.job_id);
+        let data = req.body;
+
+        if (validator.isEmpty(euid) || validator.isEmpty(job_id) || data == {}) {
+            res.status(422).send();
+            return;
+        }
+        if (!validator.isUUID(euid, [4]) || !validator.isInt(job_id)) {
+            res.status(400).send();
+            return;
+        }
+        pairs = Object.keys(data).map((key, index) => `${key}=$${index + 1}`).join(", ");
+        values = Object.values(data);
+        let update_job = `UPDATE job set ${pairs} where job_id = $${values.length + 1} and euid = $${values.length + 2} returning euid AS uid`;
+        // values.concat(euid);
+        // values.concat(job_id);
+        Promise.all([pool.query(update_job, values.concat(job_id, euid))])
+            .then(result => {
+                let rows = result.map(r => r.rows[0]);
+
+                if (rows[0]) {
+                    res.status(200).send(rows[0]);
+                } else {
+                    res.status(400).send();
+                }
+                return;
+            })
+            .catch(e => {
+                res.status(500, res.send(sendError(500, '/employer ' + e)));
+            });
+
     }
 ];

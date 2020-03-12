@@ -87,9 +87,7 @@ exports.getEmployer = [
 exports.updateEmployer = [
     async function (req, res, next) {
         let uid = validator.escape(req.params.uid);
-
         let data = req.body;
-        console.log(uid)
 
         if (!validator.isUUID(uid, [4])) {
             res.status(400).send("Invalid UUID");
@@ -98,7 +96,6 @@ exports.updateEmployer = [
         delete data['uid'];
         delete data['firebaseID']
         pairs = Object.keys(data).map((key, index) => `${key}=$${index + 1}`).join(", ");
-        console.log(data);
         values = Object.values(data)
         var update_employer = `UPDATE employer set ${pairs} where uid = $${values.length + 1} RETURNING uid`;
         Promise.all([pool.query(update_employer, values.concat(uid))])
