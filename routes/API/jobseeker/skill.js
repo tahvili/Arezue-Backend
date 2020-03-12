@@ -73,16 +73,28 @@ exports.addSkill = [
 
         await Promise.all([pool.query(getSkillId, [skill])])
         .then(result => {
+            // skill is in pre_skills table
             if (result.rowCount > 0) {
                 console.log(`id: ${result.rows[0].id}`)
                 Promise.all([pool.query(addSkill, [uid, result.rows[0].id, level, years])])
                 .then(result2 => {
                     console.log(result2);
                 });
+            // skill is NOT in pre_skills table
             } else {
                 Promise.all([pool.query(addPreSkill, [skill])])
-                .then(result2 => {
-                    console.log(result2);
+                .then(result3 => {
+                    row = result3.map(r => r.rows)
+                    console.log(row[0][0].id);
+                    Promise.all([pool.query(addSkill, [uid, row[0][0].id, level, years])])
+                    .then(result4 => {
+                        row1 = result4.map(r => r.rows)
+                        console.log(row1);
+                        // res.status(200).send(result4[0])
+                        // return;
+
+                    })
+                
                 });
             }
         })
