@@ -14,6 +14,7 @@ const dream_company = require('./jobseeker/dream_company');
 const experience = require('./jobseeker/experience'); 
 const ed = require('./jobseeker/education'); 
 const cert = require('./jobseeker/certification'); 
+const resume = require('./jobseeker/resume');
 
 router.route('/?:uid?')
     /**
@@ -190,6 +191,7 @@ router.route('/:uid/skill/?:skill?')
      * 
      */
     .get(skill.getSkills)
+
     /**
      *  @swagger
      * 
@@ -216,10 +218,20 @@ router.route('/:uid/skill/?:skill?')
      *                in: formData
      *                required: false
      *                type: integer
+     *              - name: level
+     *                description: Level of expertise with the skill. 1 is expert and 5 is beginner.
+     *                in: formData
+     *                required: true
+     *                type: integer
+     *              - name: years
+     *                description: years of experience with the skill
+     *                in: formData
+     *                required: true
+     *                type: integer
      * 
      *          responses:
      *              200:
-     *                  description: Successfully get the Jobseeker
+     *                  description: Successfully add the Jobseeker's skill
      *              400:
      *                  description: User could not be found
      *              500:
@@ -867,6 +879,61 @@ router.route('/:uid/exp/?:exp_id?')
      * 
      */
     .post(experience.addExp)
+
+    /**
+     *  @swagger
+     * 
+     *  /jobseeker/{uid}/exp:
+     *      put:
+     *          description: update an experience from jobseeker (ONLY SUPPORST 1 RIGHT NOW)
+     *          tags:
+     *              - Jobseeker, Experiences
+     *          produces: 
+     *              - application/json
+     *          parameters:
+     *              - name: uid
+     *                description: UID for the specific user
+     *                in: path
+     *                requried: true
+     *                type: string
+     *              - name: exp_id
+     *                description: Experience ID of the specific experience
+     *                in: formData
+     *                required: true
+     *                type: string
+     *              - name: title
+     *                description: Title of the past job experience
+     *                in: formData
+     *                required: true
+     *                type: string
+     *              - name: start_date
+     *                description: Starting date of job
+     *                in: formData
+     *                required: true
+     *                type: string
+     *              - name: end_date
+     *                description: Ending date of job
+     *                in: formData
+     *                required: true
+     *                type: string
+     *              - name: description
+     *                description: The description of the job
+     *                in: formData
+     *                required: true
+     *                type: string
+     * 
+     *          responses:
+     *              200:
+     *                  description: Successfully update the experience
+     *              400:
+     *                  description: User could not be found
+     *              500:
+     *                  description: Internal server error
+     * 
+     * 
+     */
+    .put(experience.updateExp)
+
     /**
      *  @swagger
      * 
@@ -899,7 +966,192 @@ router.route('/:uid/exp/?:exp_id?')
      * 
      * 
      */
-    .delete(experience.deleteExp)
+    .delete(experience.deleteExp);
 
+router.route('/:uid/resumes/?')
+    /**
+    *   @swagger
+    * 
+    *   /jobseeker/{uid}/resumes:
+    *       get:
+    *           description: Get all the resumes for an jobseeker
+    *           tags:
+    *               - Jobseeker | Resumes
+    *           produces:
+    *               - application/json
+    *           parameters:
+    *               - name: uid
+    *                 description: The uid of the jobseeker of target
+    *                 in: path
+    *                 required: true
+    *                 type: string
+    *           responses:
+    *               200:
+    *                   description: Successfully returned back the all the resumes
+    *               400:
+    *                   description: One of the supplied argument does not follow our syntax
+    *               404:
+    *                   description: No job found or no employer is found
+    *               422:
+    *                   description: Information missing
+    *               500:
+    *                   description: There is an error in the backend
+    *               
+    */
+    .get(resume.getAllResume);
+
+router.route('/:uid/resumes/?:resume_id?/?')
+    /**
+    *   @swagger
+    * 
+    *   /jobseeker/{uid}/resumes/{resume_id}:
+    *       get:
+    *           description: Get a specific resume for a jobseeker
+    *           tags:
+    *               - Jobseeker | Resumes
+    *           produces:
+    *               - application/json
+    *           parameters:
+    *               - name: uid
+    *                 description: The uid of the jobseeker of target
+    *                 in: path
+    *                 required: true
+    *                 type: string
+    *               - name: resume_id
+    *                 description: The id of the target resume for the jobseeker
+    *                 in: path
+    *                 required: true
+    *                 type: integer
+    *           responses:
+    *               200:
+    *                   description: Successfully returned back the specified resume
+    *               400:
+    *                   description: One of the supplied argument does not follow our syntax
+    *               404:
+    *                   description: No job found or no employer is found
+    *               422:
+    *                   description: Information missing
+    *               500:
+    *                   description: There is an error in the backend
+    *               
+    */
+    .get(resume.getResume)
+    /**
+    *   @swagger
+    * 
+    *   /jobseeker/{uid}/resumes:
+    *       post:
+    *           description: Create a specific resume for a jobseeker
+    *           tags:
+    *               - Jobseeker | Resumes
+    *           produces:
+    *               - application/json
+    *           parameters:
+    *               - name: uid
+    *                 description: The uid of the jobseeker of target
+    *                 in: path
+    *                 required: true
+    *                 type: string
+    *               - name: resume_id
+    *                 description: The id of the target resume for the jobseeker
+    *                 in: path
+    *                 required: true
+    *                 type: integer
+    *               - name: Resume Snapshot
+    *                 description: The json of a resume
+    *                 in: requestBody
+    *                 required: true
+    *                 type: array
+    *                 items: {}
+    *           responses:
+    *               200:
+    *                   description: Successfully created the resume
+    *               400:
+    *                   description: One of the supplied argument does not follow our syntax
+    *               404:
+    *                   description: No job found or no employer is found
+    *               422:
+    *                   description: Information missing
+    *               500:
+    *                   description: There is an error in the backend
+    *               
+    */
+    .post(resume.createResume)
+    /**
+    *   @swagger
+    * 
+    *   /jobseeker/{uid}/resumes/{resume_id}:
+    *       put:
+    *           description: Update a specific resume for a jobseeker
+    *           tags:
+    *               - Jobseeker | Resumes
+    *           produces:
+    *               - application/json
+    *           parameters:
+    *               - name: uid
+    *                 description: The uid of the jobseeker of target
+    *                 in: path
+    *                 required: true
+    *                 type: string
+    *               - name: resume_id
+    *                 description: The id of the target resume for the jobseeker
+    *                 in: path
+    *                 required: true
+    *                 type: integer
+    *               - name: Resume Snapshot
+    *                 description: The json of a resume that needs to be updated (Full json)
+    *                 in: requestBody
+    *                 required: true
+    *                 type: array
+    *                 items: {}
+    *           responses:
+    *               200:
+    *                   description: Successfully updated the resume for the jobseeker
+    *               400:
+    *                   description: One of the supplied argument does not follow our syntax
+    *               404:
+    *                   description: No job found or no employer is found
+    *               422:
+    *                   description: Information missing
+    *               500:
+    *                   description: There is an error in the backend
+    *               
+    */
+    .put(resume.updateResume)
+    /**
+    *   @swagger
+    * 
+    *   /jobseeker/{uid}/resumes/{resume_id}:
+    *       delete:
+    *           description: Delete a specific resume for a jobseeker
+    *           tags:
+    *               - Jobseeker | Resumes
+    *           produces:
+    *               - application/json
+    *           parameters:
+    *               - name: uid
+    *                 description: The uid of the jobseeker of target
+    *                 in: path
+    *                 required: true
+    *                 type: string
+    *               - name: resume_id
+    *                 description: The id of the target resume for the jobseeker
+    *                 in: path
+    *                 required: true
+    *                 type: integer
+    *           responses:
+    *               200:
+    *                   description: Successfully deleted the resume
+    *               400:
+    *                   description: One of the supplied argument does not follow our syntax
+    *               404:
+    *                   description: No job found or no employer is found
+    *               422:
+    *                   description: Information missing
+    *               500:
+    *                   description: There is an error in the backend
+    *               
+    */
+    .delete(resume.deleteResume);
 
 module.exports = router;

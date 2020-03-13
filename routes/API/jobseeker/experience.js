@@ -65,6 +65,37 @@ exports.addExp = [
             .catch(e => { res.status(500); re.send(sendError(500, '/jobseeker error ' + e)) });
     }];
 
+    exports.updateExp = [
+        async function (req, res, next) {
+            let uid = validator.escape(req.params.uid);
+            let exp_id = validator.escape(req.body.exp_id);
+
+            if (!validator.isUUID(uid, [4])) {
+                res.status(400).send("Invalid UUID");
+                return;
+            }
+
+            let data = req.body;
+            delete data['exp_id'];
+            pairs = Object.keys(data).map((key, index) => `${key}=$${index + 1}`).join(", ");
+    
+            values = Object.values(data)
+            console.log(pairs);
+            var query = `UPDATE experiences set ${pairs} where exp_id = $${values.length + 1} RETURNING exp_id`;
+            Promise.all([pool.query(query, values.concat(exp_id))])
+                .then(result => {
+                    var rows = result.filter(r => r.rowCount > 0).map(r => r.rows[0])
+    
+                    if (rows[0]) {
+                        res.status(200).send(rows[0]);
+                    } else {
+                        res.status(400).send(`Jobseeker could not be updated`);
+                    }
+                })
+                .catch(e => { res.status(500); res.send(sendError(500, '/experience error ' + e)) });
+        }
+    ];
+
 exports.deleteExp = [
     async function (req, res, next) {
         let uid = validator.escape(req.params.uid);
