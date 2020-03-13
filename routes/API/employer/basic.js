@@ -65,6 +65,7 @@ exports.getEmployer = [
             res.status(400).send("Invalid UUID");
             return;
         }
+        if (uid !== req['authData']['uid']) return res.sendStatus(403);
 
         let create_employer = `SELECT * FROM employer where uid = $1`;
         Promise.all([pool.query(create_employer, [uid])])
@@ -93,6 +94,8 @@ exports.updateEmployer = [
             res.status(400).send("Invalid UUID");
             return;
         }
+        if (uid !== req['authData']['uid']) return res.sendStatus(403);
+
         delete data['uid'];
         delete data['firebaseID']
         pairs = Object.keys(data).map((key, index) => `${key}=$${index + 1}`).join(", ");

@@ -30,6 +30,9 @@ exports.getProfile = [
             res.status(400).send();
             return;
         }
+
+        if (uid !== req['authData']['uid']) return res.sendStatus(403);
+
         let query_jobseeker = `SELECT uid, acceptance_wage, goal_wage, open_relocation FROM jobseeker WHERE uid = $1`;
         let query_skills = `SELECT * FROM skills where uid = $1`;
         let query_dream_careers = `SELECT * FROM dream_careers WHERE uid = $1`;

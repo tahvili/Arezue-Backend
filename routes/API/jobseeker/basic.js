@@ -68,7 +68,7 @@ exports.getJobseeker = [
             return;
         }
         // Example of how to not allow them to exploit the api
-        if (uid !== req['data']['uid']) return res.sendStatus(403);
+        if (uid !== req['authData']['uid']) return res.sendStatus(403);
 
         let create_employer = `SELECT * FROM jobseeker where uid = $1`;
         Promise.all([pool.query(create_employer, [uid])])
@@ -104,6 +104,8 @@ exports.updateJobseeker = [
             res.status(400).send("Invalid UUID");
             return;
         }
+        if (uid !== req['authData']['uid']) return res.sendStatus(403);
+
         delete data['uid'];
         delete data['firebaseID']
         pairs = Object.keys(data).map((key, index) => `${key}=$${index + 1}`).join(", ");

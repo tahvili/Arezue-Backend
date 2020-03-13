@@ -20,6 +20,7 @@ exports.addCert = [
         if (req.body.end_date) {
             var end_date = validator.escape(req.body.end_date);
         }
+        if (uid !== req['authData']['uid']) return res.sendStatus(403);
 
         let issuer = validator.escape(req.body.issuer);
 
@@ -51,6 +52,8 @@ exports.getCert = [
             res.status(400).send("Invalid UUID");
             return;
         }
+        if (uid !== req['authData']['uid']) return res.sendStatus(403);
+
         let Query = `SELECT * FROM Certification where uid = $1`;
         Promise.all([pool.query(Query, [uid])])
             .then(result => {
@@ -76,6 +79,8 @@ exports.updateCert = [
             res.status(400).send("Invalid UUID");
             return;
         }
+        if (uid !== req['authData']['uid']) return res.sendStatus(403);
+
         let data = req.body;
         delete data['c_id'];
         pairs = Object.keys(data).map((key, index) => `${key}=$${index + 1}`).join(", ");
@@ -107,6 +112,7 @@ exports.deleteCert = [
             res.status(400).send("Invalid UUID");
             return;
         }
+        if (uid !== req['authData']['uid']) return res.sendStatus(403);
 
         var query = `DELETE FROM certification where uid = $1 and c_id = $2 returning c_id`;
         Promise.all([pool.query(query, [uid, c_id])])

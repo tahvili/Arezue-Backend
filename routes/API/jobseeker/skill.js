@@ -30,6 +30,8 @@ exports.getSkills = [
             res.status(400).send("Invalid UUID");
             return;
         }
+        if (uid !== req['authData']['uid']) return res.sendStatus(403);
+
         let Query = `SELECT * FROM skills where uid = $1`;
         Promise.all([pool.query(Query, [uid])])
             .then(result => {
@@ -63,6 +65,8 @@ exports.addSkill = [
             res.status(400).send("Invalid UUID");
             return;
         }
+        if (uid !== req['authData']['uid']) return res.sendStatus(403);
+
     // https://stackoverflow.com/questions/28250680/how-do-i-access-previous-promise-results-in-a-then-chain
     // https://stackoverflow.com/questions/39693228/building-promise-chain-with-logic-using-postgresql
     // https://stackoverflow.com/questions/33257412/how-to-handle-the-if-else-in-promise-then
@@ -181,6 +185,8 @@ exports.deleteSkill = [
             res.status(400).send("Invalid UUID");
             return;
         }
+        if (uid !== req['authData']['uid']) return res.sendStatus(403);
+
         let Query = `DELETE FROM skills WHERE uid = $1 and skill = $2 returning uid`;
         Promise.all([pool.query(Query, [uid, skill])])
             .then(result => {

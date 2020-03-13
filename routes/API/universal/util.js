@@ -27,7 +27,7 @@ exports.verifyToken = [
                 if (err) {
                     res.sendStatus(403);
                 } else {
-                    req.data = authData;
+                    req.authData = authData;
                     next();
                 }
             });

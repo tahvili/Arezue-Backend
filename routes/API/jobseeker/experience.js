@@ -21,6 +21,8 @@ exports.getExp = [
             res.status(400).send("Invalid UUID");
             return;
         }
+        if (uid !== req['authData']['uid']) return res.sendStatus(403);
+
         let Query = `SELECT * FROM Experiences where uid = $1`;
         Promise.all([pool.query(Query, [uid])])
             .then(result => {
@@ -52,6 +54,8 @@ exports.addExp = [
             res.status(400).send("Invalid UUID");
             return;
         }
+        if (uid !== req['authData']['uid']) return res.sendStatus(403);
+
         let Query = `INSERT INTO experiences (uid, title, start_date, end_date, description) VALUES ($1, $2, $3, $4, $5) returning uid`;
         Promise.all([pool.query(Query, [uid, title, start_date, end_date, description])])
             .then(result => {
@@ -74,6 +78,7 @@ exports.addExp = [
                 res.status(400).send("Invalid UUID");
                 return;
             }
+            if (uid !== req['authData']['uid']) return res.sendStatus(403);
 
             let data = req.body;
             delete data['exp_id'];
@@ -112,6 +117,8 @@ exports.deleteExp = [
             res.status(400).send("Invalid UUID");
             return;
         }
+        if (uid !== req['authData']['uid']) return res.sendStatus(403);
+
         let Query = `DELETE FROM experiences WHERE uid = $1 and exp_id = $2 returning uid`;
         Promise.all([pool.query(Query, [uid, e_id])])
             .then(result => {

@@ -30,6 +30,8 @@ exports.getDreamCareers = [
             res.status(400).send("Invalid UUID");
             return;
         }
+        if (uid !== req['authData']['uid']) return res.sendStatus(403);
+
         let Query = `SELECT * FROM Dream_Careers where uid = $1`;
         Promise.all([pool.query(Query, [uid])])
             .then(result => {
@@ -65,6 +67,8 @@ exports.addDreamCareers = [
             res.status(400).send("Invalid UUID");
             return;
         }
+        if (uid !== req['authData']['uid']) return res.sendStatus(403);
+
         if (uid != req.params.uid) return res.status(400).send();
         if (dream_career != req.body.dream_career) return res.status(400).send();
         if (ranking != req.body.ranking) return res.status(400).send();
@@ -98,6 +102,8 @@ exports.deleteDreamCareers = [
             res.status(400).send("Invalid UUID");
             return;
         }
+        if (uid !== req['authData']['uid']) return res.sendStatus(403);
+
         let Query = `DELETE FROM dream_careers WHERE uid = $1 and dream_career = $2 returning uid`;
         Promise.all([pool.query(Query, [uid, dream_career])])
             .then(result => {

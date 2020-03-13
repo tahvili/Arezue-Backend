@@ -116,6 +116,8 @@ exports.addJob = [
         if (status.length != req.body.status.length) return res.status(400).send();
         if (max_candidate.length != req.body.max_candidate.toString().length) return res.status(400).send();
 
+        if (uid !== req['authData']['uid']) return res.sendStatus(403);
+
         res.type('application/json');
         let query = `INSERT INTO job VALUES(DEFAULT, $1, $2, $3, $4, $5, $6, $7, DEFAULT, DEFAULT, $8, $9, $10) returning euid AS uid, job_id`;
         Promise.all([pool.query(query, [euid, title, wage, position, hours, location, description, status, max_candidate, company_name])])
@@ -148,6 +150,8 @@ exports.updateJob = [
             res.status(400).send();
             return;
         }
+        if (uid !== req['authData']['uid']) return res.sendStatus(403);
+
         pairs = Object.keys(data).map((key, index) => `${key}=$${index + 1}`).join(", ");
         values = Object.values(data);
         let update_job = `UPDATE job set ${pairs} where job_id = $${values.length + 1} and euid = $${values.length + 2} returning euid AS uid`;
@@ -182,6 +186,8 @@ exports.deleteJob = [
             res.status(400).send();
             return;
         }
+        if (uid !== req['authData']['uid']) return res.sendStatus(403);
+
         let query = `DELETE FROM job WHERE euid = $1 and job_id = $2 returning euid`;
         Promise.all([pool.query(query, [euid, job_id])])
             .then(result => {

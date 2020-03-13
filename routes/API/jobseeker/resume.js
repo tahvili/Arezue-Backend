@@ -30,6 +30,8 @@ exports.getAllResume = [
             res.status(400).send();
             return;
         }
+        if (uid !== req['authData']['uid']) return res.sendStatus(403);
+
         let query = `SELECT * FROM resumes where uid = $1`;
         Promise.all([pool.query(query, [uid])])
             .then(result => {
@@ -97,6 +99,8 @@ exports.createResume = [
             return;
         }
 
+        if (uid !== req['authData']['uid']) return res.sendStatus(403);
+
         let query = `INSERT INTO resumes VALUES($1, DEFAULT, $2, DEFAULT) returning uid, resume_id`;
         Promise.all([pool.query(query, [uid, resume])])
             .then(result => {
@@ -132,6 +136,8 @@ exports.updateResume = [
             return;
         }
 
+        if (uid !== req['authData']['uid']) return res.sendStatus(403);
+
         let query = `UPDATE resumes set resume = $1 where uid = $2 and resume_id = $3 returning uid`;
         Promise.all([pool.query(query, [resume, uid, resume_id])])
             .then(result => {
@@ -162,6 +168,8 @@ exports.deleteResume = [
             res.status(400).send();
             return;
         }
+
+        if (uid !== req['authData']['uid']) return res.sendStatus(403);
 
         let query = `DELETE FROM resumes WHERE uid = $1 and resume_id = $2 RETURNING uid`;
         Promise.all([pool.query(query, [uid, resume_id])])

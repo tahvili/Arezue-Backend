@@ -18,6 +18,7 @@ exports.addEducation = [
         let grad_date = validator.escape(req.body.grad_date);
         let program = validator.escape(req.body.program);
 
+        if (uid !== req['authData']['uid']) return res.sendStatus(403);
 
         let query = `INSERT INTO Education (uid, school_name, start_date, grad_date, program) 
         VALUES ($1, $2, $3, $4, $5) returning ed_id`;
@@ -46,6 +47,8 @@ exports.getEducation = [
             res.status(400).send("Invalid UUID");
             return;
         }
+        if (uid !== req['authData']['uid']) return res.sendStatus(403);
+
         let Query = `SELECT * FROM Education where uid = $1`;
         Promise.all([pool.query(Query, [uid])])
             .then(result => {
@@ -75,6 +78,8 @@ exports.updateEducation = [
             res.status(400).send("Invalid UUID");
             return;
         }
+        if (uid !== req['authData']['uid']) return res.sendStatus(403);
+
         let data = req.body;
         delete data['ed_id'];
         pairs = Object.keys(data).map((key, index) => `${key}=$${index + 1}`).join(", ");
@@ -106,6 +111,7 @@ exports.deleteEducation = [
             res.status(400).send("Invalid UUID");
             return;
         }
+        if (uid !== req['authData']['uid']) return res.sendStatus(403);
 
         var query = `DELETE FROM education where uid = $1 and ed_id = $2 returning ed_id`;
         Promise.all([pool.query(query, [uid, ed_id])])

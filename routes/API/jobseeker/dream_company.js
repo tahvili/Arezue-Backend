@@ -30,6 +30,8 @@ exports.getDreamCompanies = [
             res.status(400).send("Invalid UUID");
             return;
         }
+        if (uid !== req['authData']['uid']) return res.sendStatus(403);
+
         let Query = `SELECT * FROM Dream_Companies where uid = $1`;
         Promise.all([pool.query(Query, [uid])])
             .then(result => {
@@ -64,6 +66,8 @@ exports.addDreamCompanies = [
         if (dream_company != req.body.dream_company) return res.status(400).send();
         if (ranking != req.body.ranking) return res.status(400).send();
 
+        if (uid !== req['authData']['uid']) return res.sendStatus(403);
+
         let Query = `INSERT INTO dream_companies (uid, dream_company, preference) VALUES ($1, $2, $3) returning uid`;
         Promise.all([pool.query(Query, [uid, dream_company, ranking])])
             .then(result => {
@@ -90,6 +94,8 @@ exports.deleteDreamCompanies = [
             res.status(400).send("Invalid UUID");
             return;
         }
+        if (uid !== req['authData']['uid']) return res.sendStatus(403);
+
         let Query = `DELETE FROM dream_companies WHERE uid = $1 and dream_company = $2 returning uid`;
         Promise.all([pool.query(Query, [uid, dream_company])])
             .then(result => {
