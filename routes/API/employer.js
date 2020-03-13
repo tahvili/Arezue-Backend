@@ -7,6 +7,7 @@ const bodyParser = require('body-parser');
 
 const basic = require('./employer/basic');
 const job = require('./employer/job');
+const universal = require('./universal/util');
 
 router.route('/?:uid?')
     /**
@@ -79,7 +80,7 @@ router.route('/?:uid?')
      * 
      * 
      */
-    .get(basic.getEmployer)
+    .get(universal.verifyToken, basic.getEmployer)
     /**
      *  @swagger
      * 
@@ -126,7 +127,7 @@ router.route('/?:uid?')
      * 
      * 
      */
-    .put(basic.updateEmployer)
+    .put(universal.verifyToken, basic.updateEmployer)
 
 router.route('/:uid/jobs/?')
     /**
@@ -158,7 +159,7 @@ router.route('/:uid/jobs/?')
     *                   description: There is an error in the backend
     *               
     */
-    .get(job.getAllJob);
+    .get(universal.verifyToken, job.getAllJob);
 
 router.route('/:uid/jobs/?:job_id?')
     /**
@@ -195,7 +196,7 @@ router.route('/:uid/jobs/?:job_id?')
     *                   description: There is an error in the backend
     *               
     */
-    .get(job.getJob)
+    .get(universal.verifyToken, job.getJob)
     /**
     *   @swagger
     * 
@@ -275,7 +276,7 @@ router.route('/:uid/jobs/?:job_id?')
     *                   description: There is an error in the backend
     *               
     */
-    .post(job.addJob)
+    .post(universal.verifyToken, job.addJob)
     /**
     *   @swagger
     * 
@@ -316,7 +317,7 @@ router.route('/:uid/jobs/?:job_id?')
     *                   description: There is an error in the backend
     *               
     */
-    .put(job.updateJob)
+    .put(universal.verifyToken, job.updateJob)
     /**
     *   @swagger
     * 
@@ -351,6 +352,6 @@ router.route('/:uid/jobs/?:job_id?')
     *                   description: There is an error in the backend
     *               
     */
-    .delete(job.deleteJob);
+    .delete(universal.verifyToken, job.deleteJob);
 
 module.exports = router;

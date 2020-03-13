@@ -58,40 +58,36 @@ exports.createJobseeker = [
 
 exports.getJobseeker = [
     async function (req, res, next) {
-        let privateKey = fs.readFileSync(__dirname + '/../universal/private.pem', 'utf8');
-        jwt.verify(req.token, privateKey, (err, authData) => {
-            if (err) {
-                res.sendStatus(403);
-            } else {
-                let uid = validator.escape(req.params.uid);
-                if (validator.isEmpty(uid)) {
-                    res.status(400).send("One of the field is empty");
-                    return;
+        let uid = validator.escape(req.params.uid);
+        if (validator.isEmpty(uid)) {
+            res.status(400).send("One of the field is empty");
+            return;
+        }
+        if (!validator.isUUID(uid, [4])) {
+            res.status(400).send("Invalid UUID");
+            return;
+        }
+        // Example of how to not allow them to exploit the api
+        if (uid !== req['data']['uid']) return res.sendStatus(403);
+
+        let create_employer = `SELECT * FROM jobseeker where uid = $1`;
+        Promise.all([pool.query(create_employer, [uid])])
+            .then(result => {
+                // var rowCountsArray = values.map(r=>r.rowCount)
+                var rows = result.filter(r => r.rowCount > 0).map(r => r.rows[0])
+
+                if (rows[0]) {
+                    res.status(200).send(rows[0])
+                } else {
+                    res.status(400).send(`jobseeker could not be found`);
                 }
-                if (!validator.isUUID(uid, [4])) {
-                    res.status(400).send("Invalid UUID");
-                    return;
-                }
-        
-                let create_employer = `SELECT * FROM jobseeker where uid = $1`;
-                Promise.all([pool.query(create_employer, [uid])])
-                    .then(result => {
-                        // var rowCountsArray = values.map(r=>r.rowCount)
-                        var rows = result.filter(r => r.rowCount > 0).map(r => r.rows[0])
-        
-                        if (rows[0]) {
-                            res.status(200).send(rows[0])
-                        } else {
-                            res.status(400).send(`jobseeker could not be found`);
-                        }
-        
-                    })
-                    .catch(e => {
-                        res.status(500);
-                        res.send(sendError(500, '/jobseeker error ' + e));
-                    });
-            }
-        });
+
+            })
+            .catch(e => {
+                res.status(500);
+                res.send(sendError(500, '/jobseeker error ' + e));
+            });
+
        
     }
 ];

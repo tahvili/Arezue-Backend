@@ -130,7 +130,7 @@ router.route('/?:uid?')
      * 
      * 
      */
-    .put(basic.updateJobseeker);
+    .put(universal.verifyToken, basic.updateJobseeker);
 
 
 router.route('/:uid/profile/?')
@@ -161,7 +161,7 @@ router.route('/:uid/profile/?')
      * 
      * 
      */
-    .get(profile.getProfile);
+    .get(universal.verifyToken, profile.getProfile);
 
 router.route('/:uid/skill/?:skill?')
     /**
@@ -191,7 +191,7 @@ router.route('/:uid/skill/?:skill?')
      * 
      * 
      */
-    .get(skill.getSkills)
+    .get(universal.verifyToken, skill.getSkills)
 
     /**
      *  @swagger
@@ -240,7 +240,7 @@ router.route('/:uid/skill/?:skill?')
      * 
      * 
      */
-    .post(skill.addSkill)
+    .post(universal.verifyToken, skill.addSkill)
     /**
      *  @swagger
      * 
@@ -273,7 +273,7 @@ router.route('/:uid/skill/?:skill?')
      * 
      * 
      */
-    .delete(skill.deleteSkill)
+    .delete(universal.verifyToken, skill.deleteSkill)
 
 router.route('/:uid/education/?:ed_id?')
     /**
@@ -323,7 +323,7 @@ router.route('/:uid/education/?:ed_id?')
     * 
     * 
     */
-    .post(ed.addEducation)
+    .post(universal.verifyToken, ed.addEducation)
 
     /**
      *  @swagger
@@ -352,7 +352,7 @@ router.route('/:uid/education/?:ed_id?')
      * 
      * 
      */
-    .get(ed.getEducation)
+    .get(universal.verifyToken, ed.getEducation)
     /**
     *  @swagger
     * 
@@ -402,7 +402,7 @@ router.route('/:uid/education/?:ed_id?')
     *              500:
     *                  description: Internal server error
     */
-    .put(ed.updateEducation)
+    .put(universal.verifyToken, ed.updateEducation)
 
     /**
     *  @swagger
@@ -435,7 +435,7 @@ router.route('/:uid/education/?:ed_id?')
     *                  description: Internal server error
     * 
     */
-   .delete(ed.deleteEducation)
+   .delete(universal.verifyToken, ed.deleteEducation)
 
 router.route('/:uid/certification/?:c_id?')
     /**
@@ -485,7 +485,7 @@ router.route('/:uid/certification/?:c_id?')
     * 
     * 
     */
-    .post(cert.addCert)
+    .post(universal.verifyToken, cert.addCert)
 
     /**
      *  @swagger
@@ -514,7 +514,7 @@ router.route('/:uid/certification/?:c_id?')
      * 
      * 
      */
-    .get(cert.getCert)
+    .get(universal.verifyToken, cert.getCert)
 
     /**
     *  @swagger
@@ -565,7 +565,7 @@ router.route('/:uid/certification/?:c_id?')
     *              500:
     *                  description: Internal server error
     */
-   .put(cert.updateCert)
+   .put(universal.verifyToken, cert.updateCert)
 
     /**
      *  @swagger
@@ -599,7 +599,7 @@ router.route('/:uid/certification/?:c_id?')
      * 
      * 
      */
-    .delete(cert.deleteCert)
+    .delete(universal.verifyToken, cert.deleteCert)
 
 router.route('/:uid/dream_career/?:dream_career?')
     /**
@@ -629,7 +629,7 @@ router.route('/:uid/dream_career/?:dream_career?')
      * 
      * 
      */
-    .get(dream_career.getDreamCareers)
+    .get(universal.verifyToken, dream_career.getDreamCareers)
     /**
      *  @swagger
      * 
@@ -667,7 +667,7 @@ router.route('/:uid/dream_career/?:dream_career?')
      * 
      * 
      */
-    .post(dream_career.addDreamCareers)
+    .post(universal.verifyToken, dream_career.addDreamCareers)
     /**
      *  @swagger
      * 
@@ -700,7 +700,7 @@ router.route('/:uid/dream_career/?:dream_career?')
      * 
      * 
      */
-    .delete(dream_career.deleteDreamCareers)
+    .delete(universal.verifyToken, dream_career.deleteDreamCareers)
 
 router.route('/:uid/dream_company/?:dream_company?')
     /**
@@ -730,7 +730,7 @@ router.route('/:uid/dream_company/?:dream_company?')
      * 
      * 
      */
-    .get(dream_company.getDreamCompanies)
+    .get(universal.verifyToken, dream_company.getDreamCompanies)
     /**
      *  @swagger
      * 
@@ -768,7 +768,7 @@ router.route('/:uid/dream_company/?:dream_company?')
      * 
      * 
      */
-    .post(dream_company.addDreamCompanies)
+    .post(universal.verifyToken, dream_company.addDreamCompanies)
     /**
      *  @swagger
      * 
@@ -801,7 +801,7 @@ router.route('/:uid/dream_company/?:dream_company?')
      * 
      * 
      */
-    .delete(dream_company.deleteDreamCompanies)
+    .delete(universal.verifyToken, dream_company.deleteDreamCompanies)
 
 router.route('/:uid/exp/?:exp_id?')
     /**
@@ -831,7 +831,7 @@ router.route('/:uid/exp/?:exp_id?')
      * 
      * 
      */
-    .get(experience.getExp)
+    .get(universal.verifyToken, experience.getExp)
     /**
      *  @swagger
      * 
@@ -879,7 +879,7 @@ router.route('/:uid/exp/?:exp_id?')
      * 
      * 
      */
-    .post(experience.addExp)
+    .post(universal.verifyToken, experience.addExp)
 
     /**
      *  @swagger
@@ -933,7 +933,7 @@ router.route('/:uid/exp/?:exp_id?')
      * 
      * 
      */
-    .put(experience.updateExp)
+    .put(universal.verifyToken, experience.updateExp)
 
     /**
      *  @swagger
@@ -967,7 +967,7 @@ router.route('/:uid/exp/?:exp_id?')
      * 
      * 
      */
-    .delete(experience.deleteExp);
+    .delete(universal.verifyToken, experience.deleteExp);
 
 router.route('/:uid/resumes/?')
     /**
@@ -999,7 +999,7 @@ router.route('/:uid/resumes/?')
     *                   description: There is an error in the backend
     *               
     */
-    .get(resume.getAllResume);
+    .get(universal.verifyToken, resume.getAllResume);
 
 router.route('/:uid/resumes/?:resume_id?/?')
     /**
@@ -1036,7 +1036,7 @@ router.route('/:uid/resumes/?:resume_id?/?')
     *                   description: There is an error in the backend
     *               
     */
-    .get(resume.getResume)
+    .get(universal.verifyToken, resume.getResume)
     /**
     *   @swagger
     * 
@@ -1077,7 +1077,7 @@ router.route('/:uid/resumes/?:resume_id?/?')
     *                   description: There is an error in the backend
     *               
     */
-    .post(resume.createResume)
+    .post(universal.verifyToken, resume.createResume)
     /**
     *   @swagger
     * 
@@ -1118,7 +1118,7 @@ router.route('/:uid/resumes/?:resume_id?/?')
     *                   description: There is an error in the backend
     *               
     */
-    .put(resume.updateResume)
+    .put(universal.verifyToken, resume.updateResume)
     /**
     *   @swagger
     * 
@@ -1153,6 +1153,6 @@ router.route('/:uid/resumes/?:resume_id?/?')
     *                   description: There is an error in the backend
     *               
     */
-    .delete(resume.deleteResume);
+    .delete(universal.verifyToken, resume.deleteResume);
 
 module.exports = router;

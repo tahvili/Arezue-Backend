@@ -7,7 +7,7 @@ const bodyParser = require('body-parser');
 
 const basic = require('./universal/basic');
 
-router.route('/')
+router.route('/?')
     /**
      *  @swagger
      * 

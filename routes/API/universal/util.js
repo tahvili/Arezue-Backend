@@ -8,6 +8,8 @@ const app = express.Router({
     strict: true
 });
 
+const privateKey = fs.readFileSync(__dirname + '/private.pem', 'utf8');
+
 // Will use public key after figuring this out
 
 exports.verifyToken = [
@@ -19,9 +21,29 @@ exports.verifyToken = [
             const bearer = bearerHeader.split(' ');
             const bearerToken = bearer[1];
             req.token = bearerToken;
-            next();
+            // We need to decode the token to see if its valid
+            
+            jwt.verify(req.token, privateKey, (err, authData) => {
+                if (err) {
+                    res.sendStatus(403);
+                } else {
+                    req.data = authData;
+                    next();
+                }
+            });
+            
         } else {
             res.sendStatus(403);
         }
-    }
+    },
 ];
+
+exports.createToken = function (data, callback) {
+        let privateKey = fs.readFileSync(__dirname + '/private.pem', 'utf8');
+        jwt.sign(data, privateKey, (err, token) => {
+            if (err) {
+                callback(err, null);
+            }
+            callback(null, token);
+        });
+    };
