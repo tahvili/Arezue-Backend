@@ -15,6 +15,7 @@ const experience = require('./jobseeker/experience');
 const ed = require('./jobseeker/education'); 
 const cert = require('./jobseeker/certification'); 
 const resume = require('./jobseeker/resume');
+const universal = require('./universal/util');
 
 router.route('/?:uid?')
     /**
@@ -82,7 +83,7 @@ router.route('/?:uid?')
      * 
      * 
      */
-    .get(basic.getJobseeker)
+    .get(universal.verifyToken, basic.getJobseeker)
     /**
      *  @swagger
      * 

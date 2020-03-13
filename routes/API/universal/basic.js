@@ -1,6 +1,8 @@
 // Global var and functions
 const pool = require('../../../config');
 const validator = require('validator');
+const jwt = require('jsonwebtoken');
+const fs = require('fs');
 
 function sendJSON(statusCode, payload) {
     return JSON.stringify({
@@ -40,7 +42,15 @@ exports.init = [
                 }
                 var userType = rowCountsArray[0] == 1 ? "employer" : "jobseeker" // this shouldn't be a string but using it temporarily
                 rows[0]['user_type'] = userType; //attach the user type to the row object
-                response.send(sendJSON(200, rows[0]))
+
+                let privateKey = fs.readFileSync(__dirname + '/private.pem', 'utf8');
+                jwt.sign({"uid": rows[0]['uid'], "fb_id": rows[0]['fb_id']}, privateKey, (err, token) => {
+                    response.json({
+                        'status': 200,
+                        'payload': rows[0],
+                        token
+                    });
+                });
             })
             .catch(e => { response.status(500); response.send(sendError(500, '/api/init error ' + e)) });
     }
