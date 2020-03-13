@@ -81,6 +81,40 @@ exports.getResume = [
     }
 ];
 
+exports.createResume = [
+    async function(req, res, next) {
+        let uid = validator.escape(req.params.uid);        
+        let resume = req.body;
+         
+        if (resume == '') return res.status(400).send();
+        
+        if (validator.isEmpty(uid)) {
+            res.status(422).send();
+            return;
+        }
+        if (!validator.isUUID(uid, [4])) {
+            res.status(400).send();
+            return;
+        }
+
+        let query = `INSERT INTO resumes VALUES($1, DEFAULT, $2, DEFAULT) returning uid, resume_id`;
+        Promise.all([pool.query(query, [uid, resume])])
+            .then(result => {
+                let rows = result.map(r => r.rows[0]);
+                
+                if (rows[0]) {
+                    res.status(200).send(rows[0]);
+                } else {
+                    res.status(400).send();
+                }
+                return;
+            })
+            .catch(e => {
+                res.status(500, res.send(sendError(500, '/employer ' + e)));
+            });
+    }
+];
+
 exports.updateResume = [
     async function(req, res, next) {
         let uid = validator.escape(req.params.uid);
@@ -107,6 +141,36 @@ exports.updateResume = [
                     res.status(200).send(rows[0]);
                 } else {
                     res.status(400).send();
+                }
+                return;
+            })
+            .catch(e => {
+                res.status(500, res.send(sendError(500, '/employer ' + e)));
+            });
+    }
+];
+
+exports.deleteResume = [
+    async function(req, res, next) {
+        let uid = validator.escape(req.params.uid);
+        let resume_id = validator.escape(req.params.resume_id);
+        if (validator.isEmpty(uid) || validator.isEmpty(resume_id)) {
+            res.status(422).send();
+            return;
+        }
+        if (!validator.isUUID(uid, [4])) {
+            res.status(400).send();
+            return;
+        }
+
+        let query = `DELETE FROM resumes WHERE uid = $1 and resume_id = $2 RETURNING uid`;
+        Promise.all([pool.query(query, [uid, resume_id])])
+            .then(result => {
+                let rows = result.map(r => r.rows[0]);
+                if (rows[0]) {
+                    res.status(200).send(rows[0]);
+                } else {
+                    res.status(404).send();
                 }
                 return;
             })
