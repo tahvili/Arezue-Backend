@@ -34,6 +34,10 @@ exports.getSkills = [
         let query2 = `SELECT Skill from Pre_Skills where id = $1`;
         await Promise.all([pool.query(Query, [uid])])
             .then(async result => {
+                if (result[0].rowCount == 0) {
+                    res.status(404).send('Jobseeker not found');
+                    return;
+                }
                 var row1 = result.filter(r => r.rowCount > 0).map(r => r.rows)
                 var skills = [];
                 for (i = 0; i < row1[0].length; i++) {
@@ -87,6 +91,7 @@ exports.addSkill = [
         let getSkillId = `SELECT id FROM pre_skills WHERE LOWER(skill) = LOWER($1)`;
         let addPreSkill = `INSERT INTO pre_skills(skill) values(LOWER($1)) RETURNING id;`;
         let addSkill = `INSERT INTO skills(uid, skill_id, level, years) VALUES($1, $2, $3, $4) returning uid`;
+        // Idealy should check if uid even exists first. 
         await Promise.all([pool.query(getSkillId, [skill])])
             .then(result => {
                 // skill is in pre_skills table. Proceed to add jobseeker's skill
@@ -111,6 +116,7 @@ exports.addSkill = [
                             // Now we can add to skills
                             Promise.all([pool.query(addSkill, [uid, row[0][0].id, level, years])])
                                 .then(result4 => {
+                                    console.log(result4);
                                     row = result4.map(r => r.rows);
                                     res.status(200).send(row[0][0]);
                                     return;
