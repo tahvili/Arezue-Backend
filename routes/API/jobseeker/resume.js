@@ -96,7 +96,8 @@ exports.createResume = [
             res.status(400).send();
             return;
         }
-
+        console.log(req.body);
+        
         let query = `INSERT INTO resumes VALUES($1, DEFAULT, $2, DEFAULT) returning uid, resume_id`;
         Promise.all([pool.query(query, [uid, resume])])
             .then(result => {
