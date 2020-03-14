@@ -84,7 +84,7 @@ exports.getResume = [
 exports.createResume = [
     async function(req, res, next) {
         let uid = validator.escape(req.params.uid);        
-        let resume = req.body;
+        let resume = req.body.resume;
          
         if (resume == '') return res.status(400).send();
         
