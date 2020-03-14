@@ -982,7 +982,7 @@ router.route('/:uid/resumes/?')
     *           parameters:
     *               - name: uid
     *                 description: The uid of the jobseeker of target
-    *                 in: path
+    *                 in: path  
     *                 required: true
     *                 type: string
     *           responses:
