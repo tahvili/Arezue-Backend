@@ -84,7 +84,7 @@ exports.getResume = [
 exports.createResume = [
     async function(req, res, next) {
         let uid = validator.escape(req.params.uid);        
-        let resume = req.body;
+        let resume = req.body.resume;
          
         if (resume == '') return res.status(400).send();
         
@@ -96,8 +96,8 @@ exports.createResume = [
             res.status(400).send();
             return;
         }
-        console.log(req.body);
-        
+        console.log(req.body.resume);
+
         let query = `INSERT INTO resumes VALUES($1, DEFAULT, $2, DEFAULT) returning uid, resume_id`;
         Promise.all([pool.query(query, [uid, resume])])
             .then(result => {

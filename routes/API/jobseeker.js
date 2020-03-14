@@ -1057,9 +1057,9 @@ router.route('/:uid/resumes/?:resume_id?/?')
     *                 in: path
     *                 required: true
     *                 type: integer
-    *               - name: Resume Snapshot
+    *               - name: resume
     *                 description: The json of a resume
-    *                 in: requestBody
+    *                 in: formData
     *                 required: true
     *                 type: array
     *                 items: {}
@@ -1098,12 +1098,6 @@ router.route('/:uid/resumes/?:resume_id?/?')
     *                 in: path
     *                 required: true
     *                 type: integer
-    *               - name: Resume Snapshot
-    *                 description: The json of a resume that needs to be updated (Full json)
-    *                 in: requestBody
-    *                 required: true
-    *                 type: array
-    *                 items: {}
     *           responses:
     *               200:
     *                   description: Successfully updated the resume for the jobseeker
