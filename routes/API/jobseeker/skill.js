@@ -32,7 +32,6 @@ exports.getSkills = [
         }
         let Query = `SELECT * FROM skills where uid = $1`;
         let query2 = `SELECT Skill from Pre_Skills where id = $1`;
-        var skills = [];
         await Promise.all([pool.query(Query, [uid])])
             .then(async result => {
                 var row1 = result.filter(r => r.rowCount > 0).map(r => r.rows)
