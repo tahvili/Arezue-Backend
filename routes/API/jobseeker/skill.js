@@ -147,7 +147,9 @@ exports.deleteSkill = [
             res.status(400).send("Invalid UUID");
             return;
         }
-        let Query = `DELETE FROM skills WHERE uid = $1 and skill = $2 returning uid`;
+        let Query = `DELETE FROM skills WHERE uid = $1 AND skill_id = 
+                        (SELECT id FROM pre_skills 
+                        WHERE skill = $2) returning uid`;
         Promise.all([pool.query(Query, [uid, skill])])
             .then(result => {
                 var rows = result.filter(r => r.rowCount > 0).map(r => r.rows);
@@ -155,7 +157,7 @@ exports.deleteSkill = [
                 if (rows.length == 1) {
                     res.status(200).send(rows[0][0]);
                 } else {
-                    res.status(404).send('Delete is case sensitive');
+                    res.status(404).send('Skill not found');
                 }
             })
             .catch(e => {
