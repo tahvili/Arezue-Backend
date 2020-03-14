@@ -8,7 +8,7 @@ const bodyParser = require('body-parser');
 
 const basic = require('./company/basic');
 
-router.route('/:company_name?')
+router.route('/?:company_name?')
     /**
      *  @swagger
      * 
