@@ -30,6 +30,7 @@ exports.getDreamCareers = [
             res.status(400).send("Invalid UUID");
             return;
         }
+        res.type('application/json');
         let Query = `SELECT * FROM Dream_Careers where uid = $1`;
         Promise.all([pool.query(Query, [uid])])
             .then(result => {
@@ -40,7 +41,7 @@ exports.getDreamCareers = [
                     if (rows.length == 0) {
                         res.status(200).send([]);
                     }
-                    res.status(200).send(rows[0]);
+                    res.status(200).send({'data': rows[0]});
                 } else {
                     res.status(400).send(`Jobseeker could not be found`);
                 }

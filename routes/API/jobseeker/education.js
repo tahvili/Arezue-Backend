@@ -53,7 +53,7 @@ exports.getEducation = [
                 if (result[0].rows) {
                     edu.education = result[0].rows;
                     if (edu) {
-                        res.status(200).send(edu)
+                        res.status(200).send({'data': edu})
                     } else {
                         res.status(400).send(`Jobseeker could not be found`);
                     }
