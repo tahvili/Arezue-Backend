@@ -56,7 +56,7 @@ exports.getCert = [
             .then(result => {
                 var edu = {};
                 if (result[0].rows) {
-                    edu.certification = result[0].rows;
+                    edu.data = result[0].rows;
                     if (edu) {
                         res.status(200).send(edu)
                     } else {

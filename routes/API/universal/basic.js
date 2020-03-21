@@ -52,6 +52,7 @@ exports.getAllUsers = function (request, response, next) {
         if (error) {
             throw error;
         }
-        response.status(200).json(results.rows);
+        response.type('application/json');
+        response.status(200).json({'data': results.rows});
     });
 };

@@ -32,6 +32,7 @@ exports.getSkills = [
         }
         let Query = `SELECT * FROM skills where uid = $1`;
         let query2 = `SELECT Skill from Pre_Skills where id = $1`;
+        res.type('application/json')
         await Promise.all([pool.query(Query, [uid])])
             .then(async result => {
                 if (result[0].rowCount == 0) {
@@ -59,7 +60,8 @@ exports.getSkills = [
                         });
                 }
                 if (skills) {
-                    res.status(200).send(skills)
+                    
+                    res.status(200).send({'data': skills})
                     return;
                 } else {
                     res.status(400).send(`Jobseeker could not be found`);
@@ -73,13 +75,13 @@ exports.getSkills = [
     }
 ];
 
-
 exports.addSkill = [
     async function (req, res, next) {
         let uid = validator.escape(req.params.uid);
         let skill = validator.escape(req.body.skill);
         let level = validator.escape(req.body.level);
         let years = validator.escape(req.body.years);
+        var ranking = null;
         if (validator.isEmpty(uid) || validator.isEmpty(skill)) {
             res.status(400).send("One of the field is empty");
             return;

@@ -22,6 +22,7 @@ exports.getExp = [
             return;
         }
         let Query = `SELECT * FROM Experiences where uid = $1`;
+        res.type('application/json')
         Promise.all([pool.query(Query, [uid])])
             .then(result => {
                 var rows = result.filter(r => r.rowCount > 0).map(r => r.rows)
@@ -30,7 +31,7 @@ exports.getExp = [
                     if (rows.length == 0) {
                         res.status(200).send([]);
                     }
-                    res.status(200).send(rows[0])
+                    res.status(200).send({'data': rows[0]})
                 } else {
                     res.status(400).send(`Jobseeker could not be found`);
                 }

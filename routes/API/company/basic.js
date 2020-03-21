@@ -40,13 +40,13 @@ exports.getCompany = [
     async function (req, res, next) {
         let company_name = validator.escape(req.params.company_name);
         let Query = `SELECT * FROM company WHERE company_name = ($1)`;
-       
+        res.type('application/json');
         Promise.all([pool.query(Query, [company_name])])
             .then(result => {
                 var rows = result.filter(r => r.rowCount > 0).map(r => r.rows);
 
                 if (rows[0]) {
-                    res.status(200).send(rows[0]);
+                    res.status(200).send({'data': rows[0]});
                 } else {
                     res.status(400).send(`Company could not be found`);
                 }
