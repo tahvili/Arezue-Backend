@@ -119,7 +119,7 @@ exports.updateResume = [
     async function(req, res, next) {
         let uid = validator.escape(req.params.uid);
         let resume_id = validator.escape(req.params.resume_id);
-        let resume = req.body;
+        let resume = req.body.resume;
          
         if (resume == '') return res.status(400).send();
         
