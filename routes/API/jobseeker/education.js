@@ -51,9 +51,9 @@ exports.getEducation = [
             .then(result => {
                 var edu = {};
                 if (result[0].rows) {
-                    edu.education = result[0].rows;
+                    edu.data = result[0].rows;
                     if (edu) {
-                        res.status(200).send({'data': edu})
+                        res.status(200).send(edu)
                     } else {
                         res.status(400).send(`Jobseeker could not be found`);
                     }
