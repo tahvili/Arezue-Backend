@@ -212,11 +212,6 @@ router.route('/:uid/jobs/?:job_id?')
     *                 in: path
     *                 required: true
     *                 type: string
-    *               - name: job_id
-    *                 description: The ID of the job of target
-    *                 in: path
-    *                 required: true
-    *                 type: string
     *               - name: company_name
     *                 description: The name of the company
     *                 in: formData
