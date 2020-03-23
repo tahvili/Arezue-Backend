@@ -180,8 +180,14 @@ exports.searchSkill = [
         if (validator.isEmpty(req.query.q)) return res.sendStatus(400);
         let search_query = validator.escape(req.query.q);
         if (search_query.length != req.query.q.length) return res.sendStatus(400);
-        let limit = validator.escape(req.query.limit);
-        if (limit.length != req.query.limit.length) return res.sendStatus(400);
+        let limit;
+        if (!req.query.limit) {
+            limit = 25;
+        } else {
+            limit = validator.escape(req.query.limit);
+            if (limit.length != req.query.limit.length) return res.sendStatus(400);
+        }
+        
         let uid = validator.escape(req.params.uid);
         if (validator.isEmpty(uid) || !validator.isUUID(uid, [4])) return res.sendStatus(400);
 
@@ -189,7 +195,7 @@ exports.searchSkill = [
         search_query = '%' + search_query + '%';
         res.type('application/json');
 
-        Promise.all([pool.query(Query, [search_query])])
+        Promise.all([pool.query(Query, [search_query, limit])])
             .then(result => {
                 var rows = result.map(r => r.rows)[0];
                 let results = [];

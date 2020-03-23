@@ -162,7 +162,7 @@ router.route('/:uid/profile/?')
      */
     .get(profile.getProfile);
 
-router.route('/:uid/skill/search?:q&?:limit')
+router.route('/:uid/skill/search')
     /**
      *  @swagger
      * 
@@ -184,6 +184,11 @@ router.route('/:uid/skill/search?:q&?:limit')
      *                in: query
      *                requried: true
      *                type: string
+     *              - name: limit
+     *                description: The requested query
+     *                in: query
+     *                requried: true
+     *                type: integer
      * 
      *          responses:
      *              200:
@@ -197,7 +202,8 @@ router.route('/:uid/skill/search?:q&?:limit')
      */
     .get(skill.searchSkill)
 
-router.route('/:uid/skill/?:skill?')
+
+router.route('/:uid/skill/?:skill?/?')
     /**
      *  @swagger
      * 
