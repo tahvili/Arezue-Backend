@@ -138,6 +138,7 @@ exports.updateJob = [
         let euid = validator.escape(req.params.uid);
         let job_id = validator.escape(req.params.job_id);
         let data = req.body;
+        console.log(data);
         if (data == '') return res.status(400).send();
 
         if (validator.isEmpty(euid) || validator.isEmpty(job_id) || data == {}) {
