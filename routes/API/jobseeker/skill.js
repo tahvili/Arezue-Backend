@@ -186,7 +186,7 @@ exports.searchSkill = [
         if (validator.isEmpty(uid) || !validator.isUUID(uid, [4])) return res.sendStatus(400);
 
         let Query = `SELECT skill FROM pre_skills WHERE skill LIKE $1 LIMIT $2`;
-        search_query += '%';
+        search_query = '%' + search_query + '%';
         res.type('application/json');
 
         Promise.all([pool.query(Query, [search_query])])
