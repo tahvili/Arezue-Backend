@@ -40,7 +40,7 @@ if [ $# -eq 0 ] || [ "$1" == "new" ] || [ "$1" == "all" ]
         PGPASSWORD=${password} psql -U ${username} -p ${port} -h ${hostname} ${database} < ./Dream_Careers/Dream_Careers.sql;
         PGPASSWORD=${password} psql -U ${username} -p ${port} -h ${hostname} ${database} < ./Employer/Employer.sql;
         PGPASSWORD=${password} psql -U ${username} -p ${port} -h ${hostname} ${database} < ./Job/Job.sql;
-        PGPASSWORD=${password} psql -U ${username} -p ${port} -h ${hostname} ${database} < ./Pre_skills/Pre_Skills.sql;
+        PGPASSWORD=${password} psql -U ${username} -p ${port} -h ${hostname} ${database} < ./Pre_Skills/Pre_Skills.sql;
         PGPASSWORD=${password} psql -U ${username} -p ${port} -h ${hostname} ${database} < ./Skills/Skills.sql;
         PGPASSWORD=${password} psql -U ${username} -p ${port} -h ${hostname} ${database} < ./Keywords/Keywords.sql;
         PGPASSWORD=${password} psql -U ${username} -p ${port} -h ${hostname} ${database} < ./Benefits/Benefits.sql;
