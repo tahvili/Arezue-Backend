@@ -98,7 +98,7 @@ exports.createResume = [
             return;
         }
 
-        let query = `INSERT INTO resumes (uid, resume, resume_name) VALUES($1, $2, $3) returning uid, resume_id`;
+        let query = `INSERT INTO resumes (uid, resume, resume_name) VALUES ($1, $2, $3) returning uid, resume_id`;
         Promise.all([pool.query(query, [uid, resume, name])])
             .then(result => {
                 let rows = result.map(r => r.rows[0]);
