@@ -117,8 +117,8 @@ exports.addJob = [
         if (max_candidate.length != req.body.max_candidate.toString().length) return res.status(400).send();
 
         res.type('application/json');
-        let query = `INSERT INTO job VALUES(DEFAULT, $1, $2, $3, $4, $5, $6, $7, DEFAULT, DEFAULT, $8, $9, $10) returning euid AS uid, job_id`;
-        Promise.all([pool.query(query, [euid, title, wage, position, hours, location, description, status, max_candidate, company_name])])
+        let query = `INSERT INTO job (euid, company_name, title, wage, position, hours, location, description, status, max_candidate) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) returning euid AS uid, job_id`;
+        Promise.all([pool.query(query, [euid, company_name, title, wage, position, hours, location, description, status, max_candidate])])
             .then(result => {
                 var rows = result.map(r => r.rows)[0];
                 if (rows.length > 0) {
