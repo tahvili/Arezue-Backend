@@ -12,7 +12,9 @@ router.use(function (req, res, next) {
 router.use('/jobseeker/', require('./API/jobseeker'));
 router.use('/company', require('./API/company'));
 router.use('/employer', require('./API/employer'));
+router.use('/search', require('./API/search'));
 router.use('/init', require('./API/universal'));
+
 
 
 module.exports = router;
