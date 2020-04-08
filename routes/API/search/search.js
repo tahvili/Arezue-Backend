@@ -36,7 +36,9 @@ exports.searchCandidates = [
 
                     //postgres jsons with subrrays are returned as arrays, need to sanitize (not the best way)
                     candidates.forEach(c => {
-                        c.resume.skill = c.resume.skill.replace("[", "").replace("]","").split(",")
+                        if (typeof(c.resume.skill) == "string") {
+                            c.resume.skill = c.resume.skill.replace("[", "").replace("]","").split(",")
+                        }
                     })
 
                     //filter for resumers that contain skills as passed in the query body
