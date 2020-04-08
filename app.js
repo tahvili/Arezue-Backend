@@ -24,7 +24,7 @@ var options = {
       description: 'API for all api calls to Arezue server'
     }
   },
-  apis: ['./routes/API/universal.js', './routes/API/company.js', './routes/API/employer.js', './routes/API/jobseeker.js'],
+  apis: ['./routes/API/universal.js', './routes/API/company.js', './routes/API/employer.js', './routes/API/jobseeker.js', './routes/API/search.js'],
 };
 const swaggerSpec = swaggerJSDoc(options);
 

@@ -7,6 +7,7 @@ const bodyParser = require('body-parser');
 
 const basic = require('./employer/basic');
 const job = require('./employer/job');
+const search = require("./search/search");
 
 router.route('/?:uid?')
     /**
