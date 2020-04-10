@@ -550,7 +550,7 @@ exports.addExp = [
 
                 if (rows[0]) {
                     s
-                    res.status(200).send('Added job experience');
+                    res.status(200).send(rows[0]);
                 } else {
                     res.status(400).send(`Jobseeker could not be found`);
                 }

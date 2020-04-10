@@ -58,7 +58,7 @@ exports.addExp = [
             .then(result => {
                 var rows = result.filter(r => r.rowCount > 0).map(r => r.rows);
                 if (rows[0]) {
-                    res.status(200).send('Added job experience');
+                    res.status(200).send(rows[0]);
                 } else {
                     res.status(400).send(`Jobseeker could not be found`);
                 }
