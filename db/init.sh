@@ -37,10 +37,11 @@ if [ $# -eq 0 ] || [ "$1" == "new" ] || [ "$1" == "all" ]
         PGPASSWORD=${password} psql -U ${username} -p ${port} -h ${hostname} ${database} < ./Company/Company.sql;
         PGPASSWORD=${password} psql -U ${username} -p ${port} -h ${hostname} ${database} < ./Dream_Companies/Dream_Companies.sql;
         PGPASSWORD=${password} psql -U ${username} -p ${port} -h ${hostname} ${database} < ./Available_Locations/Available_Locations.sql;
-        PGPASSWORD=${password} psql -U ${username} -p ${port} -h ${hostname} ${database} < ./Skills/Skills.sql;
         PGPASSWORD=${password} psql -U ${username} -p ${port} -h ${hostname} ${database} < ./Dream_Careers/Dream_Careers.sql;
         PGPASSWORD=${password} psql -U ${username} -p ${port} -h ${hostname} ${database} < ./Employer/Employer.sql;
         PGPASSWORD=${password} psql -U ${username} -p ${port} -h ${hostname} ${database} < ./Job/Job.sql;
+        PGPASSWORD=${password} psql -U ${username} -p ${port} -h ${hostname} ${database} < ./Pre_Skills/Pre_Skills.sql;
+        PGPASSWORD=${password} psql -U ${username} -p ${port} -h ${hostname} ${database} < ./Skills/Skills.sql;
         PGPASSWORD=${password} psql -U ${username} -p ${port} -h ${hostname} ${database} < ./Keywords/Keywords.sql;
         PGPASSWORD=${password} psql -U ${username} -p ${port} -h ${hostname} ${database} < ./Benefits/Benefits.sql;
         PGPASSWORD=${password} psql -U ${username} -p ${port} -h ${hostname} ${database} < ./Pending_Requests/Pending_Requests.sql;
@@ -50,8 +51,8 @@ if [ $# -eq 0 ] || [ "$1" == "new" ] || [ "$1" == "all" ]
         PGPASSWORD=${password} psql -U ${username} -p ${port} -h ${hostname} ${database} < ./Pending_Requests_Sent/Pending_Requests_Sent.sql;
         PGPASSWORD=${password} psql -U ${username} -p ${port} -h ${hostname} ${database} < ./Job_list/Job_list.sql; 
         PGPASSWORD=${password} psql -U ${username} -p ${port} -h ${hostname} ${database} < ./Experiences/Experiences.sql;
-        PGPASSWORD=${password} psql -U ${username} -p ${port} -h ${hostname} ${database} < ./Experiences/Experiences.sql;
-        PGPASSWORD=${password} psql -U ${username} -p ${port} -h ${hostname} ${database} < ./Uuid_mapping/Uuid_mapping.sql;
+        PGPASSWORD=${password} psql -U ${username} -p ${port} -h ${hostname} ${database} < ./Education/Education.sql;
+        PGPASSWORD=${password} psql -U ${username} -p ${port} -h ${hostname} ${database} < ./Certification/Certification.sql;
         } > /dev/null 2> "$logfile"; [ -s "$logfile" ] || rm -f "$logfile"
         if [ -f "$logfile" ]
             then
@@ -69,7 +70,7 @@ if [ $# -eq 0 ] || [ "$1" == "new" ] || [ "$1" == "all" ]
 fi
 
 
-if [ "$1" == "dummy" ] || [ "$1" == "new" ] || [ "$1" == "all" ]
+if [ "$1" == "dummy" ] || [ "$1" == "all" ]
     then
          if [ -f "$logfile" ]
          then

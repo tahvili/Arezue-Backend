@@ -1,0 +1,22 @@
+skills need level of expertise and years of experience
+    shared database?
+    some matrix dot product close to 1 stuff
+search by keyword for now
+add skills in job
+========
+
+add job_skills table
+    add rank 
+add chaneg skills to jobseeker_skills
+    years and level of experience
+    beg/int/expertise
+
+add predefined skills table
+
+add get skill by character in predefined table
+
+resume snapshot
+
+job creation
+    end points and stuff
+

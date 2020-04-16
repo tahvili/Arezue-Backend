@@ -6,12 +6,10 @@ BEGIN
 END
 $$;
 
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-
 CREATE table IF NOT EXISTS Job (
-    Job_ID uuid primary key,
+    Job_ID serial primary key,
     EUID uuid REFERENCES employer(UID) ON DELETE CASCADE not NULL,
-    Company_ID uuid REFERENCES company(Company_ID) ON DELETE CASCADE not NULL,
+    Company_Name varchar(70) REFERENCES company(Company_Name) ON DELETE CASCADE not NULL,
     Title VARCHAR(70) not NULL,
     Wage text not NULL,
     Position VARCHAR(70) not NULL,
@@ -20,6 +18,9 @@ CREATE table IF NOT EXISTS Job (
     Description text not NULL,
     Date_Posted date not NULL default current_date,
     Expiry_Date date not NULL default current_date + 30, -- 30 Days by default
-    Status job_status not NULL,
+    Status VARCHAR(20) not NULL,
     Max_Candidate int not NULL
+
+    -- Potentially for employer to rank the skill that is more important when they are creating the job
+    
 );
