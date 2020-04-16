@@ -56,7 +56,7 @@ exports.addExp = [
         let Query = `INSERT INTO experiences (uid, title, start_date, end_date, description) VALUES ($1, $2, $3, $4, $5) returning exp_id`;
         Promise.all([pool.query(Query, [uid, title, start_date, end_date, description])])
             .then(result => {
-                var rows = result.filter(r => r.rowCount > 0).map(r => r.rows);
+                var rows = result.filter(r => r.rowCount > 0).map(r => r.rows[0]);
                 if (rows[0]) {
                     res.status(200).send(rows[0]);
                 } else {
