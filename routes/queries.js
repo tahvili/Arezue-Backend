@@ -543,14 +543,14 @@ exports.addExp = [
             res.status(400).send("Invalid UUID");
             return;
         }
-        let Query = `INSERT INTO experiences (uid, title, start_date, end_date, description) VALUES ($1, $2, $3, $4, $5) returning uid`;
+        let Query = `INSERT INTO experiences (uid, title, start_date, end_date, description) VALUES ($1, $2, $3, $4, $5) returning exp_id`;
         Promise.all([pool.query(Query, [uid, title, start_date, end_date, description])])
             .then(result => {
                 var rows = result.filter(r => r.rowCount > 0).map(r => r.rows[0]);
 
                 if (rows[0]) {
                     s
-                    res.status(200).send('Added job experience');
+                    res.status(200).send(rows[0]);
                 } else {
                     res.status(400).send(`Jobseeker could not be found`);
                 }
