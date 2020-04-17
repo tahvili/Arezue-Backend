@@ -22,9 +22,10 @@ function sendError(statusCode, message, additionalInfo = {}) {
 exports.searchCandidates = [
     async function(req, res, next) {
         var reqQuery = req.body;
-        
+        console.log(reqQuery);
         if ("skills" in reqQuery) {
             skills = reqQuery.skills.split(",").map(skill => skill.toLowerCase());
+            console.log(skills);
             
             let query = "SELECT * FROM resumes;";
             pool.query(query)
@@ -33,6 +34,8 @@ exports.searchCandidates = [
                 if (rows.length > 0) {
                     //Filter out for resumes without the skill attribute
                     var candidates = rows.filter(r => r.hasOwnProperty("resume") && r.resume.hasOwnProperty("skill"))
+                    console.log(rows);
+                    console.log(candidates);
 
                     //postgres jsons with subrrays are returned as arrays, need to sanitize (not the best way)
                     candidates.forEach(c => {
@@ -64,6 +67,7 @@ exports.searchCandidates = [
 
 exports.searchSkill = [
     async function(req, res, next) {
+
         if (validator.isEmpty(req.query.q)) return res.sendStatus(400);
         let search_query = validator.escape(req.query.q);
         if (search_query.length != req.query.q.length) return res.sendStatus(400);
@@ -75,9 +79,6 @@ exports.searchSkill = [
             if (limit.length != req.query.limit.length) return res.sendStatus(400);
         }
         
-        let uid = validator.escape(req.params.uid);
-        if (validator.isEmpty(uid) || !validator.isUUID(uid, [4])) return res.sendStatus(400);
-
         let Query = `SELECT skill FROM pre_skills WHERE skill LIKE $1 LIMIT $2`;
         search_query = '%' + search_query + '%';
         res.type('application/json');

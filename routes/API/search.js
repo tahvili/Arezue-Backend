@@ -7,11 +7,11 @@ const bodyParser = require('body-parser');
 
 const search = require("./search/search");
 
-router.route('/')
+router.route('/candidates')
     /**
      *  @swagger
      * 
-     *  /search:
+     *  /search/candidates:
      *      post:
      *          description: Search for candidates by skill
      *          tags:
@@ -39,7 +39,7 @@ router.route('/')
      */
     .post(search.searchCandidates);
 
-    router.route('/skills')
+router.route('/skill/search')
     /**
      *  @swagger
      * 
@@ -47,15 +47,10 @@ router.route('/')
      *      get:
      *          description: Search the predefiled skills table based on query
      *          tags:
-     *              - Jobseeker, skills
+     *              - Search
      *          produces: 
      *              - application/json
      *          parameters:
-     *              - name: uid
-     *                description: The UID of the jobseeker
-     *                in: path
-     *                required: true
-     *                type: string
      *              - name: q
      *                description: The requested query
      *                in: query
@@ -77,6 +72,6 @@ router.route('/')
      * 
      * 
      */
-    .get(skill.searchSkill)
+    .get(search.searchSkill)
 
     module.exports = router;
