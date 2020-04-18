@@ -32,10 +32,12 @@ exports.getProfile = [
         }
         let query_jobseeker = `SELECT uid, acceptance_wage, goal_wage, open_relocation FROM jobseeker WHERE uid = $1`;
         // let query_skills = `SELECT * FROM skills where uid = $1`;
-        let query_dream_careers = `SELECT * FROM dream_careers WHERE uid = $1`;
+        let query_dream_careers = `SELECT PDC.career as dream_career FROM pre_dream_careers PDC LEFT JOIN dream_careers DC
+                                    ON PDC.id = DC.career_id WHERE uid = $1`;
         let query_skills = `SELECT ps.skill, s.years, s.level FROM pre_skills ps, skills s WHERE ps.id = s.skill_id 
         AND s.uid = $1;`;
-        let query_dream_companies = `SELECT * FROM dream_companies WHERE uid = $1`;
+        let query_dream_companies = `SELECT PDC.company as dream_company FROM pre_dream_companies PDC LEFT JOIN
+                                        dream_companies DC ON PDC.id = DC.company_id WHERE uid = $1`;
         let query_experiences = `SELECT * FROM experiences WHERE uid = $1`;
         let query_certification = `SELECT * FROM certification WHERE uid = $1`;
         let query_education = `SELECT * FROM education WHERE uid = $1`;
