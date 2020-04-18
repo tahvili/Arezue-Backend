@@ -35,8 +35,10 @@ if [ $# -eq 0 ] || [ "$1" == "new" ] || [ "$1" == "all" ]
         PGPASSWORD=${password} psql -U ${username} -p ${port} -h ${hostname} ${database} < ./Users/Users.sql;
         PGPASSWORD=${password} psql -U ${username} -p ${port} -h ${hostname} ${database} < ./Jobseeker/Jobseeker.sql;
         PGPASSWORD=${password} psql -U ${username} -p ${port} -h ${hostname} ${database} < ./Company/Company.sql;
+        PGPASSWORD=${password} psql -U ${username} -p ${port} -h ${hostname} ${database} < ./Dream_Companies/Pre_Dream_Companies.sql;
         PGPASSWORD=${password} psql -U ${username} -p ${port} -h ${hostname} ${database} < ./Dream_Companies/Dream_Companies.sql;
         PGPASSWORD=${password} psql -U ${username} -p ${port} -h ${hostname} ${database} < ./Available_Locations/Available_Locations.sql;
+        PGPASSWORD=${password} psql -U ${username} -p ${port} -h ${hostname} ${database} < ./Dream_Careers/Pre_Dream_Careers.sql;
         PGPASSWORD=${password} psql -U ${username} -p ${port} -h ${hostname} ${database} < ./Dream_Careers/Dream_Careers.sql;
         PGPASSWORD=${password} psql -U ${username} -p ${port} -h ${hostname} ${database} < ./Employer/Employer.sql;
         PGPASSWORD=${password} psql -U ${username} -p ${port} -h ${hostname} ${database} < ./Job/Job.sql;
@@ -88,6 +90,9 @@ if [ "$1" == "dummy" ] || [ "$1" == "all" ]
                 PGPASSWORD=${password} psql -U ${username} -p ${port} -h ${hostname} ${database} < ./dummy_data/job_data.sql
                 PGPASSWORD=${password} psql -U ${username} -p ${port} -h ${hostname} ${database} < ./dummy_data/resume_data.sql
                 PGPASSWORD=${password} psql -U ${username} -p ${port} -h ${hostname} ${database} < ./dummy_data/experiences_data.sql
+                PGPASSWORD=${password} psql -U ${username} -p ${port} -h ${hostname} ${database} < ./dummy_data/pre_skills_data.sql
+                PGPASSWORD=${password} psql -U ${username} -p ${port} -h ${hostname} ${database} < ./dummy_data/pre_careers_data.sql
+                PGPASSWORD=${password} psql -U ${username} -p ${port} -h ${hostname} ${database} < ./dummy_data/pre_companies_data.sql
                 } > /dev/null 2> "$logfile"; [ -s "$logfile" ] || rm -f "$logfile"
                 if [ -f "$logfile" ]
                   then

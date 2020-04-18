@@ -22,7 +22,7 @@ function sendError(statusCode, message, additionalInfo = {}) {
 exports.searchCandidates = [
     async function(req, res, next) {
         var reqQuery = req.body;
-        
+        console.log(reqQuery);
         if ("skills" in reqQuery) {
             skills = reqQuery.skills.split(",").map(skill => skill.toLowerCase());
             
@@ -61,3 +61,109 @@ exports.searchCandidates = [
         }
     }
 ]
+
+exports.searchSkill = [
+    async function(req, res, next) {
+ 
+        if (validator.isEmpty(req.query.q)) return res.sendStatus(400);
+        let search_query = validator.escape(req.query.q);
+        if (search_query.length != req.query.q.length) return res.sendStatus(400);
+        let limit;
+        if (!req.query.limit) {
+            limit = 25;
+        } else {
+            limit = validator.escape(req.query.limit);
+            if (limit.length != req.query.limit.length) return res.sendStatus(400);
+        }
+        
+        let Query = `SELECT skill FROM pre_skills WHERE LOWER(skill) LIKE LOWER($1) LIMIT $2`;
+        search_query = '%' + search_query + '%';
+        res.type('application/json');
+
+        Promise.all([pool.query(Query, [search_query, limit])])
+            .then(result => {
+                var rows = result.map(r => r.rows)[0];
+                let results = [];
+
+                Object.keys(rows).forEach(function(key) {
+                    results.push(rows[key].skill);
+                });
+                res.status(200).send({data: results});
+            })
+            .catch(e => {
+                res.status(500);
+                res.send(sendError(500, '/searchSkill ' + e))
+            });
+    }
+];
+
+exports.searchCareer = [
+    async function(req, res, next) {
+ 
+        if (validator.isEmpty(req.query.q)) return res.sendStatus(400);
+        let search_query = validator.escape(req.query.q);
+        if (search_query.length != req.query.q.length) return res.sendStatus(400);
+        let limit;
+        if (!req.query.limit) {
+            limit = 25;
+        } else {
+            limit = validator.escape(req.query.limit);
+            if (limit.length != req.query.limit.length) return res.sendStatus(400);
+        }
+        
+        let Query = `SELECT career FROM pre_dream_careers WHERE LOWER(career) LIKE LOWER($1) LIMIT $2`;
+        search_query = '%' + search_query + '%';
+        res.type('application/json');
+
+        Promise.all([pool.query(Query, [search_query, limit])])
+            .then(result => {
+                var rows = result.map(r => r.rows)[0];
+                console.log(rows);
+                let results = [];
+
+                Object.keys(rows).forEach(function(key) {
+                    results.push(rows[key].career);
+                });
+                res.status(200).send({data: results});
+            })
+            .catch(e => {
+                res.status(500);
+                res.send(sendError(500, '/searchCareer ' + e))
+            });
+    }
+];
+
+exports.searchCompany = [
+    async function(req, res, next) {
+ 
+        if (validator.isEmpty(req.query.q)) return res.sendStatus(400);
+        let search_query = validator.escape(req.query.q);
+        if (search_query.length != req.query.q.length) return res.sendStatus(400);
+        let limit;
+        if (!req.query.limit) {
+            limit = 25;
+        } else {
+            limit = validator.escape(req.query.limit);
+            if (limit.length != req.query.limit.length) return res.sendStatus(400);
+        }
+        
+        let Query = `SELECT company FROM pre_dream_companies WHERE LOWER(company) LIKE LOWER($1) LIMIT $2`;
+        search_query = '%' + search_query + '%';
+        res.type('application/json');
+
+        Promise.all([pool.query(Query, [search_query, limit])])
+            .then(result => {
+                var rows = result.map(r => r.rows)[0];
+                let results = [];
+
+                Object.keys(rows).forEach(function(key) {
+                    results.push(rows[key].company);
+                });
+                res.status(200).send({data: results});
+            })
+            .catch(e => {
+                res.status(500);
+                res.send(sendError(500, '/searchCompany ' + e))
+            });
+    }
+];
