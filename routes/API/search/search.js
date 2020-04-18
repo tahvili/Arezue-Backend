@@ -25,7 +25,6 @@ exports.searchCandidates = [
         console.log(reqQuery);
         if ("skills" in reqQuery) {
             skills = reqQuery.skills.split(",").map(skill => skill.toLowerCase());
-            console.log(skills);
             
             let query = "SELECT * FROM resumes;";
             pool.query(query)
@@ -34,8 +33,6 @@ exports.searchCandidates = [
                 if (rows.length > 0) {
                     //Filter out for resumes without the skill attribute
                     var candidates = rows.filter(r => r.hasOwnProperty("resume") && r.resume.hasOwnProperty("skill"))
-                    console.log(rows);
-                    console.log(candidates);
 
                     //postgres jsons with subrrays are returned as arrays, need to sanitize (not the best way)
                     candidates.forEach(c => {
@@ -79,7 +76,7 @@ exports.searchSkill = [
             if (limit.length != req.query.limit.length) return res.sendStatus(400);
         }
         
-        let Query = `SELECT skill FROM pre_skills WHERE skill LIKE $1 LIMIT $2`;
+        let Query = `SELECT skill FROM pre_skills WHERE LOWER(skill) LIKE LOWER($1) LIMIT $2`;
         search_query = '%' + search_query + '%';
         res.type('application/json');
 
@@ -95,7 +92,7 @@ exports.searchSkill = [
             })
             .catch(e => {
                 res.status(500);
-                res.send(sendError(500, '/jobseeker ' + e))
+                res.send(sendError(500, '/searchSkill ' + e))
             });
     }
 ];
