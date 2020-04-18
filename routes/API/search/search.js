@@ -67,7 +67,7 @@ exports.searchCandidates = [
 
 exports.searchSkill = [
     async function(req, res, next) {
-
+ 
         if (validator.isEmpty(req.query.q)) return res.sendStatus(400);
         let search_query = validator.escape(req.query.q);
         if (search_query.length != req.query.q.length) return res.sendStatus(400);

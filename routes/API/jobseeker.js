@@ -751,7 +751,7 @@ router.route('/:uid/dream_company/?:dream_company?')
      *                in: formData
      *                required: true
      *                type: string
-     *              - name: preference
+     *              - name: ranking
      *                description: Preference of the company
      *                in: formData
      *                required: false
@@ -768,6 +768,7 @@ router.route('/:uid/dream_company/?:dream_company?')
      * 
      */
     .post(dream_company.addDreamCompanies)
+
     /**
      *  @swagger
      * 
