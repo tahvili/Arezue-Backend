@@ -172,7 +172,8 @@ exports.deleteDreamCareers = [
             res.status(400).send("Invalid UUID");
             return;
         }
-        let Query = `DELETE FROM dream_careers WHERE uid = $1 and dream_career = $2 returning uid`;
+        let Query = `DELETE FROM dream_careers WHERE uid = $1 and career_id = (SELECT DISTINCT id from pre_dream_careers WHERE career ILIKE $2) returning uid`;
+        //let Query = `DELETE FROM dream_careers WHERE uid = $1 and dream_career = $2 returning uid`;
         Promise.all([pool.query(Query, [uid, dream_career])])
             .then(result => {
                 var rows = result.filter(r => r.rowCount > 0).map(r => r.rows);
