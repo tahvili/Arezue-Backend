@@ -80,8 +80,7 @@ exports.updateCert = [
         delete data['c_id'];
         pairs = Object.keys(data).map((key, index) => `${key}=$${index + 1}`).join(", ");
         values = Object.values(data)
-        // values.concat(c_id);
-        console.log(`Values: ${values}`)
+
         var query = `UPDATE certification set ${pairs} where c_id = $${values.length + 1} RETURNING c_id`;
         Promise.all([pool.query(query, values.concat(c_id))])
             .then(result => {

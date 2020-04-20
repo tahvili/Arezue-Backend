@@ -91,9 +91,6 @@ exports.updateJobseeker = [
         let uid = validator.escape(req.params.uid);
 
         let data = req.body;
-        console.log(typeof data);
-        console.log(data);
-
         if (!validator.isUUID(uid, [4])) {
             res.status(400).send("Invalid UUID");
             return;
@@ -103,7 +100,6 @@ exports.updateJobseeker = [
         pairs = Object.keys(data).map((key, index) => `${key}=$${index + 1}`).join(", ");
 
         values = Object.values(data)
-        console.log(pairs);
         var update_jobseeker = `UPDATE jobseeker set ${pairs} where uid = $${values.length + 1} RETURNING uid`;
         Promise.all([pool.query(update_jobseeker, values.concat(uid))])
             .then(result => {

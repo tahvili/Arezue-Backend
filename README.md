@@ -1,13 +1,19 @@
 # DSC-backend
 This is the repo solely for the backend of our DSC-arezue project
 
+## Main Backend developer
+- daffychuy [https://github.com/daffychuy]
+- pshyong [https://github.com/pshyong]
+
 ## Requirements
 - npm^6.13
 - nodejs^12.14.1
 - PostgreSQL^11 // We recommend 12 or higher
 
 ## Environments
-All enviornmental variables (i.e. ports, database credentials) will go into the dotenv file
+All enviornmental variables (i.e. ports, database credentials) will go into the dotenv (.env) file.
+
+*Currently the file contains credential to our remote API server which is only valid in that server's IP range making security not an issue given no one outside that IP can access the database even knowing the credential*
 
 ## How to start
 If first time cloning the repo, we will need to download all dependencies, simply perform the following commands
@@ -18,15 +24,15 @@ npm start
 We do **recommend** you develop with nodemon which provides easability, and it will be included in development environment.
 Once nodemon is installed, simply perform the following commands
 ```
-npm install
+npm install -D
 nodemon start
 ```
-After running the above command, your webserver will now be started. By default we will be using port **3000** so connect using http://localhost:3000
+After running the above command, your webserver will now be started. By default we will be using port ```3000``` so connect using http://localhost:3000
 
-Now we need a working database, which we've kindly provided a *init.sh* that will initilize all tables automatically, but in order to use the script, you will need to first manually create the database. After the database has been created, you must modify *database.conf* accordingly to the database you've just created.
+Now we need a working database, which we've kindly provided a ```init.sh``` that will initilize all tables automatically, but in order to use the script, you will need to first manually create the database. After the database has been created, you must modify ```database.conf``` accordingly to the database you've just created.
 
 ## ExpressJS
-Will be mainly using expressjs for its middleware and page routing
+We use Express module for nodejs for middleware, routing, and API.
 
 ## Databases
 - We are using PostgreSQL for our backend and frontend's database
@@ -42,7 +48,7 @@ Will be mainly using expressjs for its middleware and page routing
     ```
 ## Data model
 Our database follows the following image of data model that our backend has designed to give scalability.
-[Enlarge Here](https://app.sqldbm.com/PostgreSQL/Share/kV3GUyt-8Z5r7qtVxQ4xGkGFrngIE8md_DYjF4jNYw0)
+[Enlarge Here](https://app.sqldbm.com/PostgreSQL/Share/kV3GUyt-8Z5r7qtVxQ4xGkGFrngIE8md_DYjF4jNYw0) (Note: This diagram is outdated)
 ![Image of Data Model](https://i.imgur.com/NbNqjvO.png)
 
 ## Testing

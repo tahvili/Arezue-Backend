@@ -118,7 +118,6 @@ exports.addSkill = [
                             // Now we can add to skills
                             Promise.all([pool.query(addSkill, [uid, row[0][0].id, level, years])])
                                 .then(result4 => {
-                                    console.log(result4);
                                     row = result4.map(r => r.rows);
                                     res.status(200).send(row[0][0]);
                                     return;
@@ -171,43 +170,6 @@ exports.deleteSkill = [
             .catch(e => {
                 res.status(500);
                 res.send(sendError(500, '/jobseeker error ' + e))
-            });
-    }
-];
-
-exports.searchSkill = [
-    async function(req, res, next) {
-        if (validator.isEmpty(req.query.q)) return res.sendStatus(400);
-        let search_query = validator.escape(req.query.q);
-        if (search_query.length != req.query.q.length) return res.sendStatus(400);
-        let limit;
-        if (!req.query.limit) {
-            limit = 25;
-        } else {
-            limit = validator.escape(req.query.limit);
-            if (limit.length != req.query.limit.length) return res.sendStatus(400);
-        }
-        
-        let uid = validator.escape(req.params.uid);
-        if (validator.isEmpty(uid) || !validator.isUUID(uid, [4])) return res.sendStatus(400);
-
-        let Query = `SELECT skill FROM pre_skills WHERE skill LIKE $1 LIMIT $2`;
-        search_query = '%' + search_query + '%';
-        res.type('application/json');
-
-        Promise.all([pool.query(Query, [search_query, limit])])
-            .then(result => {
-                var rows = result.map(r => r.rows)[0];
-                let results = [];
-
-                Object.keys(rows).forEach(function(key) {
-                    results.push(rows[key].skill);
-                });
-                res.status(200).send({data: results});
-            })
-            .catch(e => {
-                res.status(500);
-                res.send(sendError(500, '/jobseeker ' + e))
             });
     }
 ];
