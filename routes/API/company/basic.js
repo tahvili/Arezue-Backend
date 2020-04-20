@@ -54,7 +54,7 @@ exports.getCompany = [
             .catch(e => { res.status(500); res.send(sendError(500, '/company error ' + e)) });
     }];
 
-
+// Currently no company can be updated or deleted due to not in need during project duration
 exports.updateCompany = [
 
 ];

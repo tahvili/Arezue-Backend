@@ -118,7 +118,6 @@ exports.addSkill = [
                             // Now we can add to skills
                             Promise.all([pool.query(addSkill, [uid, row[0][0].id, level, years])])
                                 .then(result4 => {
-                                    console.log(result4);
                                     row = result4.map(r => r.rows);
                                     res.status(200).send(row[0][0]);
                                     return;

@@ -40,7 +40,6 @@ exports.createEmployer = [
         let create_employer = `INSERT INTO Employer (fb_id, name, email_address, company_name) VALUES ($1, $2, $3, $4) RETURNING uid`;
         Promise.all([pool.query(create_employer, [firebaseID, name, email, company])])
             .then(result => {
-                // var rowCountsArray = values.map(r=>r.rowCount)
                 var rows = result.filter(r => r.rowCount > 0).map(r => r.rows[0])
 
                 if (rows[0].uid) {
@@ -69,7 +68,6 @@ exports.getEmployer = [
         let create_employer = `SELECT * FROM employer where uid = $1`;
         Promise.all([pool.query(create_employer, [uid])])
             .then(result => {
-                // var rowCountsArray = values.map(r=>r.rowCount)
                 var rows = result.filter(r => r.rowCount > 0).map(r => r.rows[0])
 
                 if (rows[0]) {

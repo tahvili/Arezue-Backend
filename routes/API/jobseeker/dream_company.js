@@ -97,7 +97,6 @@ exports.getDreamCompanies = [
                                 // Now we can add to skills
                                 Promise.all([pool.query(addCompany, [uid, row[0][0].id, ranking])])
                                     .then(result4 => {
-                                        console.log(result4);
                                         row = result4.map(r => r.rows);
                                         res.status(200).send(row[0][0]);
                                         return;
@@ -122,36 +121,6 @@ exports.getDreamCompanies = [
                 });
             }
 ];
-// exports.addDreamCompanies = [
-//     async function (req, res, next) {
-//         let uid = validator.escape(req.params.uid);
-//         let dream_company = validator.escape(req.body.dream_company);
-//         let ranking = validator.escape(req.body.ranking);
-//         if (validator.isEmpty(uid) || validator.isEmpty(dream_company)) {
-//             res.status(400).send("One of the field is empty");
-//             return;
-//         }
-//         if (!validator.isUUID(uid, [4])) {
-//             res.status(400).send("Invalid UUID");
-//             return;
-//         }
-//         if (uid != req.params.uid) return res.status(400).send();
-//         if (dream_company != req.body.dream_company) return res.status(400).send();
-//         if (ranking != req.body.ranking) return res.status(400).send();
-
-//         let Query = `INSERT INTO dream_companies (uid, dream_company, preference) VALUES ($1, $2, $3) returning uid`;
-//         Promise.all([pool.query(Query, [uid, dream_company, ranking])])
-//             .then(result => {
-//                 var rows = result.filter(r => r.rowCount > 0).map(r => r.rows);
-
-//                 if (rows[0]) {
-//                     res.status(200).send('Added dream company');
-//                 } else {
-//                     res.status(400).send(`Jobseeker could not be found`);
-//                 }
-//             })
-//             .catch(e => { res.status(500); res.send(sendError(500, '/jobseeker error ' + e)) });
-//     }];
 
 exports.deleteDreamCompanies = [
     async function (req, res, next) {

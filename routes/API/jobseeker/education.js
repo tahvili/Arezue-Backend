@@ -80,7 +80,6 @@ exports.updateEducation = [
         pairs = Object.keys(data).map((key, index) => `${key}=$${index + 1}`).join(", ");
 
         values = Object.values(data)
-        console.log(pairs);
         var query = `UPDATE education set ${pairs} where ed_id = $${values.length + 1} RETURNING ed_id`;
         Promise.all([pool.query(query, values.concat(ed_id))])
             .then(result => {

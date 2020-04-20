@@ -56,7 +56,6 @@ exports.getProfile = [
                 res.status(404).send()
                 return;
             }
-            // console.log(rows);
             let result = {}
             result['jobseeker'] = {};
             result['jobseeker']['uid'] = rows[0][0]['uid'];
@@ -68,7 +67,6 @@ exports.getProfile = [
             })
             
             for (let i = 1; i < rows.length; i++) {
-                // console.log(mapping[i])
                 if (mapping[i] === 'experiences' || mapping[i] === 'education' || mapping[i] === 'certification' || mapping[i] == 'skills') {
                     Object.keys(rows[i]).forEach(function(key) {
                         delete rows[i][key]['uid'];
@@ -77,15 +75,12 @@ exports.getProfile = [
                 } else {
                     result['jobseeker']['info'][mapping[i]] = []
                     for (let j = 0; j < rows[i].length; j++) {
-                        console.log(rows[i][j]);
                         result['jobseeker']['info'][mapping[i]].push(rows[i][j][mapping[i]]);
                         
                     }
                 }
                 
             }
-            console.log(JSON.stringify(result));
-            console.log(rows);
 
             res.type('application/json')
             res.status(200).send(JSON.stringify(result));

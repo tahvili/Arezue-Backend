@@ -1,10 +1,5 @@
 /*jshint esversion: 6*/
-/*
- * We need to create an authorized API call after we get firebase integration
- * https://www.toptal.com/firebase/role-based-firebase-authentication
- */
 
-// Need to call pool from config.js which is our database setup and others
 const pool = require('../config');
 const bodyParser = require('body-parser');
 
@@ -35,7 +30,7 @@ exports.init = [
                 if (rows.length == 0) {
                     response.status(404);
                     response.send(sendError(404, `User with firebaseID = ${firebaseID} not found.`));
-                    return; //console.error?
+                    return; 
                 }
                 var userType = rowCountsArray[0] == 1 ? "employer" : "jobseeker" // this shouldn't be a string but using it temporarily
                 rows[0]['user_type'] = userType; //attach the user type to the row object
@@ -213,9 +208,6 @@ exports.updateJobseeker = [
         let uid = validator.escape(req.params.uid);
 
         let data = req.body;
-        console.log(typeof data);
-        console.log(data);
-
         if (!validator.isUUID(uid, [4])) {
             res.status(400).send("Invalid UUID");
             return;
@@ -225,7 +217,6 @@ exports.updateJobseeker = [
         pairs = Object.keys(data).map((key, index) => `${key}=$${index + 1}`).join(", ");
 
         values = Object.values(data)
-        console.log(pairs);
         var update_jobseeker = `UPDATE jobseeker set ${pairs} where uid = $${values.length + 1} RETURNING uid`;
         Promise.all([pool.query(update_jobseeker, values.concat(uid))])
             .then(result => {
@@ -246,7 +237,6 @@ exports.updateEmployer = [
         let uid = validator.escape(req.params.uid);
 
         let data = req.body;
-        console.log(uid)
 
         if (!validator.isUUID(uid, [4])) {
             res.status(400).send("Invalid UUID");
@@ -255,7 +245,6 @@ exports.updateEmployer = [
         delete data['uid'];
         delete data['firebaseID']
         pairs = Object.keys(data).map((key, index) => `${key}=$${index + 1}`).join(", ");
-        console.log(data);
         values = Object.values(data)
         var update_employer = `UPDATE employer set ${pairs} where uid = $${values.length + 1} RETURNING uid`;
         Promise.all([pool.query(update_employer, values.concat(uid))])
@@ -700,7 +689,6 @@ exports.updateEducation = [
         pairs = Object.keys(data).map((key, index) => `${key}=$${index + 1}`).join(", ");
 
         values = Object.values(data)
-        console.log(pairs);
         var query = `UPDATE education set ${pairs} where ed_id = $${values.length + 1} RETURNING ed_id`;
         Promise.all([pool.query(query, values.concat(ed_id))])
             .then(result => {
@@ -813,8 +801,6 @@ exports.updateCert = [
         delete data['c_id'];
         pairs = Object.keys(data).map((key, index) => `${key}=$${index + 1}`).join(", ");
         values = Object.values(data)
-        // values.concat(c_id);
-        console.log(`Values: ${values}`)
         var query = `UPDATE certification set ${pairs} where c_id = $${values.length + 1} RETURNING c_id`;
         Promise.all([pool.query(query, values.concat(c_id))])
             .then(result => {

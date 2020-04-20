@@ -80,8 +80,7 @@ exports.addExp = [
             delete data['exp_id'];
             pairs = Object.keys(data).map((key, index) => `${key}=$${index + 1}`).join(", ");
     
-            values = Object.values(data)
-            console.log(pairs);
+            values = Object.values(data);
             var query = `UPDATE experiences set ${pairs} where exp_id = $${values.length + 1} RETURNING exp_id`;
             Promise.all([pool.query(query, values.concat(exp_id))])
                 .then(result => {
@@ -101,10 +100,6 @@ exports.deleteExp = [
     async function (req, res, next) {
         let uid = validator.escape(req.params.uid);
         let e_id = validator.escape(req.params.exp_id);
-        // let title = validator.escape(req.body.title);
-        // let start_date = validator.escape(req.body.start_date);
-        // let end_date = validator.escape(req.body.end_date);
-        // let description = validator.escape(req.body.description);
         if (validator.isEmpty(uid)) {
             res.status(400).send("One of the field is empty");
             return;

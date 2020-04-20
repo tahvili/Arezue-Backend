@@ -54,8 +54,6 @@ exports.searchCandidates = [
             })
             
         } else {
-            // did not pass in any query data successfully return "nothing".
-            console.log("here");
             res.status(200).send(sendJSON(200, {}));
             return;
         }
@@ -118,7 +116,6 @@ exports.searchCareer = [
         Promise.all([pool.query(Query, [search_query, limit])])
             .then(result => {
                 var rows = result.map(r => r.rows)[0];
-                console.log(rows);
                 let results = [];
 
                 Object.keys(rows).forEach(function(key) {
