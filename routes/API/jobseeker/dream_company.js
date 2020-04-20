@@ -165,7 +165,7 @@ exports.deleteDreamCompanies = [
             res.status(400).send("Invalid UUID");
             return;
         }
-        let Query = `DELETE FROM dream_companies WHERE uid = $1 and dream_company = $2 returning uid`;
+        let Query = `DELETE FROM dream_companies WHERE uid = $1 and company_id = (SELECT DISTINCT id from pre_dream_companies WHERE company ILIKE $2) returning uid`;
         Promise.all([pool.query(Query, [uid, dream_company])])
             .then(result => {
                 var rows = result.filter(r => r.rowCount > 0).map(r => r.rows);
