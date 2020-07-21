@@ -1,5 +1,5 @@
-# DSC-backend
-This is the repo solely for the backend of our DSC-arezue project
+# Arezue - Recruitment App - Backend
+This is the repo solely for the backend of our Arezue - Recruitment App - Backend project
 
 ## Main Backend developer
 - daffychuy [https://github.com/daffychuy]
